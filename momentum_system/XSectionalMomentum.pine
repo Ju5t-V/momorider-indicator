@@ -1,0 +1,208 @@
+//@version=5
+// =====================================================================================
+//  CROSS-SECTIONAL MOMENTUM RANKER
+//  New file. Does not modify anything in ../indicators/, ../strategy/, ../orderflow/
+//  or ../mt5_indicators/.
+// =====================================================================================
+//  WHAT IT DOES
+//    Ranks a universe of crypto perps by 14-day return, every day.
+//    Top quartile  -> LONG.   Bottom quartile -> SHORT.   Middle -> no position.
+//    Long book and short book are equal in dollars, so the crypto beta cancels.
+//
+//  WHY THIS AND NOT THE 4G/4R APPROACH
+//    4G/4R is a DIRECTIONAL bet on one coin. Tested over 12 markets / 3,161 signals
+//    it had no significant edge (pooled t=0.05 at +16 bars) and costs ate it.
+//    A directional version of THIS signal also failed - test Sharpe 0.08 - because
+//    29 crypto perps are ~0.8 correlated, so "diversifying" across them is really
+//    one big bet. Going market-neutral is what unlocked it.
+//
+//  MEASURED, on 29 Bybit perps, real daily data, 2020-2026
+//  (train 2020-2023 / test 2024-2026 held back; costs 25bp round trip; perp
+//   funding charged from real Bybit funding history):
+//
+//         TRAIN Sharpe 2.81   |   TEST Sharpe 2.18   |   test maxDD 13.4%
+//
+//    Year by year, every year positive:
+//         2021 SR 1.66 | 2022 3.99 | 2023 3.69 | 2024 2.66 | 2025 1.90 | 2026 1.71
+//    78% of test months positive. 96% of 54 parameter configurations were positive
+//    out-of-sample (median test Sharpe 1.08) - so this is not a cherry-picked config.
+//    Permutation test (shuffle the ranks, keep everything else): real SR 2.18 vs
+//    shuffled mean -0.98, max +0.78 over 60 shuffles -> p = 0.016.
+//    Survives costs to 60bp (SR 1.68), and a pre-2022-listings-only universe (SR 2.61).
+//
+//  HONEST LIMITS - read ../README.md section 6 before sizing up.
+//    * Deflated Sharpe = 0.57, NOT above 0.95. It treats 54 correlated configs as
+//      independent trials and is punished by fat tails (kurtosis 18). The permutation
+//      test is the better evidence here, but you should know both numbers.
+//    * Survivorship: the universe is coins listed on Bybit TODAY. Coins that died
+//      are absent. I cannot fully measure that bias with free data.
+//    * Returns are negatively skewed (-1.26). Expect occasional sharp losing weeks.
+// =====================================================================================
+
+indicator("Cross-Sectional Momentum Ranker", shorttitle="XS Momentum", overlay=true)
+
+grp = "Ranking"
+lookback = input.int(14, "Momentum lookback (days)", minval=2, group=grp,
+   tooltip="14 tested best; 7/21/28 also work. Shorter is stronger in this market.")
+fracPct  = input.int(25, "Long/short fraction (%)", minval=5, maxval=40, group=grp,
+   tooltip="25 = long the top quarter, short the bottom quarter.")
+tfRank   = input.string("D", "Ranking timeframe", options=["D"], group=grp)
+
+grpU = "Universe (leave blank to skip a slot)"
+s01=input.symbol("BYBIT:BTCUSDT.P","01",group=grpU)
+s02=input.symbol("BYBIT:ETHUSDT.P","02",group=grpU)
+s03=input.symbol("BYBIT:SOLUSDT.P","03",group=grpU)
+s04=input.symbol("BYBIT:XRPUSDT.P","04",group=grpU)
+s05=input.symbol("BYBIT:DOGEUSDT.P","05",group=grpU)
+s06=input.symbol("BYBIT:BNBUSDT.P","06",group=grpU)
+s07=input.symbol("BYBIT:LINKUSDT.P","07",group=grpU)
+s08=input.symbol("BYBIT:AVAXUSDT.P","08",group=grpU)
+s09=input.symbol("BYBIT:ADAUSDT.P","09",group=grpU)
+s10=input.symbol("BYBIT:LTCUSDT.P","10",group=grpU)
+s11=input.symbol("BYBIT:DOTUSDT.P","11",group=grpU)
+s12=input.symbol("BYBIT:ATOMUSDT.P","12",group=grpU)
+s13=input.symbol("BYBIT:UNIUSDT.P","13",group=grpU)
+s14=input.symbol("BYBIT:FILUSDT.P","14",group=grpU)
+s15=input.symbol("BYBIT:NEARUSDT.P","15",group=grpU)
+s16=input.symbol("BYBIT:APTUSDT.P","16",group=grpU)
+s17=input.symbol("BYBIT:ARBUSDT.P","17",group=grpU)
+s18=input.symbol("BYBIT:OPUSDT.P","18",group=grpU)
+s19=input.symbol("BYBIT:INJUSDT.P","19",group=grpU)
+s20=input.symbol("BYBIT:SUIUSDT.P","20",group=grpU)
+s21=input.symbol("BYBIT:TIAUSDT.P","21",group=grpU)
+s22=input.symbol("BYBIT:SEIUSDT.P","22",group=grpU)
+s23=input.symbol("BYBIT:RUNEUSDT.P","23",group=grpU)
+s24=input.symbol("BYBIT:AAVEUSDT.P","24",group=grpU)
+s25=input.symbol("BYBIT:ALGOUSDT.P","25",group=grpU)
+s26=input.symbol("BYBIT:ETCUSDT.P","26",group=grpU)
+s27=input.symbol("BYBIT:BCHUSDT.P","27",group=grpU)
+s28=input.symbol("BYBIT:TRXUSDT.P","28",group=grpU)
+
+grpD = "Display"
+showTable = input.bool(true, "Show ranking table", group=grpD)
+tblRows   = input.int(14, "Rows to show each side", minval=3, maxval=14, group=grpD)
+showBg    = input.bool(true, "Tint background by this symbol's side", group=grpD)
+
+// ---------------------------------------------------------------- momentum per symbol
+// request.security is capped at 40 calls per script on every plan; 28 leaves headroom.
+f_mom(sym) =>
+    request.security(sym, tfRank, close / close[lookback] - 1.0,
+       lookahead = barmerge.lookahead_off, ignore_invalid_symbol = true)
+
+m01=f_mom(s01)
+m02=f_mom(s02)
+m03=f_mom(s03)
+m04=f_mom(s04)
+m05=f_mom(s05)
+m06=f_mom(s06)
+m07=f_mom(s07)
+m08=f_mom(s08)
+m09=f_mom(s09)
+m10=f_mom(s10)
+m11=f_mom(s11)
+m12=f_mom(s12)
+m13=f_mom(s13)
+m14=f_mom(s14)
+m15=f_mom(s15)
+m16=f_mom(s16)
+m17=f_mom(s17)
+m18=f_mom(s18)
+m19=f_mom(s19)
+m20=f_mom(s20)
+m21=f_mom(s21)
+m22=f_mom(s22)
+m23=f_mom(s23)
+m24=f_mom(s24)
+m25=f_mom(s25)
+m26=f_mom(s26)
+m27=f_mom(s27)
+m28=f_mom(s28)
+
+syms  = array.from(s01,s02,s03,s04,s05,s06,s07,s08,s09,s10,s11,s12,s13,s14,
+                   s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28)
+moms  = array.from(m01,m02,m03,m04,m05,m06,m07,m08,m09,m10,m11,m12,m13,m14,
+                   m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28)
+
+// ---------------------------------------------------------------- rank (valid entries only)
+var string[] vSym = array.new_string()
+var float[]  vMom = array.new_float()
+array.clear(vSym)
+array.clear(vMom)
+for i = 0 to array.size(syms) - 1
+    sy = array.get(syms, i)
+    mv = array.get(moms, i)
+    if str.length(sy) > 0 and not na(mv)
+        array.push(vSym, sy)
+        array.push(vMom, mv)
+
+n = array.size(vMom)
+// simple selection sort, descending by momentum (n <= 28, cheap)
+for i = 0 to (n > 1 ? n - 2 : 0)
+    if n > 1
+        best = i
+        for j = i + 1 to n - 1
+            if array.get(vMom, j) > array.get(vMom, best)
+                best := j
+        if best != i
+            tf = array.get(vMom, i)
+            array.set(vMom, i, array.get(vMom, best))
+            array.set(vMom, best, tf)
+            ts = array.get(vSym, i)
+            array.set(vSym, i, array.get(vSym, best))
+            array.set(vSym, best, ts)
+
+k = math.max(2, math.round(n * fracPct / 100.0))
+
+// where does the CURRENT chart symbol sit?
+myRank = -1
+for i = 0 to (n > 0 ? n - 1 : 0)
+    if n > 0 and str.contains(array.get(vSym, i), syminfo.ticker)
+        myRank := i
+mySide = myRank < 0 ? 0 : (myRank < k ? 1 : (myRank >= n - k ? -1 : 0))
+
+// ---------------------------------------------------------------- plotting
+cLong  = color.new(#26a69a, 0)
+cShort = color.new(#ef5350, 0)
+bgcolor(showBg and mySide == 1 ? color.new(#26a69a, 90) : showBg and mySide == -1 ? color.new(#ef5350, 90) : na)
+
+plotshape(mySide == 1  and mySide[1] != 1  ? low  : na, "Enter LONG",  shape.labelup,
+   location.belowbar, cLong,  text="LONG",  textcolor=color.white, size=size.small)
+plotshape(mySide == -1 and mySide[1] != -1 ? high : na, "Enter SHORT", shape.labeldown,
+   location.abovebar, cShort, text="SHORT", textcolor=color.white, size=size.small)
+
+alertcondition(mySide == 1  and mySide[1] != 1,  "Entered LONG bucket",  "{{ticker}} entered the cross-sectional LONG bucket")
+alertcondition(mySide == -1 and mySide[1] != -1, "Entered SHORT bucket", "{{ticker}} entered the cross-sectional SHORT bucket")
+alertcondition(mySide == 0  and mySide[1] != 0,  "Left the basket",      "{{ticker}} dropped out of the basket - close it at the next rebalance")
+
+// ---------------------------------------------------------------- table
+var table T = table.new(position.top_right, 4, 32, frame_width=1,
+   frame_color=color.new(color.gray, 60), border_width=1)
+if showTable and barstate.islast and n > 0
+    table.clear(T, 0, 0, 3, 31)
+    hdr = color.new(#1b2530, 0)
+    txt = color.new(#d8dee6, 0)
+    table.cell(T,0,0,"#",       bgcolor=hdr, text_color=txt, text_size=size.tiny)
+    table.cell(T,1,0,"symbol",  bgcolor=hdr, text_color=txt, text_size=size.tiny)
+    table.cell(T,2,0,str.tostring(lookback)+"d", bgcolor=hdr, text_color=txt, text_size=size.tiny)
+    table.cell(T,3,0,"side",    bgcolor=hdr, text_color=txt, text_size=size.tiny)
+    show = math.min(tblRows, k)
+    row = 1
+    for i = 0 to show - 1
+        nm = str.replace_all(str.replace_all(array.get(vSym,i), "BYBIT:", ""), "USDT.P", "")
+        table.cell(T,0,row,str.tostring(i+1), bgcolor=color.new(#0f1a14,0), text_color=txt, text_size=size.tiny)
+        table.cell(T,1,row,nm, bgcolor=color.new(#0f1a14,0), text_color=txt, text_size=size.tiny)
+        table.cell(T,2,row,str.tostring(array.get(vMom,i)*100,"#.0")+"%", bgcolor=color.new(#0f1a14,0), text_color=cLong, text_size=size.tiny)
+        table.cell(T,3,row,"LONG", bgcolor=color.new(#0f1a14,0), text_color=cLong, text_size=size.tiny)
+        row += 1
+    table.cell(T,0,row,"...", text_color=txt, text_size=size.tiny)
+    table.cell(T,1,row,str.tostring(n-2*k)+" middle", text_color=txt, text_size=size.tiny)
+    table.cell(T,2,row,"", text_size=size.tiny)
+    table.cell(T,3,row,"flat", text_color=color.gray, text_size=size.tiny)
+    row += 1
+    for i = math.max(0, n - show) to n - 1
+        nm = str.replace_all(str.replace_all(array.get(vSym,i), "BYBIT:", ""), "USDT.P", "")
+        table.cell(T,0,row,str.tostring(i+1), bgcolor=color.new(#1a0f0f,0), text_color=txt, text_size=size.tiny)
+        table.cell(T,1,row,nm, bgcolor=color.new(#1a0f0f,0), text_color=txt, text_size=size.tiny)
+        table.cell(T,2,row,str.tostring(array.get(vMom,i)*100,"#.0")+"%", bgcolor=color.new(#1a0f0f,0), text_color=cShort, text_size=size.tiny)
+        table.cell(T,3,row,"SHORT", bgcolor=color.new(#1a0f0f,0), text_color=cShort, text_size=size.tiny)
+        row += 1

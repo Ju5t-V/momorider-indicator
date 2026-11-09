@@ -1,0 +1,94 @@
+//@version=5
+// =====================================================================================
+//  MomoRider  ·  Indicator 1 of 2 :  TREND RIBBON + LIQUIDITY HUNTER  (overlay)
+// =====================================================================================
+//  Reverse-engineered from JS Tradventure "MomoRider" screen recordings.
+//
+//  MEASURED (not guessed) from the source charts:
+//    · Fast ribbon line  = EMA(26) of Heikin-Ashi close
+//    · Slow ribbon line  = EMA(52) of Heikin-Ashi close
+//        Verified to 0.1 tick on BTCUSDT.P 30m  (64,141.3 / 63,853.7)
+//        Verified to 6 dp  on SXTUSDT.P 15m  (0.007306 / 0.007257)
+//    · "Staircase"       = EMA(26) of Heikin-Ashi close taken from a HIGHER timeframe
+//        BTCUSDT.P 30m -> steps every 8 bars = 4H anchor, EMA 26 (mean err 1.4 pts)
+//        SXTUSDT.P 15m -> 3H anchor, EMA 26 matched the printed 0.007136 exactly
+//        => the anchor timeframe is a user input; the length 26 was identical on both.
+//
+//  Put this on the price pane. Chart type should be Heikin Ashi to match the original;
+//  if you run normal candles, set "Candle source" = Heikin Ashi below.
+// =====================================================================================
+
+indicator("MomoRider · Trend Ribbon + Liquidity Hunter", shorttitle="MR Ribbon+LH", overlay=true, max_labels_count=500)
+
+// ------------------------------------------------------------------ inputs
+grpS = "Source"
+haMode = input.string("Chart (use if chart is already Heikin Ashi)", "Candle source", options=["Chart (use if chart is already Heikin Ashi)", "Force Heikin Ashi"], group=grpS)
+
+grpR = "Trend ribbon"
+fastLen = input.int(26, "Fast EMA", minval=1, group=grpR)
+slowLen = input.int(52, "Slow EMA", minval=1, group=grpR)
+showFill = input.bool(true, "Shade the ribbon", group=grpR)
+
+grpL = "Liquidity Hunter (staircase)"
+lhTF = input.timeframe("240", "Anchor timeframe", tooltip="4H reproduced the BTC 30m chart. 3H reproduced the SXT 15m chart. Set to taste / per chart.", group=grpL)
+lhLen = input.int(26, "Anchor EMA length", minval=1, tooltip="26 was measured on both source charts. The author's alert name says '(20)', so 20 is a plausible alternative.", group=grpL)
+
+grpP = "Pullback (1G / 1R) markers"
+showPB = input.bool(true, "Mark 1G / 1R pullback candles", group=grpP)
+
+// ------------------------------------------------------------------ HA source
+ha = ticker.heikinashi(syminfo.tickerid)
+useForcedHA = haMode == "Force Heikin Ashi"
+// call request.security unconditionally (never inside a conditional), then pick
+haO = request.security(ha, timeframe.period, open)
+haH = request.security(ha, timeframe.period, high)
+haL = request.security(ha, timeframe.period, low)
+haC = request.security(ha, timeframe.period, close)
+hO = useForcedHA ? haO : open
+hH = useForcedHA ? haH : high
+hL = useForcedHA ? haL : low
+hC = useForcedHA ? haC : close
+
+// ------------------------------------------------------------------ ribbon
+emaFast = ta.ema(hC, fastLen)
+emaSlow = ta.ema(hC, slowLen)
+bull    = emaFast > emaSlow
+
+colUp   = color.new(#00b050, 0)
+colDn   = color.new(#e53935, 0)
+ribCol  = bull ? colUp : colDn
+
+pF = plot(emaFast, "Fast EMA", color=ribCol, linewidth=2)
+pS = plot(emaSlow, "Slow EMA", color=ribCol, linewidth=2)
+fill(pF, pS, color=showFill ? color.new(bull ? #00b050 : #e53935, 88) : na, title="Ribbon fill")
+
+// ------------------------------------------------------------------ Liquidity Hunter staircase
+// Requests the Heikin-Ashi ticker directly at the higher timeframe, so the EMA is
+// computed on HTF Heikin-Ashi closes (never nest one request.security inside another).
+// [1] + lookahead_on = value of the LAST CLOSED higher-timeframe bar -> non-repainting.
+lhLevel = request.security(ha, lhTF, ta.ema(close, lhLen)[1], lookahead=barmerge.lookahead_on)
+
+plot(lhLevel, "Liquidity Hunter", color=color.new(#b0b0c0, 0), linewidth=2)
+
+// ------------------------------------------------------------------ ribbon touch / pullback logic
+ribTop = math.max(emaFast, emaSlow)
+ribBot = math.min(emaFast, emaSlow)
+
+redBar   = hC < hO
+greenBar = hC > hO
+
+// 1G : a RED candle sitting above the (bullish) ribbon whose low reaches back into it
+oneG = bull and redBar   and hC > ribBot and hL <= ribTop
+// 1R : a GREEN candle sitting below the (bearish) ribbon whose high reaches back into it
+oneR = not bull and greenBar and hC < ribTop and hH >= ribBot
+
+plotshape(showPB and oneG ? ribBot : na, "1G pullback", shape.triangleup,   location.absolute, color.new(#00b050, 0), size=size.tiny)
+plotshape(showPB and oneR ? ribTop : na, "1R pullback", shape.triangledown, location.absolute, color.new(#e53935, 0), size=size.tiny)
+
+// ------------------------------------------------------------------ alerts
+alertcondition(ta.crossover(hC, lhLevel),  "Price crossed ABOVE Liquidity Hunter", "{{ticker}} {{interval}} · close crossed ABOVE Liquidity Hunter @ {{close}}")
+alertcondition(ta.crossunder(hC, lhLevel), "Price crossed BELOW Liquidity Hunter", "{{ticker}} {{interval}} · close crossed BELOW Liquidity Hunter @ {{close}}")
+alertcondition(oneG, "1G pullback (red candle into bullish ribbon)", "{{ticker}} {{interval}} · 1G — red candle pulled back into the bullish ribbon")
+alertcondition(oneR, "1R pullback (green candle into bearish ribbon)", "{{ticker}} {{interval}} · 1R — green candle pulled back into the bearish ribbon")
+alertcondition(ta.crossover(emaFast, emaSlow),  "Ribbon turned bullish", "{{ticker}} {{interval}} · ribbon flipped BULLISH")
+alertcondition(ta.crossunder(emaFast, emaSlow), "Ribbon turned bearish", "{{ticker}} {{interval}} · ribbon flipped BEARISH")

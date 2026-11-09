@@ -1,0 +1,293 @@
+//@version=5
+// =====================================================================================
+//  MomoRider  ·  4G/4R STRATEGY  (research harness)
+// =====================================================================================
+//  This is a NEW file. It does not touch, replace or modify any indicator in
+//  ../indicators/ - those are unchanged.
+//
+//  ---------------------------------------------------------------------------------
+//  READ THIS BEFORE YOU TRADE IT.
+//
+//  I mechanised the 4G/4R setup exactly as reconstructed, and tested it on 12 Bybit
+//  perps over 2024-01 -> 2026-08 (46,177 bars each; 3,161 signals on 30m). Result:
+//
+//    * The signal does NOT significantly predict direction.
+//        pooled +16 bars: +0.003%  t=+0.05  p=0.96
+//        pooled +48 bars: +0.117%  t=+1.56  p=0.12
+//        pooled +96 bars: +0.187%  t=+1.78  p=0.075
+//      A round trip costs ~0.14%, so even the best horizon barely clears costs.
+//
+//    * Gross edge is real but tiny: +0.078 R/trade, PF 1.15 on 30m with wide exits.
+//      Net after Bybit taker + slippage: +0.024 R, PF 1.04. Break-even at 0.10%/side.
+//
+//    * On 15m it LOSES clearly: -0.127 R/trade, PF 0.80 pooled. Use 30m, not 15m.
+//
+//    * Deflated Sharpe (Bailey & Lopez de Prado 2014), correcting for the 33 config
+//      trials I ran: DSR = 0.001 on the tuned symbols, 0.000 on 8 unseen symbols.
+//      That means: indistinguishable from luck.
+//
+//    * Every filter I tried (ADX, VPIN, HTF trend, order-flow agreement) and a
+//      meta-labelling classifier ALL failed to generalise to unseen symbols/time.
+//
+//  So: this file is a HARNESS for you to test on your own charts and iterate - not a
+//  system I am telling you is profitable. Defaults below are the least-bad
+//  configuration the evidence supports. Full write-up in ./README.md.
+//
+//  Level 2 / Level 3: not possible. Pine has NO order-book, depth or DOM access on
+//  any plan. request.footprint() (added Mar 2026) gives tick bid/ask volume but needs
+//  Premium/Ultimate - you are on Free. What IS available on Free is Bulk Volume
+//  Classification (Easley, Lopez de Prado & O'Hara), which recovers order-flow
+//  toxicity from OHLCV alone. It is implemented below and it did not help.
+// =====================================================================================
+
+strategy("MomoRider 4G/4R Strategy", shorttitle="MR 4G/4R", overlay=true,
+   initial_capital       = 10000,
+   default_qty_type      = strategy.percent_of_equity,
+   default_qty_value     = 100,
+   commission_type       = strategy.commission.percent,
+   commission_value      = 0.055,      // Bybit taker
+   slippage              = 2,
+   calc_on_every_tick    = false,
+   process_orders_on_close = true,
+   max_labels_count      = 500)
+
+// ------------------------------------------------------------------ inputs
+grpS = "Source"
+haMode = input.string("Chart (use if chart is already Heikin Ashi)", "Candle source",
+   options=["Chart (use if chart is already Heikin Ashi)", "Force Heikin Ashi"], group=grpS)
+
+grpO = "Momentum engine (verified - do not tune)"
+dtLen = input.int(39,  "Detrend EMA length",   minval=2, group=grpO)
+cyc1  = input.int(14,  "Stochastic length #1", minval=2, group=grpO)
+sm1   = input.float(0.72, "Smoothing factor #1", minval=0.05, maxval=1.0, step=0.001, group=grpO)
+cyc2  = input.int(26,  "Stochastic length #2", minval=2, group=grpO)
+sm2   = input.float(0.67, "Smoothing factor #2", minval=0.05, maxval=1.0, step=0.001, group=grpO)
+zHi   = input.float(90, "Upper zone", group=grpO)
+zLo   = input.float(10, "Lower zone", group=grpO)
+
+grpE = "Entry (4G / 4R)"
+ribFast = input.int(26, "Ribbon fast EMA", minval=1, group=grpE)
+ribSlow = input.int(52, "Ribbon slow EMA", minval=1, group=grpE)
+win     = input.int(5,  "Setup window (bars)", minval=2, group=grpE)
+pivLen  = input.int(3,  "Pivot strength", minval=1, group=grpE)
+minSep  = input.int(4,  "Min bars between pivots", minval=1, group=grpE)
+allowL  = input.bool(true, "Take 4G longs",  group=grpE)
+allowS  = input.bool(true, "Take 4R shorts", group=grpE)
+
+grpX = "Exit (triple barrier)"
+// Wide stop + far target + long time-stop was the ONE change that measurably helped.
+// Tight exits (1.5 ATR / 3 ATR) turned a +0.078 R gross edge into -0.085 R net,
+// because the cost per trade in R terms scales as 1/stop-distance.
+atrLen  = input.int(14,   "ATR length", minval=1, group=grpX)
+slATR   = input.float(4.0,  "Stop  (x ATR)", minval=0.1, step=0.1, group=grpX,
+   tooltip="Wide on purpose. At a 1.5xATR stop, round-trip costs are ~0.21 R per trade and eat the entire edge.")
+tpATR   = input.float(12.0, "Target (x ATR)", minval=0.1, step=0.5, group=grpX,
+   tooltip="Far on purpose. Forward-return analysis showed what edge exists appears at 48-96 bars, not 8-16.")
+maxBars = input.int(96,   "Time stop (bars)", minval=1, group=grpX)
+
+grpR = "Risk"
+riskPct = input.float(1.0, "Risk per trade (% of equity)", minval=0.01, step=0.1, group=grpR,
+   tooltip="Volatility-scaled sizing: size = risk$ / stop distance. This is what makes the same settings transferable across markets (Moskowitz/Ooi/Pedersen 2012; Harvey et al 2018).")
+
+grpF = "Filters (all OFF - none generalised out-of-sample)"
+useADX  = input.bool(false, "ADX filter", group=grpF,
+   tooltip="Looked like the best filter on the 4 tuning symbols (+0.060 R). Did not survive on 8 unseen symbols.")
+adxMin  = input.float(20.0, "  ADX >=", group=grpF)
+useVPIN = input.bool(false, "VPIN (order-flow toxicity) filter", group=grpF,
+   tooltip="Bulk Volume Classification. Improved monotonically in-sample; did not generalise.")
+vpinLen = input.int(50,   "  VPIN window", minval=5, group=grpF)
+vpinPct = input.float(50.0, "  keep VPIN below this trailing percentile", minval=1, maxval=100, group=grpF)
+vpinLb  = input.int(2000, "  trailing window for the percentile", minval=100, group=grpF)
+
+grpV = "Display"
+showLbl = input.bool(true, "Show HH/HL/LH/LL labels", group=grpV)
+
+// ------------------------------------------------------------------ HA source
+ha = ticker.heikinashi(syminfo.tickerid)
+forceHA = haMode == "Force Heikin Ashi"
+haO = request.security(ha, timeframe.period, open)
+haH = request.security(ha, timeframe.period, high)
+haL = request.security(ha, timeframe.period, low)
+haC = request.security(ha, timeframe.period, close)
+hO = forceHA ? haO : open
+hH = forceHA ? haH : high
+hL = forceHA ? haL : low
+hC = forceHA ? haC : close
+
+// ------------------------------------------------------------------ oscillator
+f_stoch(_s, _len) =>
+    hh = ta.highest(_s, _len)
+    ll = ta.lowest(_s, _len)
+    rng = hh - ll
+    rng <= 0 ? 50.0 : 100.0 * (_s - ll) / rng
+
+osrc = (hH + hL) / 2
+odt  = osrc - ta.ema(osrc, dtLen)
+v1 = f_stoch(odt, cyc1)
+var float pf = na
+pf := na(pf[1]) ? v1 : pf[1] + sm1 * (v1 - pf[1])
+v3 = f_stoch(pf, cyc2)
+var float osc = na
+osc := na(osc[1]) ? v3 : osc[1] + sm2 * (v3 - osc[1])
+
+// ------------------------------------------------------------------ structure labels
+ph = ta.pivothigh(osc, pivLen, pivLen)
+pl = ta.pivotlow(osc,  pivLen, pivLen)
+var int   lastType = 0
+var int   lastBar  = -1
+var float lastOsc  = 0.0
+var float curHiPx  = na
+var float refHiPx  = na
+var float curLoPx  = na
+var float refLoPx  = na
+var label lastLbl  = na
+bool  bullStruct = false
+bool  bearStruct = false
+float structOsc  = na
+pBar = bar_index - pivLen
+pOsc = osc[pivLen]
+pPx  = hC[pivLen]
+
+if not na(ph) or not na(pl)
+    isHigh   = not na(ph)
+    sameType = lastType == (isHigh ? 1 : -1)
+    better   = sameType and (isHigh ? pOsc > lastOsc : pOsc < lastOsc)
+    farEnough= lastBar < 0 or (pBar - lastBar) >= minSep
+    if (not sameType and farEnough) or better
+        if better
+            label.delete(lastLbl)
+        string txt = ""
+        if isHigh
+            if not better
+                refHiPx := curHiPx
+            txt     := na(refHiPx) ? "HH" : (pPx >= refHiPx ? "HH" : "LH")
+            curHiPx := pPx
+        else
+            if not better
+                refLoPx := curLoPx
+            txt     := na(refLoPx) ? "HL" : (pPx >= refLoPx ? "HL" : "LL")
+            curLoPx := pPx
+        if showLbl
+            lastLbl := label.new(pBar, hL[pivLen], txt, xloc.bar_index, yloc.price,
+               color = (txt == "HH" or txt == "HL") ? color.new(#4caf50, 0) : color.new(#c62828, 0),
+               style = isHigh ? label.style_label_down : label.style_label_up,
+               textcolor = color.white, size = size.tiny)
+        lastType   := isHigh ? 1 : -1
+        lastBar    := pBar
+        lastOsc    := pOsc
+        structOsc  := pOsc
+        bullStruct := txt == "HH" or txt == "HL"
+        bearStruct := txt == "LH" or txt == "LL"
+
+// ------------------------------------------------------------------ 4G / 4R
+emaF = ta.ema(hC, ribFast)
+emaS = ta.ema(hC, ribSlow)
+bull = emaF > emaS
+ribTop = math.max(emaF, emaS)
+ribBot = math.min(emaF, emaS)
+redBar   = hC < hO
+greenBar = hC > hO
+plot(emaF, "Ribbon fast", color=color.new(bull ? #26a69a : #ef5350, 0))
+plot(emaS, "Ribbon slow", color=color.new(bull ? #1b6f5b : #b71c1c, 0))
+
+oneG = bull     and redBar   and hC > ribBot and hL <= ribTop
+oneR = not bull and greenBar and hC < ribTop and hH >= ribBot
+
+var int  g1bar = -1
+var bool g4ok  = false
+if oneG
+    g1bar := bar_index
+    g4ok  := false
+if g1bar >= 0 and bar_index == g1bar + 1 and greenBar
+    g4ok := true
+
+var int  r1bar = -1
+var bool r4ok  = false
+if oneR
+    r1bar := bar_index
+    r4ok  := false
+if r1bar >= 0 and bar_index == r1bar + 1 and redBar
+    r4ok := true
+
+twoG = osc <= zLo
+twoR = osc >= zHi
+threeG = bullStruct and not na(structOsc) and structOsc <= zLo + 15
+threeR = bearStruct and not na(structOsc) and structOsc >= zHi - 15
+
+sinceOneG = ta.barssince(oneG)
+sinceTwoG = ta.barssince(twoG)
+sinceThrG = ta.barssince(threeG)
+sinceOneR = ta.barssince(oneR)
+sinceTwoR = ta.barssince(twoR)
+sinceThrR = ta.barssince(threeR)
+readyG = g4ok and not na(sinceOneG) and sinceOneG <= win and not na(sinceTwoG) and sinceTwoG <= win and not na(sinceThrG) and sinceThrG <= win
+readyR = r4ok and not na(sinceOneR) and sinceOneR <= win and not na(sinceTwoR) and sinceTwoR <= win and not na(sinceThrR) and sinceThrR <= win
+
+var bool firedG = false
+var bool firedR = false
+if oneG
+    firedG := false
+if oneR
+    firedR := false
+sig4G = readyG and not firedG
+sig4R = readyR and not firedR
+if sig4G
+    firedG := true
+if sig4R
+    firedR := true
+
+// ------------------------------------------------------------------ filters
+[_diP, _diM, adxVal] = ta.dmi(14, 14)
+
+// Bulk Volume Classification (Easley, Lopez de Prado & O'Hara 2012):
+//   buy fraction = Phi( dP / sd(dP) );  toxicity = rolling mean |2*frac - 1|
+// Pine has no erf(), so Phi uses the logistic approximation Phi(x) ~ 1/(1+e^-1.702x),
+// which is within ~0.01 of the true normal CDF - ample for a monotone filter.
+dP   = ta.change(close)
+sdP  = math.max(1e-12, ta.stdev(dP, vpinLen))
+zval = dP / sdP
+buyFrac = 1.0 / (1.0 + math.exp(-1.702 * zval))
+vpinV = ta.sma(math.abs(2.0 * buyFrac - 1.0), vpinLen)
+vpinThr = ta.percentile_linear_interpolation(vpinV, vpinLb, vpinPct)
+
+passADX  = not useADX  or adxVal >= adxMin
+passVPIN = not useVPIN or vpinV <= vpinThr
+okFilters = passADX and passVPIN
+
+// ------------------------------------------------------------------ orders
+atrV = ta.atr(atrLen)
+longSig  = sig4G and allowL and okFilters and atrV > 0
+shortSig = sig4R and allowS and okFilters and atrV > 0
+
+// volatility-scaled size: a stop-out loses exactly riskPct of equity
+riskCash = strategy.equity * riskPct / 100.0
+stopDist = slATR * atrV
+qty = stopDist > 0 ? riskCash / stopDist : na
+
+if longSig and strategy.position_size == 0
+    strategy.entry("4G", strategy.long, qty=qty)
+if shortSig and strategy.position_size == 0
+    strategy.entry("4R", strategy.short, qty=qty)
+
+var float entryPx = na
+if strategy.position_size != 0 and strategy.position_size[1] == 0
+    entryPx := close
+if strategy.position_size == 0
+    entryPx := na
+
+if strategy.position_size > 0
+    strategy.exit("x4G", from_entry="4G",
+       stop  = entryPx - slATR * atrV,
+       limit = entryPx + tpATR * atrV)
+if strategy.position_size < 0
+    strategy.exit("x4R", from_entry="4R",
+       stop  = entryPx + slATR * atrV,
+       limit = entryPx - tpATR * atrV)
+
+// time stop
+barsIn = ta.barssince(strategy.position_size[1] == 0 and strategy.position_size != 0)
+if strategy.position_size != 0 and not na(barsIn) and barsIn >= maxBars
+    strategy.close_all(comment="time")
+
+plotshape(longSig  ? low  : na, "4G", shape.labelup,   location.absolute, color.new(#4caf50,0), text="4G", textcolor=color.white, size=size.tiny)
+plotshape(shortSig ? high : na, "4R", shape.labeldown, location.absolute, color.new(#c62828,0), text="4R", textcolor=color.white, size=size.tiny)

@@ -1,0 +1,121 @@
+//@version=5
+// =====================================================================================
+//  MomoRider  ·  COMBINED :  TREND RIBBON + STAIRCASE  (on price)
+//                          + LIQUIDITY HUNTER VOLUME   (own pane)
+// =====================================================================================
+//  This is indicator 1 and indicator 3 merged into a single slot, so the free-plan
+//  2-indicator budget becomes:
+//        slot 1 = this file
+//        slot 2 = 2_JS_MomoRider_Momentum.pine
+//
+//  How it draws in two panes at once: the indicator is declared overlay=false, so it
+//  owns a lower pane for the volume histogram, and the ribbon / staircase / pullback
+//  markers are pushed up onto the price chart with force_overlay=true.
+//
+//  Everything here was measured, not guessed — see README.md:
+//    · EMA(26) and EMA(52) of Heikin-Ashi close   (reproduced to the last printed digit
+//      on BTCUSDT.P 30m and SXTUSDT.P 15m)
+//    · staircase = EMA(26) of HA close from a higher timeframe (4H on a 30m chart)
+//    · volume average = SMA(volume, 20)  (reproduced 1,334.1 exactly and uniquely)
+//    · bars orange at >= 2x that average, dark red at >= 4x   (61 of 61 bars matched)
+// =====================================================================================
+
+indicator("MomoRider · Ribbon + Liquidity", shorttitle="MR Ribbon+Liq", overlay=false)
+
+// ------------------------------------------------------------------ inputs
+grpS = "Source"
+haMode = input.string("Chart (use if chart is already Heikin Ashi)", "Candle source", options=["Chart (use if chart is already Heikin Ashi)", "Force Heikin Ashi"], group=grpS)
+
+grpR = "Trend ribbon (drawn on the price chart)"
+fastLen  = input.int(26, "Fast EMA", minval=1, group=grpR)
+slowLen  = input.int(52, "Slow EMA", minval=1, group=grpR)
+showRib  = input.bool(true, "Show ribbon", group=grpR)
+showBand = input.bool(false, "Shade between the lines", tooltip="The original JS chart draws two plain lines with no shading, so this is off by default. fill() cannot be pushed to the price pane, so the shading is drawn with plotcandle() instead — it appears as a band of blocks rather than one continuous fill.", group=grpR)
+
+grpL = "Staircase (drawn on the price chart)"
+showLH = input.bool(true,  "Show staircase", group=grpL)
+lhTF   = input.timeframe("240", "Anchor timeframe", tooltip="4H reproduced the BTC 30m chart; 3H reproduced the SXT 15m chart.", group=grpL)
+lhLen  = input.int(26, "Anchor EMA length", minval=1, group=grpL)
+
+grpP = "Pullback markers (1G / 1R)"
+showPB = input.bool(true, "Mark 1G / 1R pullback candles", group=grpP)
+
+grpV = "Liquidity Hunter volume (lower pane)"
+maLen  = input.int(20,  "Volume average length",    minval=1, group=grpV)
+hiMult = input.float(2.0, "High-volume multiple",    minval=1.0, step=0.1, group=grpV)
+xtMult = input.float(4.0, "Extreme-volume multiple", minval=1.0, step=0.1, group=grpV)
+showMA = input.bool(true, "Show volume average", group=grpV)
+
+// ------------------------------------------------------------------ Heikin-Ashi source
+ha = ticker.heikinashi(syminfo.tickerid)
+forceHA = haMode == "Force Heikin Ashi"
+// request.security is called unconditionally (never inside a conditional), then selected
+haO = request.security(ha, timeframe.period, open)
+haH = request.security(ha, timeframe.period, high)
+haL = request.security(ha, timeframe.period, low)
+haC = request.security(ha, timeframe.period, close)
+hO = forceHA ? haO : open
+hH = forceHA ? haH : high
+hL = forceHA ? haL : low
+hC = forceHA ? haC : close
+
+// ==================================================================== PRICE PANE
+emaFast = ta.ema(hC, fastLen)
+emaSlow = ta.ema(hC, slowLen)
+bull    = emaFast > emaSlow
+ribCol  = bull ? color.new(#00b050, 0) : color.new(#e53935, 0)
+
+plot(showRib ? emaFast : na, "Fast EMA", color=ribCol, linewidth=2, force_overlay=true)
+plot(showRib ? emaSlow : na, "Slow EMA", color=ribCol, linewidth=2, force_overlay=true)
+
+// Optional shading. NOTE: fill() has no force_overlay parameter (its only arguments are
+// color/title/editable/show_last/fillgaps), so it cannot be pushed onto the price pane
+// from a pane script. plotcandle() is a plot*() function and does support force_overlay,
+// so the band is drawn as bodyless candles spanning the two EMAs.
+bandHi = math.max(emaFast, emaSlow)
+bandLo = math.min(emaFast, emaSlow)
+plotcandle(showBand ? bandLo : na, showBand ? bandHi : na, showBand ? bandLo : na, showBand ? bandHi : na,
+   title="Ribbon band", color=color.new(bull ? #00b050 : #e53935, 88), wickcolor=na, bordercolor=na, force_overlay=true)
+
+// staircase: HTF Heikin-Ashi EMA, non-repainting (last CLOSED higher-timeframe bar)
+lhLevel = request.security(ha, lhTF, ta.ema(close, lhLen)[1], lookahead=barmerge.lookahead_on)
+plot(showLH ? lhLevel : na, "Staircase", color=color.new(#b0b0c0, 0), linewidth=2, force_overlay=true)
+
+// 1G / 1R pullback candles
+ribTop = math.max(emaFast, emaSlow)
+ribBot = math.min(emaFast, emaSlow)
+redBar   = hC < hO
+greenBar = hC > hO
+oneG = bull     and redBar   and hC > ribBot and hL <= ribTop
+oneR = not bull and greenBar and hC < ribTop and hH >= ribBot
+
+plotshape(showPB and oneG ? ribBot : na, "1G pullback", shape.triangleup,   location.absolute, color.new(#00b050, 0), size=size.tiny, force_overlay=true)
+plotshape(showPB and oneR ? ribTop : na, "1R pullback", shape.triangledown, location.absolute, color.new(#e53935, 0), size=size.tiny, force_overlay=true)
+
+// ==================================================================== LOWER PANE
+vMa  = ta.sma(volume, maLen)
+mult = vMa > 0 ? volume / vMa : 0.0
+up   = hC >= hO
+
+cTeal   = color.new(#1b6f5b, 0)   // normal, HA up
+cPink   = color.new(#aa6466, 0)   // normal, HA down
+cOrange = color.new(#ffa548, 0)   // >= 2x average -> liquidity / where size traded
+cDark   = color.new(#7c0002, 0)   // >= 4x average -> climax / trap bar
+
+barCol = mult >= xtMult ? cDark : mult >= hiMult ? cOrange : (up ? cTeal : cPink)
+
+plot(volume, "Volume", style=plot.style_columns, color=barCol)
+plot(showMA ? vMa : na, "Volume SMA", color=color.new(#e26901, 0), linewidth=2)
+
+// ==================================================================== alerts
+isHi = mult >= hiMult and mult < xtMult
+isXt = mult >= xtMult
+
+alertcondition(ta.crossover(hC, lhLevel),  "Price crossed ABOVE the staircase", "{{ticker}} {{interval}} · close crossed ABOVE the staircase @ {{close}}")
+alertcondition(ta.crossunder(hC, lhLevel), "Price crossed BELOW the staircase", "{{ticker}} {{interval}} · close crossed BELOW the staircase @ {{close}}")
+alertcondition(ta.crossover(emaFast, emaSlow),  "Ribbon turned bullish", "{{ticker}} {{interval}} · ribbon flipped BULLISH")
+alertcondition(ta.crossunder(emaFast, emaSlow), "Ribbon turned bearish", "{{ticker}} {{interval}} · ribbon flipped BEARISH")
+alertcondition(oneG, "1G pullback (red candle into bullish ribbon)", "{{ticker}} {{interval}} · 1G — red candle pulled back into the bullish ribbon")
+alertcondition(oneR, "1R pullback (green candle into bearish ribbon)", "{{ticker}} {{interval}} · 1R — green candle pulled back into the bearish ribbon")
+alertcondition(isHi, "High volume (>= 2x average)",    "{{ticker}} {{interval}} · high-volume bar — size traded here")
+alertcondition(isXt, "Extreme volume (>= 4x average)", "{{ticker}} {{interval}} · EXTREME volume — climax / trap bar")

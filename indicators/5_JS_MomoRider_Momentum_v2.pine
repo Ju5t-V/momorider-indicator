@@ -1,0 +1,333 @@
+//@version=5
+// =====================================================================================
+//  MomoRider  ·  MOMENTUM  v2   (separate pane)  —  drop-in replacement for #2
+// =====================================================================================
+//  Same engine as 2_JS_MomoRider_Momentum.pine. The maths is UNCHANGED and the defaults
+//  are UNCHANGED. What v2 adds is a preset switch and a calibration readout, both of
+//  which come out of a second screen recording (screen-20260819-205619.mp4) that was
+//  measured frame-by-frame.
+//
+//  WHAT THAT RECORDING ESTABLISHED
+//
+//  1. Three EXACT momentum values, read off JS's own price scale. Each is anchored to a
+//     bar identified independently: the ribbon EMAs / volume SMA printed on that same
+//     frame matched that bar to the last printed digit, so the bar is not in doubt.
+//         BTCUSDT.P 30m  2026-08-18 00:30 UTC  ->  29.8
+//         SXTUSDT.P 15m  2026-08-19 06:45 UTC  ->  74.563001
+//         SXTUSDT.P 15m  2026-08-19 08:15 UTC  ->   8.617047
+//     These are permanent regression tests — see the "Calibration readout" input.
+//
+//  2. The zone bands were measured off the pixels, not assumed: GREEN 90..100,
+//     RED 0..10. Confirms what #2 already draws.
+//
+//  3. The oscillator really is bounded 0..100 and plateaus at both rails — the
+//     Schaff/STC family is right. Adding a THIRD smoothing stage was tested and buys
+//     nothing (fit RMSE 11.06 vs 11.08), so the 2-stage form stays.
+//
+//  4. THE DEFAULTS ARE CORRECT AND WERE NOT CHANGED. The label pills visible in the
+//     recording are the real test, because the labels ARE the 3G/3R trigger. On the
+//     BTC 30m window the original prints LL, HH, HL, HH, HL. The shipped defaults
+//     reproduce all five, with the right types and on the right side of the pane.
+//     A parameter set fitted to the three exact values above instead invents a
+//     spurious sixth pivot that is not on the original chart — i.e. "correcting" the
+//     engine to hit those numbers BREAKS the entry trigger. It was not done.
+//
+//  5. Known, measured limitation: the pivots land late. Across those five pivots the
+//     shipped defaults are 8 bars late in total (1.6 bars each). Types and order are
+//     right; the bar is not. The "Fast pivots" preset cuts that to 1 bar in total, but
+//     it is fitted to that ONE 60-bar window (16k parameter sets reproduce the same
+//     sequence), so it is EXPERIMENTAL — off by default. Use it to A/B, not to trust.
+//
+//  NOT MODELLED: the small green/red triangles on JS's PRICE pane are from a different
+//  script (he runs 4-5 indicators). They are visible in the recording but their rule
+//  could not be determined from it, so nothing here invents them. He never opens an
+//  indicator settings dialog anywhere in the 10:39, so no parameter was ever revealed.
+// =====================================================================================
+
+indicator("MomoRider · Momentum v2 (HH/HL/LH/LL)", shorttitle="MR Momentum v2", overlay=false, max_labels_count=500)
+
+// ------------------------------------------------------------------ inputs
+grpS = "Source"
+haMode = input.string("Chart (use if chart is already Heikin Ashi)", "Candle source", options=["Chart (use if chart is already Heikin Ashi)", "Force Heikin Ashi"], group=grpS)
+
+grpO = "Momentum engine"
+preset = input.string("JS-matched (verified)", "Preset", options=["JS-matched (verified)", "Fast pivots (EXPERIMENTAL)", "Custom (use the values below)"], group=grpO,
+   tooltip="JS-matched reproduces the original's pivot sequence exactly on the one window that could be measured. Fast pivots cuts the label lag but is fitted to that single window only — treat it as a test, not a truth.")
+dtLenI = input.int(39,  "Detrend EMA length",   minval=2, group=grpO)
+cyc1I  = input.int(14,  "Stochastic length #1", minval=2, group=grpO)
+sm1I   = input.float(0.72, "Smoothing factor #1", minval=0.05, maxval=1.0, step=0.001, group=grpO)
+cyc2I  = input.int(26,  "Stochastic length #2", minval=2, group=grpO)
+sm2I   = input.float(0.67, "Smoothing factor #2", minval=0.05, maxval=1.0, step=0.001, group=grpO)
+
+isJS   = preset == "JS-matched (verified)"
+isFast = preset == "Fast pivots (EXPERIMENTAL)"
+dtLen  = isJS ? 39   : isFast ? 13    : dtLenI
+cyc1   = isJS ? 14   : isFast ? 11    : cyc1I
+sm1    = isJS ? 0.72 : isFast ? 0.473 : sm1I
+cyc2   = isJS ? 26   : isFast ? 15    : cyc2I
+sm2    = isJS ? 0.67 : isFast ? 0.691 : sm2I
+
+grpZ = "Zones"
+zHi = input.float(90, "Upper zone (green band)", group=grpZ)
+zLo = input.float(10, "Lower zone (red band)",   group=grpZ)
+
+grpP = "Structure labels"
+pivLen   = input.int(3, "Pivot strength", minval=1, tooltip="Bars either side of an oscillator swing needed to confirm it.", group=grpP)
+minSep   = input.int(4, "Minimum bars between pivots", minval=1, group=grpP)
+showLbl  = input.bool(true, "Show HH / HL / LH / LL labels", group=grpP)
+
+grpG = "4G / 4R setup"
+ribFast = input.int(26, "Ribbon fast EMA", minval=1, group=grpG)
+ribSlow = input.int(52, "Ribbon slow EMA", minval=1, group=grpG)
+win     = input.int(5, "Setup window (bars)", minval=2, tooltip="How many bars the four conditions may be spread over. 5 = tight/strict; raise it if you find valid setups are being missed because the momentum pivot confirms late.", group=grpG)
+showSig = input.bool(true, "Show 4G / 4R signal", group=grpG)
+
+// ------------------------------------------------------------------ HA source
+ha = ticker.heikinashi(syminfo.tickerid)
+forceHA = haMode == "Force Heikin Ashi"
+// call request.security unconditionally (never inside a conditional), then pick
+haO = request.security(ha, timeframe.period, open)
+haH = request.security(ha, timeframe.period, high)
+haL = request.security(ha, timeframe.period, low)
+haC = request.security(ha, timeframe.period, close)
+hO = forceHA ? haO : open
+hH = forceHA ? haH : high
+hL = forceHA ? haL : low
+hC = forceHA ? haC : close
+
+// ------------------------------------------------------------------ oscillator
+f_stoch(_s, _len) =>
+    hh = ta.highest(_s, _len)
+    ll = ta.lowest(_s, _len)
+    rng = hh - ll
+    rng <= 0 ? 50.0 : 100.0 * (_s - ll) / rng
+
+src = (hH + hL) / 2
+dt  = src - ta.ema(src, dtLen)
+
+v1 = f_stoch(dt, cyc1)
+var float pf = na
+pf := na(pf[1]) ? v1 : pf[1] + sm1 * (v1 - pf[1])
+
+v3 = f_stoch(pf, cyc2)
+var float osc = na
+osc := na(osc[1]) ? v3 : osc[1] + sm2 * (v3 - osc[1])
+
+// ------------------------------------------------------------------ plot + zones
+cOrange = color.new(#ff9800, 0)
+cGreen  = color.new(#4caf50, 0)
+cRed    = color.new(#c62828, 0)
+
+lineCol = osc <= zLo ? cGreen : osc >= zHi ? cRed : cOrange
+plot(osc, "Momentum", color=lineCol, linewidth=2)
+
+hTop  = hline(100, "100", color=color.new(color.gray, 70), linestyle=hline.style_dotted)
+hHi   = hline(zHi, "Upper zone", color=color.new(color.gray, 70), linestyle=hline.style_dotted)
+hLo   = hline(zLo, "Lower zone", color=color.new(color.gray, 70), linestyle=hline.style_dotted)
+hBot  = hline(0,   "0",  color=color.new(color.gray, 70), linestyle=hline.style_dotted)
+fill(hTop, hHi, color=color.new(#4caf50, 88), title="Green band 90-100")
+fill(hLo, hBot, color=color.new(#c62828, 88), title="Red band 0-10")
+
+// ------------------------------------------------------------------ optional: Liquidity Hunter volume
+// Free-plan helper. The standalone volume script is a 3rd indicator; if you only have two
+// slots, switch this on instead — same information, drawn as faint columns behind the line.
+// Scaling: 1x average = 25, 2x = 50, 4x (and above) = 100.
+grpV = "Liquidity volume (free-plan helper)"
+showVol = input.bool(false, "Show liquidity volume columns", group=grpV)
+vMaLen  = input.int(20,  "Volume average length",   minval=1, group=grpV)
+vHiMult = input.float(2.0, "High-volume multiple",    minval=1.0, step=0.1, group=grpV)
+vXtMult = input.float(4.0, "Extreme-volume multiple", minval=1.0, step=0.1, group=grpV)
+
+vMa   = ta.sma(volume, vMaLen)
+vMult = vMa > 0 ? volume / vMa : 0.0
+vScaled = math.min(100.0, vMult * 25.0)
+vUp = hC >= hO
+vCol = vMult >= vXtMult ? color.new(#7c0002, 45) : vMult >= vHiMult ? color.new(#ffa548, 55) : color.new(vUp ? #1b6f5b : #aa6466, 78)
+plot(showVol ? vScaled : na, "Liquidity volume", style=plot.style_columns, color=vCol)
+
+// ------------------------------------------------------------------ zig-zag structure on the oscillator
+ph = ta.pivothigh(osc, pivLen, pivLen)
+pl = ta.pivotlow(osc,  pivLen, pivLen)
+
+var int    lastType = 0        // 1 = high, -1 = low, 0 = none
+var int    lastBar  = -1
+var float  lastOsc  = 0.0
+var float  curHiPx  = na       // price at the CURRENT (most recent) high pivot
+var float  refHiPx  = na       // price at the high pivot BEFORE that one
+var float  curLoPx  = na
+var float  refLoPx  = na
+var label  lastLbl  = na
+
+bool  bullStruct    = false    // this bar confirmed an HH or HL
+bool  bearStruct    = false    // this bar confirmed an LH or LL
+float structOsc     = na       // oscillator value at that pivot
+
+pBar = bar_index - pivLen
+pOsc = osc[pivLen]
+pPx  = hC[pivLen]
+
+f_mklabel(_bar, _txt, _isHigh) =>
+    y = _isHigh ? 112.0 : -12.0
+    label.new(_bar, y, _txt, xloc.bar_index, yloc.price,
+       color = (_txt == "HH" or _txt == "HL") ? cGreen : cRed,
+       style = _isHigh ? label.style_label_down : label.style_label_up,
+       textcolor = color.white, size = size.small)
+
+if not na(ph) or not na(pl)
+    isHigh    = not na(ph)
+    sameType  = lastType == (isHigh ? 1 : -1)
+    better    = sameType and (isHigh ? pOsc > lastOsc : pOsc < lastOsc)
+    farEnough = lastBar < 0 or (pBar - lastBar) >= minSep
+
+    if (not sameType and farEnough) or better
+        // replacing a same-type pivot: drop its label, keep the older reference price
+        if better
+            label.delete(lastLbl)
+
+        string txt = ""
+        if isHigh
+            if not better
+                refHiPx := curHiPx          // a genuinely new leg -> shift the reference
+            txt     := na(refHiPx) ? "HH" : (pPx >= refHiPx ? "HH" : "LH")
+            curHiPx := pPx
+        else
+            if not better
+                refLoPx := curLoPx
+            txt     := na(refLoPx) ? "HL" : (pPx >= refLoPx ? "HL" : "LL")
+            curLoPx := pPx
+
+        if showLbl
+            lastLbl := f_mklabel(pBar, txt, isHigh)
+
+        lastType   := isHigh ? 1 : -1
+        lastBar    := pBar
+        lastOsc    := pOsc
+        structOsc  := pOsc
+        bullStruct := txt == "HH" or txt == "HL"
+        bearStruct := txt == "LH" or txt == "LL"
+
+// ------------------------------------------------------------------ 4G / 4R engine
+emaF = ta.ema(hC, ribFast)
+emaS = ta.ema(hC, ribSlow)
+bull = emaF > emaS
+ribTop = math.max(emaF, emaS)
+ribBot = math.min(emaF, emaS)
+
+redBar   = hC < hO
+greenBar = hC > hO
+
+// 1G / 1R : the pull-back candle that touches the ribbon
+oneG = bull     and redBar   and hC > ribBot and hL <= ribTop
+oneR = not bull and greenBar and hC < ribTop and hH >= ribBot
+
+// 4G / 4R : the candle immediately after the pull-back candle flips the other way
+var int  g1bar = -1
+var bool g4ok  = false
+if oneG
+    g1bar := bar_index
+    g4ok  := false
+if g1bar >= 0 and bar_index == g1bar + 1 and greenBar
+    g4ok := true
+
+var int  r1bar = -1
+var bool r4ok  = false
+if oneR
+    r1bar := bar_index
+    r4ok  := false
+if r1bar >= 0 and bar_index == r1bar + 1 and redBar
+    r4ok := true
+
+// 2G / 2R : momentum inside the opposite-colour zone (line turned green / red)
+twoG = osc <= zLo
+twoR = osc >= zHi
+
+// 3G / 3R : the structure label must belong to the SAME oversold / overbought leg,
+// so require the pivot itself to have sat in (or right at the edge of) that zone.
+threeG = bullStruct and not na(structOsc) and structOsc <= zLo + 15
+threeR = bearStruct and not na(structOsc) and structOsc >= zHi - 15
+
+sinceOneG = ta.barssince(oneG)
+sinceTwoG = ta.barssince(twoG)
+sinceThrG = ta.barssince(threeG)
+sinceOneR = ta.barssince(oneR)
+sinceTwoR = ta.barssince(twoR)
+sinceThrR = ta.barssince(threeR)
+
+readyG = g4ok and not na(sinceOneG) and sinceOneG <= win and not na(sinceTwoG) and sinceTwoG <= win and not na(sinceThrG) and sinceThrG <= win
+readyR = r4ok and not na(sinceOneR) and sinceOneR <= win and not na(sinceTwoR) and sinceTwoR <= win and not na(sinceThrR) and sinceThrR <= win
+
+var bool firedG = false
+var bool firedR = false
+if oneG
+    firedG := false
+if oneR
+    firedR := false
+
+sig4G = readyG and not firedG
+sig4R = readyR and not firedR
+if sig4G
+    firedG := true
+if sig4R
+    firedR := true
+
+plotshape(showSig and sig4G ? 50 : na, "4G LONG",  shape.labelup,   location.absolute, cGreen, text="4G", textcolor=color.white, size=size.small)
+plotshape(showSig and sig4R ? 50 : na, "4R SHORT", shape.labeldown, location.absolute, cRed,   text="4R", textcolor=color.white, size=size.small)
+
+// ------------------------------------------------------------------ alerts
+// Everything needed to execute is packed into the message: side, symbol, timeframe,
+// entry reference, the momentum reading, and the ribbon level to lean the stop on.
+// NOTE: {{...}} placeholders only work in alertcondition() messages, never in alert(),
+// so the alert() strings below are built from real variables.
+hdr  = syminfo.ticker + " " + timeframe.period
+msgG = "4G LONG · " + hdr + "\nEntry(close): " + str.tostring(hC, format.mintick) + "\nMomentum: " + str.tostring(osc, "#.0") + " (came out of the 0-" + str.tostring(zLo, "#") + " zone)\nStructure: bullish HH/HL confirmed\nRibbon (stop reference): " + str.tostring(ribBot, format.mintick)
+msgR = "4R SHORT · " + hdr + "\nEntry(close): " + str.tostring(hC, format.mintick) + "\nMomentum: " + str.tostring(osc, "#.0") + " (came out of the " + str.tostring(zHi, "#") + "-100 zone)\nStructure: bearish LH/LL confirmed\nRibbon (stop reference): " + str.tostring(ribTop, format.mintick)
+
+alertcondition(sig4G, "4G LONG setup complete", "4G LONG {{ticker}} {{interval}} @ {{close}}")
+alertcondition(sig4R, "4R SHORT setup complete", "4R SHORT {{ticker}} {{interval}} @ {{close}}")
+alertcondition(bullStruct, "Bullish momentum structure (HH or HL)", "{{ticker}} {{interval}} · bullish momentum structure printed")
+alertcondition(bearStruct, "Bearish momentum structure (LH or LL)", "{{ticker}} {{interval}} · bearish momentum structure printed")
+alertcondition(ta.crossunder(osc, zLo), "Momentum entered the lower (red) zone", "{{ticker}} {{interval}} · momentum entered the 0-10 zone — line turns green")
+alertcondition(ta.crossover(osc, zHi),  "Momentum entered the upper (green) zone", "{{ticker}} {{interval}} · momentum entered the 90-100 zone — line turns red")
+
+if sig4G
+    alert(msgG, alert.freq_once_per_bar_close)
+if sig4R
+    alert(msgR, alert.freq_once_per_bar_close)
+
+// ------------------------------------------------------------------ calibration readout
+// The three values below were read directly off JS Tradventure's own charts in the
+// 2026-08-19 screen recording, each anchored to a bar identified independently (the
+// printed ribbon EMAs / volume SMA matched that bar to the last printed digit).
+// Turn this on, set your chart to the same symbol+timeframe, scroll to the bar named
+// in the row, and compare. This is how you re-verify the engine on any future chart.
+grpC = "Calibration readout"
+showCal = input.bool(false, "Show calibration readout", group=grpC, tooltip="A small table with this bar's momentum to 6 dp plus the three values measured off the original JS charts. Use it to re-verify the engine against a JS screenshot.")
+
+var table calT = table.new(position.top_right, 3, 6, border_width=1, frame_width=1, frame_color=color.new(color.gray, 50))
+if showCal and barstate.islast
+    bg  = color.new(#101418, 10)
+    hdr = color.new(#1b2530, 0)
+    tCol = color.new(#d8dee6, 0)
+    table.cell(calT, 0, 0, "MomoRider momentum v2", bgcolor=hdr, text_color=tCol, text_size=size.small)
+    table.cell(calT, 1, 0, preset,                  bgcolor=hdr, text_color=tCol, text_size=size.small)
+    table.cell(calT, 2, 0, "",                      bgcolor=hdr, text_color=tCol, text_size=size.small)
+
+    table.cell(calT, 0, 1, "this bar", bgcolor=bg, text_color=tCol, text_size=size.small)
+    table.cell(calT, 1, 1, str.tostring(osc, "#.######"), bgcolor=bg, text_color=cOrange, text_size=size.small)
+    table.cell(calT, 2, 1, syminfo.ticker + " " + timeframe.period, bgcolor=bg, text_color=tCol, text_size=size.small)
+
+    table.cell(calT, 0, 2, "measured on the original JS chart", bgcolor=hdr, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 1, 2, "value",                             bgcolor=hdr, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 2, 2, "bar (UTC)",                         bgcolor=hdr, text_color=tCol, text_size=size.tiny)
+
+    table.cell(calT, 0, 3, "BTCUSDT.P  30m", bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 1, 3, "29.8",           bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 2, 3, "2026-08-18 00:30", bgcolor=bg, text_color=tCol, text_size=size.tiny)
+
+    table.cell(calT, 0, 4, "SXTUSDT.P  15m", bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 1, 4, "74.563001",      bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 2, 4, "2026-08-19 06:45", bgcolor=bg, text_color=tCol, text_size=size.tiny)
+
+    table.cell(calT, 0, 5, "SXTUSDT.P  15m", bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 1, 5, "8.617047",       bgcolor=bg, text_color=tCol, text_size=size.tiny)
+    table.cell(calT, 2, 5, "2026-08-19 08:15", bgcolor=bg, text_color=tCol, text_size=size.tiny)

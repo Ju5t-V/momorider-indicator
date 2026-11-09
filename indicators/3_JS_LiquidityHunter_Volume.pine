@@ -1,0 +1,63 @@
+//@version=5
+// =====================================================================================
+//  MomoRider  ·  Indicator 3 of 3 :  LIQUIDITY HUNTER (volume)   -- bottom pane
+// =====================================================================================
+//  This is the "where most people traded (and got trapped)" pane.
+//
+//  MEASURED off the BTCUSDT.P 30m screenshot against the real Bybit volumes:
+//    · The orange line is SMA(volume, 20).
+//         Printed value 1,334.1 was reproduced EXACTLY and uniquely
+//         (searched sma/ema/rma/wma x lengths 2..120 — only sma(20) matched).
+//         => the "(20)" in your alert "JS Liquidity Hunter (20) Crossing 249.1"
+//            is this length, i.e. THIS is the Liquidity Hunter script.
+//    · Bar colouring, from 61 classified bars:
+//         volume >= 4.0 x SMA20  -> dark red   (measured ratios 4.09 .. 6.74)
+//         volume >= 2.0 x SMA20  -> orange     (measured ratios 2.03 .. 3.07)
+//         otherwise              -> teal if the HA candle is up, dusty red if down
+//         (highest non-highlighted bar measured 1.98, lowest orange 2.03 —
+//          so the 2.0x boundary is exact)
+//
+//  NOTE ON THE FREE PLAN: this is a 3rd indicator. If you only have 2 slots, leave this
+//  one off and instead switch on "Liquidity volume" inside the Momentum indicator, which
+//  draws the same information as background columns in that pane.
+// =====================================================================================
+
+indicator("MomoRider · Liquidity Hunter (volume)", shorttitle="MR Liquidity", overlay=false, format=format.volume)
+
+// ------------------------------------------------------------------ inputs
+maLen  = input.int(20,  "Volume average length", minval=1)
+hiMult = input.float(2.0, "High-volume multiple",    minval=1.0, step=0.1)
+xtMult = input.float(4.0, "Extreme-volume multiple", minval=1.0, step=0.1)
+showMA = input.bool(true, "Show volume average")
+
+// ------------------------------------------------------------------ HA candle direction
+ha  = ticker.heikinashi(syminfo.tickerid)
+haO = request.security(ha, timeframe.period, open)
+haC = request.security(ha, timeframe.period, close)
+useChart = input.bool(true, "Chart is already Heikin Ashi", tooltip="Leave ticked when the chart type is Heikin Ashi.")
+o_ = useChart ? open  : haO
+c_ = useChart ? close : haC
+up = c_ >= o_
+
+// ------------------------------------------------------------------ engine
+vMa  = ta.sma(volume, maLen)
+mult = vMa > 0 ? volume / vMa : 0.0
+
+cTeal   = color.new(#1b6f5b, 0)   // normal, HA up
+cPink   = color.new(#aa6466, 0)   // normal, HA down
+cOrange = color.new(#ffa548, 0)   // >= 2x average  -> liquidity / where size traded
+cDark   = color.new(#7c0002, 0)   // >= 4x average  -> climax / trap bar
+
+barCol = mult >= xtMult ? cDark : mult >= hiMult ? cOrange : (up ? cTeal : cPink)
+
+plot(volume, "Volume", style=plot.style_columns, color=barCol)
+plot(showMA ? vMa : na, "Volume SMA", color=color.new(#e26901, 0), linewidth=2)
+
+// ------------------------------------------------------------------ alerts
+isHi = mult >= hiMult and mult < xtMult
+isXt = mult >= xtMult
+
+alertcondition(isHi, "High volume (>= 2x average)",    "{{ticker}} {{interval}} · high-volume bar — size traded here")
+alertcondition(isXt, "Extreme volume (>= 4x average)", "{{ticker}} {{interval}} · EXTREME volume — climax / trap bar")
+alertcondition(isXt and up,      "Extreme volume on an UP bar",   "{{ticker}} {{interval}} · extreme volume, up bar")
+alertcondition(isXt and not up,  "Extreme volume on a DOWN bar",  "{{ticker}} {{interval}} · extreme volume, down bar")

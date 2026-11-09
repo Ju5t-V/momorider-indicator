@@ -1,0 +1,5992 @@
+Journal of Financial Economics 142 (2021) 377–403 
+Contents lists available at ScienceDirect 
+Journal of Financial Economics 
+journal homepage: www.elsevier.com/locate/jfec 
+Hedging demand and market intraday momentum ✩ 
+Guido Baltussen a , c , ∗, Zhi Da b , Sten Lammers a , Martin Martens c 
+a Erasmus School of Economics, Erasmus University Rotterdam, Burgemeester Oudlaan 50, Rotterdam 30 0 0 DR, Netherlands 
+b University of Notre Dame, 239 Mendoza College of Business, Notre Dame, IN 46556, USA 
+c Robeco Asset Management, Weena 850, Rotterdam 3014 DA, Netherlands 
+a r t i c l e 
+i n f o 
+Article history: 
+Received 16 January 2020 
+Revised 27 August 2020 
+Accepted 23 September 2020 
+Available online 4 May 2021 
+JEL classiﬁcation: 
+G12 
+G15 
+G40 
+Q02 
+Keywords: 
+Return momentum 
+Futures trading 
+Hedging demand 
+Return predictability 
+Indexing 
+a b s t r a c t 
+Hedging short gamma exposure requires trading in the direction of price movements, 
+thereby creating price momentum. Using intraday returns on over 60 futures on equities, 
+bonds, commodities, and currencies between 1974 and 2020, we ﬁnd strong market in- 
+traday momentum everywhere. The return during the last 30 minutes before the market 
+close is positively predicted by the return during the rest of the day (from previous mar- 
+ket close to the last 30 minutes). The predictive power is economically and statistically 
+highly signiﬁcant, and reverts over the next days. We provide novel evidence that links 
+market intraday momentum to the gamma hedging demand from market participants such 
+as market makers of options and leveraged ETFs. 
+© 2021 Published by Elsevier B.V. 
+1. Introduction 
+During the last week of February 2020, as the coron- 
+avirus surged outside China, the U.S. stock market crashed 
+by more than 10% and market volatility soared. Accord- 
+ing to market participants, hedging by traders with short 
+gamma positions has been a big contributor to the in- 
+crease in volatility. 1 Gamma measures how much the price 
+of a derivative accelerates when the underlying security 
+✩ We thank SqueezeMetrics for providing data; Kester Brons and Tijmen 
+Van Paasen for their research assistance; and Wouter Tilgenkamp, Xiao 
+Xiao, and Guofu Zhou for helpful comments. 
+∗Corresponding author at: Erasmus School of Economics, Erasmus Uni- 
+versity Rotterdam, Burgemeester Oudlaan 50, Rotterdam 30 0 0 DR, Nether- 
+lands. 
+E-mail address: baltussen@ese.eur.nl (G. Baltussen). 
+1 See https://www.wsj.com/articles/the- invisible- forces- exacerbating- 
+market- swings- 11582804802 . JP Morgan Chase estimated that more than 
+$100 billion in stock selling during the ﬁrst two days of the week was 
+due to such hedging activities. 
+price moves. Market makers in products with gamma ex- 
+posure, such as options and leveraged ETFs, are commonly 
+net short these products. Consequently, they have to buy 
+additional securities when prices are rising and sell when 
+prices are falling to ensure that their positions are delta- 
+neutral. Trading in the direction of the market price move- 
+ment will exacerbate market swings and thereby result in 
+market intraday momentum. 
+Similar hedging activities are carried out by other mar- 
+ket participants and have existed for a long time, for ex- 
+ample, dynamic hedging programs like portfolio insurance 
+( Leland and Rubinstein, 1976 ) and the hedging of vari- 
+able annuities products by insurers. Indeed, portfolio in- 
+surance was a popular portfolio-protecting strategy during 
+the 1980s, achieving a market cap of $70 billion in the 
+United States around 1987, and is commonly thought to 
+be one of the drivers of the October 19th, 1987 crash in 
+the equity futures market, accounting for up to 24% of the 
+market’s short volume on that day ( Tosini, 1988 ). More re- 
+cently, popular volatility-targeting strategies (for example, 
+https://doi.org/10.1016/j.jﬁneco.2021.04.029 
+0304-405X/© 2021 Published by Elsevier B.V. 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+risk parity portfolios), variance swaps, and levered or in- 
+verse ETFs all conduct similar hedging trades. 2 These hedg- 
+ing activities all contribute to market intraday momentum. 
+In this paper, we extensively study market intraday mo- 
+mentum, or time-series momentum at the market level at 
+the intraday frequency, across all major asset classes go- 
+ing back to the 1970s. Our comprehensive coverage is the 
+result of examining intraday trading of futures contracts. 
+Speciﬁcally, our data consists of 17 developed markets eq- 
+uity index futures (6 North American, 8 European, 3 Asian 
+or Australian); 16 developed market bond futures (6 North 
+American, 7 European, 3 Asian or Australian); 21 com- 
+modity futures (5 metals, 4 energies, 12 softs), and 8 cur- 
+rency futures. Our sample period covers almost 45 years 
+from December 1974 to May 2020. We present novel ev- 
+idence that market intraday momentum appears “every- 
+where” (i.e., robustly across asset classes and time periods) 
+and that gamma hedging is an important driver. 
+To facilitate our discussion, we deﬁne a trading day as 
+the 24-hour period from the market close on day t −1 
+to the market close on day t. We select the open and 
+close time to match the “common” trading hours of the 
+market. The time line below then partitions the trading 
+day into ﬁve parts: overnight ( ON, from close to open); 
+ﬁrst half an hour ( F H, the ﬁrst 30 minutes after the mar- 
+ket open); middle of the day ( M, from the end of F H to 
+an hour before the market close); second-to-last half an 
+hour ( SLH, the second-to-last 30-minute interval); and last 
+half an hour ( LH, the last 30 minutes before the market 
+close). The combination of the ﬁrst two partitions is la- 
+belled “ONFH ” ( ONF H = ON + F H). The combination of the 
+ﬁrst four partitions is labelled as “rest of the day” ( ROD = 
+ON + F H + M + SLH) and will be the focus of our paper. 
+We start by demonstrating a robust stylized fact: the 
+rest-of-day return ( r ROD ) positively and signiﬁcantly pre- 
+2 Anecdotal evidence of this channel is covered in several newspaper 
+articles, including Jason Zweig, “Will leveraged ETFs put cracks in market 
+close?,” Wall Street Journal , April 18, 2009, and Tom Lauricella, Susan Pul- 
+liam, and Diya Gullapalli, “Are ETFs driving late-day turns?,” December 
+15, 2018, and, more recently, Gunjan Banerji, “The invisible forces exac- 
+erbating market swings,” Wall Street Journal , February 27, 2020, Gunjan 
+Banerji, “The 30 minutes that can make or break the trading day,” Wall 
+Street Journal , March 11, 2020, and Gunjan Banerji and Gregory Zucker- 
+man, “Why are markets so volatile? It’s not just the coronavirus,” Wall 
+Street Journal , March 16, 2020. 
+dicts the last half-an-hour return ( r LH ) across all ma- 
+jor asset classes and markets. This effect is robust over 
+time across our sample period of 1974 to 2020, and dis- 
+tinct from the cross-sectional intraday return seasonality of 
+Heston et al. (2010) . A simple market intraday momentum 
+trading strategy produces consistent returns over time, 
+translating into high and attractive (annualized) Sharpe ra- 
+tios between 0.87 and 1.73 at the asset class level. 
+Note that our result differs from that obtained by 
+Gao et al. (2018) , who ﬁnd that r ONF H predicts r LH for nine 
+ETFs on equity indices and one ETF on a bond index. While 
+we also conﬁrm that r ONF H positively and signiﬁcantly pre- 
+dicts r LH in other markets and asset classes, its predictive 
+power is weaker than r ROD . First, r ROD has higher out-of- 
+sample R -squares than r ONF H . Second, when r ROD and r ONF H 
+have different signs, r ROD in general does a better job pre- 
+dicting r LH . Gao et al. (2018) also ﬁnd that r SLH predicts r LH . 
+We ﬁnd that the predictive power of r SLH does not extend 
+to other asset classes such as commodities and currencies. 
+In contrast, r M seems to predict r LH better than r SLH . We 
+further show that these results are robust over time and 
+markets, and generally also show up in the returns of sim- 
+ple trading strategies. All in all, using data across multiple 
+asset classes and markets in an extended sample period, 
+we conclude that r ROD positively and signiﬁcantly predicts 
+r LH and this robust pattern better describes market intra- 
+day momentum everywhere. 
+Next, we provide two novel pieces of empirical evi- 
+dence linking hedging demand to the market intraday mo- 
+mentum. The ﬁrst is based on S&P 500 index options. Op- 
+tion market makers need to trade in the same direction 
+as the underlying movement of the S&P 500 index if they 
+have negative gamma exposure. The more negative their 
+gamma exposure is, the more aggressively they have to 
+trade. Using a direct proxy of their negative gamma expo- 
+sure (NGE), we conﬁrm that market intraday momentum is 
+present for the index when NGE is negative and becomes 
+stronger when NGE becomes more negative. 
+The second piece of evidence is based on leveraged 
+ETFs (LETF). Leveraged ETFs seek to deliver a multiple 
+of the daily market return of their underlying. As of the 
+end of February 2009, Cheng and Madhavan (2010) esti- 
+mated that LETF rebalancing made up 16.8% (50.2%) of the 
+market-on-close volume on a day when the market moved 
+1% (5%). Shum et al. (2015) argue that market-on-close or- 
+ders have ﬁll risk, such that the hedging could start as 
+378 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+early as 30 minutes before close. This ﬁts nicely into our 
+reasoning that r ROD predicts r LH . Hedging demand on a par- 
+ticular LETF can be directly measured using its market cap- 
+italization and leverage and this hedging demand varies 
+considerably in the cross-section and over time. We ﬁnd 
+strong cross-sectional and time-series evidence that LETFs’ 
+hedging demand on a particular index drives the magni- 
+tude of its market intraday momentum pattern. 
+What’s so special about the end of a trading day? While 
+we do ﬁnd evidence that large price jumps during the day 
+predict subsequent returns, consistent with intraday hedg- 
+ing activities, the bulk of the hedge seems to take place 
+towards the end of the day. We conjecture that there are 
+at least ﬁve reasons for this decision. First, from a theoreti- 
+cal point of view, Clewlow and Hodges (1997) show that, in 
+the presence of partially ﬁxed transaction cost, it is optimal 
+to hedge only partially after a large price movement, im- 
+plying that additional hedging is required afterwards. Sec- 
+ond, the additional hedging could be deferred to the end 
+of the trading day for liquidity reasons. The U-shape in- 
+traday volume pattern across the equity, bond, commod- 
+ity, and currency markets in Fig. 1 conﬁrms that liquidity 
+tends to be high right after open and before close. Further, 
+spreads are generally lower and market depth higher when 
+trading towards the close. This is another reason why in- 
+vestors may not fully hedge their positions immediately af- 
+ter a jump during the day and will leave the bulk of hedg- 
+ing to be done in the last half hour, when liquidity is gen- 
+erally better, especially for trading larger quantities. 
+Third, while hedging is partial during the day, it tends 
+to be complete at the end of the day to protect against 
+overnight risk. Brock and Kleidon (1992) and Hong and 
+Wang (20 0 0) show that lower liquidity and higher price 
+risk overnight makes it optimal for market makers to close 
+delta positions before overnight. Fourth, holding positions 
+overnight typically incurs higher capital needs and invest- 
+ment frictions. For example, Bank for International Settle- 
+ments (BIS) capital requirements are driven by deltas at 
+close. Further, margin requirements generally increase for 
+overnight positions, while lending fees and margin inter- 
+est are typically charged only on positions held overnight 
+( Bogousslavsky, 2020 ). As a consequence, holding risky po- 
+sitions overnight not only comes with higher price risks, 
+but also with higher capital requirements. Market partic- 
+ipants therefore have an incentive to reduce delta at the 
+end of the day to free up capital and save cost. Finally, as 
+we have demonstrated, market makers of index products 
+such as LETFs have little choice but to hedge at the end of 
+the day. 3 
+Besides 
+hedging 
+demand, 
+other 
+factors 
+could 
+also contribute to the market intraday momentum. 
+Gao et al. (2018) discuss two: infrequent portfolio rebal- 
+ancing and late informed trading. Under the infrequent 
+rebalancing explanation, some institutional investors ef- 
+fectively choose to rebalance their portfolios in the ﬁrst 
+half hour and others in the last half hour. Rebalancing in 
+the same direction can thus generate momentum intraday. 
+3 The same holds for market makers of variance swaps, as payoff of a 
+variance swap is calculated based on the closing levels of the underlying 
+index. 
+Under the late informed trading explanation, traders who 
+are informed late trade in the last 30 minutes. Hence, 
+the same information is incorporated into prices during 
+both the ﬁrst and the last 30 minutes, resulting in mo- 
+mentum. Both explanations hinge on the strong U-shaped 
+intraday trading volume pattern, as informed trading and 
+rebalancing are expected to primarily take place at the 
+start and end of the trading session, when liquidity is high 
+( Admati and Pﬂeiderer, 1988; Bogousslavsky, 2016 ). The 
+fact that r ROD better predicts r LH than r ONF H suggests that 
+returns during the day also matter, and that hedging is an 
+important driver of market intraday momentum. 
+We conduct two additional tests that further differenti- 
+ate hedging demand from informed trading. We ﬁrst notice 
+that under the hedging explanation, the predictability of 
+r LH reﬂects transitory price pressure and should therefore 
+be reverted in the future. In contrast, the informed trading 
+explanation builds upon the arrival of fundamental infor- 
+mation, which should cause permanent price impact, and 
+hence no reversal in predictability. Empirically, in all four 
+asset classes, returns in the next three days are opposite to 
+those of r LH . For equities, bonds, and commodities, there is 
+a highly signiﬁcant mean-reversion, consistent with transi- 
+tory price pressure, which arises from hedging. 
+For another piece of evidence supporting the hedging 
+channel instead of informed trading, we turn to the under- 
+lying market for S&P 500, which closes at 4pm ET, at which 
+time most related options and levered ETFs also settle. Yet 
+futures contracts on the S&P 500 index still trade actively 
+at substantial volume for another 15 minutes until the fu- 
+tures settles at 4:15pm ET, so informed trading at suﬃcient 
+liquidity can well take place after 4pm ET. We ﬁnd that the 
+return predictability of r ROD does not extend to the futures 
+return beyond 4pm ET, which seems hard to reconcile with 
+the informed trading channel. 
+Our paper contributes to the voluminous literature on 
+return momentum. In the cross-section, winners in the 
+past six months to one year earn higher returns up to 
+one year in the future (see Jegadeesh and Titman, 1993 , 
+among others). Similarly in the time series, the past one- 
+year returns of an asset positively predict its future re- 
+turns across many asset classes (see Moskowitz et al., 2012 , 
+among others). Instead, we focus on market momentum 
+within a trading day. In this regard, our paper is most 
+closely related to Gao et al. (2018) but differs in several 
+aspects. Our analysis is much more comprehensive in its 
+coverage, spanning indices and futures contracts across all 
+major asset classes between 1974 and 2020. The market in- 
+traday momentum effect we observe is also different from 
+theirs. And, most importantly, we discover a novel underly- 
+ing economic force, which seems to be increasingly promi- 
+nent. In a related study Elaut et al. (2018) show intra- 
+day momentum in the RUB/USD currency pair since 2005, 
+which they attribute to dealers closing positions overnight. 
+Our paper also relates to a growing literature on in- 
+traday price patterns. Recently, Lou et al. (2019) reported 
+strong overnight and intraday return continuation and an 
+offsetting cross-period reversal at the individual stock level 
+and in equity return factors (see also Bogousslavsky, 2020; 
+Hendershott et al., 2020 ). Muravyev and Ni (2019) and 
+Goyenko and Zhang (2019) observe strong intraday and 
+379 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Fig. 1. Trading volume distribution during the day. This ﬁgure shows the average trading volume as a fraction of total daily volume per time bucket for 
+each asset class. The time buckets are (1) the “ﬁrst half an hour” ( F H, the ﬁrst 30 minutes after the market open), (2) the “middle of the day” ( M, from the 
+end of F H to an hour before the market close), (3) the “second-to-last half an hour” ( SLH, the second-to-last 30 minute interval), and (4) the “last half an 
+hour” ( LH, the last 30 minutes before the market close). Since bucket M contains more than 30 minutes, we divide its volume by the number of minutes 
+in the bucket and multiply by 30, such that all buckets represent volume per 30 minutes. Per market, we divide the buckets’ volumes by the daily volume 
+and average over time to get the average volume fractions per market. For each asset class, we then take the average over the markets belonging to that 
+asset class. Shown are the results for equity index futures (Panel (a)), government bond futures (Panel (b)), commodity futures (Panel (c)), and currency 
+futures (Panel (d)). Samples range from July 2003 to May 2020. 
+overnight differences in option returns. In subsequent 
+work, Barbon and Buraschi (2020) show that gamma hedg- 
+ing also drives intraday momentum and reversal patterns 
+in individual stocks throughout the trading day. Further, 
+Heston et al. (2010) ﬁnd evidence of intraday return sea- 
+sonality in the cross-section of stocks: returns continue 
+during the same half-hour intervals as in previous trad- 
+ing days, lasting from 1 to up to 40 trading days. While 
+these studies focus on individual stocks and their options, 
+our paper focuses on indices across a broad range of asset 
+classes. 4 We also ﬁnd market intraday momentum to be 
+distinct from intraday return seasonality, with r ROD contin- 
+uing to predict r LH even after controlling for r LH from pre- 
+vious days. 
+4 In addition, several studies utilize intraday price data to exam- 
+ine intraday volatility ( Chang et al., 1995 ) or the eﬃciency of volatil- 
+ity estimators. Examples include Bollerslev et al. (20 0 0) , Martens and 
+Van Dijk (2007) , and Bollerslev et al. (2018) . 
+Our results reveal that hedging demand coming from 
+options and LETFs ampliﬁes price changes and affects mar- 
+ket return dynamics over several days. Several other recent 
+studies link the rise in indexing products (like ETFs) to side 
+effects such as the ampliﬁcation of fundamental shocks 
+( Hong et al., 2012 ), excessive co-movement ( Barberis et al., 
+20 05; Greenwood, 20 05; Greenwood, 20 08; Da and Shive, 
+2018 ), a deterioration of the ﬁrm’s information envi- 
+ronment ( Israeli et al., 2017 ), increased non-fundamental 
+volatility in individual stocks ( Ben-David et al., 2018 ) and 
+VIX and commodity futures markets ( Todorov, 2019 ), and 
+non-fundamental shocks at the market level that result 
+in price reversals ( Baltussen et al., 2019 ). Intraday gamma 
+hedging demand effects could contribute to short-term 
+negative market reversals shown in the latter paper. In 
+a related study, Bogousslavsky and Muravyev (2019) ar- 
+gue that an increase in indexing is associated with an in- 
+crease in market close volumes and distortions in closing 
+price. These results are broadly consistent with the view in 
+380 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Wurgler (2011) that indexing can affect the general prop- 
+erties of markets. 
+The rest of the paper is organized as follows. 
+Section 2 describes our data and provides summary statis- 
+tics. Section 3 presents the main stylized facts about the 
+market intraday momentum pattern across the various 
+asset classes. Section 4 offers evidence supporting the 
+gamma hedging demand channel. Section 5 concludes. The 
+Appendix contains additional descriptions of the data and 
+various robustness results. 
+2. Data 
+To examine intraday momentum effects, we collect data 
+for the world’s largest, best traded, and most important 
+stock and government bond futures or indices in developed 
+markets around the world, as well as for commodity, and 
+currency futures. We obtain historical tick-by-tick data on 
+the major equity index, government bond, commodity and 
+currency futures from Tick Data LLC 5 The data consists of 
+17 developed markets’ equity futures (6 North American, 8 
+European, 3 Asian or Australian), 12 of which are also cov- 
+ered by data on their underlying equity indices; 16 devel- 
+oped markets bond futures (6 North American, 7 European, 
+3 Asian or Australian); 21 commodity futures (5 metals, 4 
+energies, 12 softs); and 8 currency futures with the sample 
+period ranging from December 1974 to May 2020. 
+We retrieve one-minute intervals containing the corre- 
+sponding open price, close price and trade volume. Volume 
+data is available from 2003 onwards. We consider the most 
+liquid contract (generally the nearest-to-delivery contract) 
+and roll it over when the daily tick volume of the next 
+back-month contract exceeds the current contract. Follow- 
+ing the procedure for intraday data ﬁltering in Barndorff- 
+Nielsen et al. (2008) , we ﬁlter the data by subsequently 
+(i) removing all observations with non-positive prices, (ii) 
+removing all non-business days, (iii) removing all days in 
+which the exchange closed earlier (such as Memorial Day), 
+and (iv) removing all days in which the total traded vol- 
+ume is less than 100 contracts. This procedure ensures that 
+the sample consists of regular trading days. Appendix A 
+provides a detailed overview of the included futures con- 
+tracts. 
+To determine ON, FH, M, SLH , and LH hours, we estab- 
+lish the opening and closing times of markets using the 
+following procedure. We select the observations that cor- 
+respond to the “common” trading hours of the market (i.e., 
+the openings hours of the cash (and ETF) market in line 
+with Gao et al. (2018) ), which typically differ from fu- 
+tures’ trading hours (futures trade for extended time pe- 
+riods, nowadays often close to 24 hours a day). Our mo- 
+tivation for this choice is that futures are derivatives and 
+are expected to behave like their underlying instruments; 
+these are the moments at which positions are most likely 
+rebalanced. This corresponds to the trading hours of the 
+underlying for equity futures; e.g., we select the observa- 
+tions of the S&P E-Mini between 09:30 and 16:00, as these 
+are the trading hours of the S&P 500. Futures are traded 
+5 www.tickdata.com . 
+nearly round-the-clock, but most of the trading happens 
+during the hours the underlying is trading. Trading volume 
+outside of these hours is typically substantially lower. By 
+contrast, the highest levels of trading volume clearly hap- 
+pen around open and close of the underlying equity index. 
+As equity markets have clear trading hours, it is straight- 
+forward to select the trading hours of the equity index it- 
+self. We correct for changes in trading hours over our sam- 
+ple, as, for example, the S&P 500 opened 30 minutes later 
+before 1985. 6 
+For futures on non-equity assets, it is not that straight- 
+forward to select the trading hours, as, for example, gov- 
+ernment bonds are generally traded over the counter. Fol- 
+lowing the patterns in equity markets, we select trading 
+hours of government bond futures based on volume plots 
+and selecting “open” and “close” times based on spikes in 
+volume. These spikes consistently happen at preset times, 
+signaling their suitability as opening and closing times. For 
+all but Australian and Japanese bond futures, this results in 
+using the regular opening hours of the futures as open, and 
+the end of the daily settlement period as close. We use the 
+regular trading hours of Australian and Japanese futures as 
+trading hours. 
+The currency futures we use are all U.S. listed. These 
+futures show volume spikes at 8:21 and 15:00, which cor- 
+respond to the open outcry hours of options on those fu- 
+tures; 15:00 also happens to be the end of the daily settle- 
+ment period for these futures. 
+The commodity futures in our sample have been sub- 
+ject to several changes in trading hours. Nowadays, most 
+of these futures trade almost 24 hours a day, but this used 
+to be different. Before the futures traded continuously, we 
+consider the actual trading hours of the futures as our 
+trading hours. After the introduction of continuous trad- 
+ing, we select trading hours based on volume plots, as is 
+the practice for government bond futures and currency fu- 
+tures. 
+For each of the asset classes, a more detailed descrip- 
+tion of the sample, along with trading hours at the end of 
+our sample, can be found in Appendix A. The trading hours 
+we consider over time and average volume plots are avail- 
+able upon request. 
+To examine the presence of intraday return predictabil- 
+ity, we calculate the return of buying at previous day’s 
+( t −1 ) close (c) and selling 30 minutes after today’s ( t) 
+opening (o) for each futures or index, 
+r ONF H,t = P o+30 ,t 
+P c,t−1 
+−1 , 
+(1) 
+and every following half-hour return until close. 
+We argue that the return until the last half hour, the re- 
+turn of buying at previous day’s close and selling 30 min- 
+utes before today’s close, 
+r ROD,t = P c−30 ,t 
+P c,t−1 
+−1 , 
+(2) 
+6 For several equity index futures, the standard contracts were quickly 
+outgrown in terms of traded volume by their mini versions. To obtain the 
+largest sample, we ﬁrst consider the standard contracts and replace them 
+with the mini versions after its introduction. 
+381 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+predicts the last half-hour return. To investigate the added 
+value of considering the return until the last half hour over 
+the ﬁrst half-hour return, we also consider the return be- 
+tween the end of the ﬁrst half hour and the last hour and 
+the second-to-last half hour, 
+r M,t = P c−60 ,t 
+P o+30 ,t 
+−1 
+(3) 
+r SLH,t = P c−30 ,t 
+P c−60 ,t 
+−1 . 
+(4) 
+We remove all observations outside of the trading hours 
+we consider a trading day. This way, the overnight return, 
+which is contained in the ﬁrst half-hour return, is com- 
+puted using the price at our closing time on the previous 
+day: e.g., a German future usually trades between 08:00 
+and 22:00. When adjusting the time frame to 08:00–17:15, 
+r ONF H is computed over the closing price at 17:15 yesterday 
+and the closing price of the ﬁrst half hour today, 08:30. 
+For each asset class, we construct various groups, one 
+of which contains all futures belonging to that asset class. 
+Within equity index and bond futures, we consider ge- 
+ographical groups for U.S.-based futures (“USA”), futures 
+from Europe (“EU”), and futures from Australia or Asia 
+(“Australasia”). Commodity futures are not country speciﬁc, 
+such that we consider categorical groups for metals, ener- 
+gies, and softs. 
+Table 1 lists the tickers and trading hours for all the 
+futures contracts we used in the paper. 
+3. Market intraday momentum everywhere 
+In this section, we show a robust market intraday mo- 
+mentum effect in all four asset classes we examine. 
+We consider several regression speciﬁcations for pre- 
+dicting the last half-an-hour return( r LH ). In the ﬁrst spec- 
+iﬁcation, the only predictor is the return from previous 
+close to the end of the ﬁrst half an hour ( r ONF H ), as in 
+Gao et al. (2018) : 
+r LH,t = α + βONF H · r ONF H,t + ε t . 
+(5) 
+In the second speciﬁcation, we consider multiple pre- 
+dictors. In addition to r ONF H , we also include the return 
+during the middle of the day ( r M ) and the return in the 
+second-to-last half an hour ( r SLH ): 
+r LH,t = α + βONF H · r ONF H,t + βM · r M,t + βSLH · r SLH,t + ε t . 
+(6) 
+In the third speciﬁcation, we combine the returns from 
+all three periods into the return during the rest of the day 
+( r ROD ): 
+r LH,t = α + βROD · r ROD,t + ε t . 
+(7) 
+We also compute the out-of-sample (OOS) R 2 to mea- 
+sure the out-of-sample predictability for each individual 
+market. A positive OOS R 2 implies that the model makes 
+better forecasts, i.e., has a lower mean squared predic- 
+tion error (MSPE), than when using the recursive historical 
+mean as a prediction for the last half-hour return. For each 
+individual market, we make forecasts using an expanding 
+window, requiring at least 500 observations, or about two 
+years of data. 
+We then deﬁne the OOS R 2 as follows: 
+R 2 
+OOS = 1 −
+ T 
+t=1 (r LH,t −ˆ 
+r LH,t ) 2 
+ T 
+t=1 (r LH,t −¯r LH,t ) 2 , 
+(8) 
+where ˆ 
+r LH,t is the predicted last half-hour return on day t
+and ¯r LH,t is the historical average last half-hour return until 
+t −1 (expanding window). 
+To see whether the MSPE is signiﬁcantly lower than us- 
+ing the recursive historical mean, we perform a Clark and 
+West (2007) test. First, deﬁne f t , 
+f t = (r LH,t −¯r LH,t ) 2 −((r LH,t −ˆ 
+r LH,t ) 2 −( ¯r LH,t −ˆ 
+r LH,t ) 2 ) , 
+(9) 
+and the test statistic follows from regressing f t on a con- 
+stant. A signiﬁcant positive constant implies that predic- 
+tor ˆ 
+r LH,t , the ﬁrst half-hour return or return until the last 
+half hour before close, results in a signiﬁcantly lower MSPE 
+than when using ¯r LH,t , the recursive historical mean. 
+3.1. Baseline results 
+In our analyses, we ﬁrst pool together futures contracts 
+in the same asset class and the regressions’ results are pro- 
+vided in Table 2 . Panels A through D report the results 
+for equity, bond, commodity, and currency futures, respec- 
+tively. 
+To the best of our knowledge, there is no pooled out- 
+of-sample R 2 measure, so we deﬁne a measure that rep- 
+resents a pooled OOS R 2 . Deﬁne F t as the futures available 
+at day t and n (F t ) the number of futures available on day 
+t . We deﬁne r LH, f,t as the last half-hour return for future 
+f ∈ F t on day t, ˆ 
+r LH, f,t our prediction for the last half hour, 
+and ¯r LH, f,t the historical average last half-hour return until 
+t −1 . Then, R 2 
+OOS is deﬁned as: 
+R 2 
+OOS = 1 −
+ T 
+t=1 
+ 
+f∈ F 
+t 
+(r LH, f,t −ˆ 
+r LH, f,t ) 2 
+n (F 
+t ) 
+ T 
+t=1 
+ 
+f∈ F 
+t 
+(r LH, f,t −¯r LH, f,t ) 2 
+n (F 
+t ) 
+. 
+(10) 
+Gao et al. (2018) examine for ten equity ETFs and one 
+bond ETF how the return in each of the 30-minute in- 
+tervals during the day predicts the return in the last half 
+an hour. They ﬁnd r ONF H to have the strongest predictive 
+power, followed by r SLH . Panel A of Table 2 conﬁrms this 
+pattern in an extended sample period and across different 
+stock markets. Column (1) ﬁnds a strong predictive power 
+in r ONF H on a stand-alone basis. Column (2) presents the 
+results for Eq. (6) ; r ONF H is again highly signiﬁcant ( t-value 
+= 6.46), followed by r SLH ( t-value = 4.82). Interestingly, the 
+returns in other 30-minute intervals, when combined into 
+one r M variable, are also signiﬁcant in predicting r LH ( t- 
+value = 4.43). In other words, all returns during the day 
+(prior to the last half an hour) have predictive power on 
+r LH . 
+In Column (3) of Panel A, we ﬁnd that combining all 
+returns during the day (prior to the last half an hour) 
+into r ROD generates the strongest predictive power. First, 
+r ROD has the highest t-value, 7.29. In addition, r ROD has the 
+highest out-of-sample R -squared ( R 2 
+OOS ), 2.88%. In contrast, 
+382 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table 1 
+Overview of futures sample. Trading hours are based on underlying trading hours (equity index futures) or on volume patterns. Trading hours are expressed 
+in the local exchange time zone. U.S.-listed futures are expressed in Eastern Standard Time (EST). An asterisk indicates futures for which the sample period 
+is extended by considering the regular future before the mini contract was introduced. 
+Future 
+Symbol 
+Trading hours 
+Future 
+Symbol 
+Trading hours 
+Equity index futures 
+Commodity futures 
+Dow Jones futures ∗
+YM 
+9:30 - 16:00 
+Gold futures COMEX 
+GC 
+8:20 - 13:30 
+S&P 500 futures ∗
+ES 
+9:30 - 16:00 
+Copper high grade futures COMEX 
+HG 
+8:10 - 13:00 
+NASDAQ 100 futures ∗
+NQ 
+9:30 - 16:00 
+Silver futures COMEX 
+SV 
+8:25 - 13:25 
+Russell 2000 ICE/CME ∗
+ER 
+9:30 - 16:00 
+Palladium futures NYMEX 
+PA 
+8:30 - 13:00 
+S&P 400 MidCap futures ∗
+MI 
+9:30 - 16:00 
+Platinum futures NYMEX 
+PL 
+8:20 - 13:05 
+Amsterdam AEX Index futures 
+EO 
+9:00 - 17:30 
+Light crude oil futures NYMEX 
+CL 
+9:00 - 14:30 
+DAX Index futures 
+DA 
+9:00 - 17:30 
+Heating oil #2 futures NYMEX 
+HO 
+9:00 - 14:30 
+Swiss Market Index futures 
+SW 
+9:00 - 17:30 
+Natural gas futures NYMEX 
+NG 
+9:00 - 14:30 
+EURO STOXX 50 Index futures 
+XX 
+9:00 - 17:30 
+RBOB gasoline futures NYMEX 
+XB 
+9:00 - 14:30 
+CAC 40 Index futures 
+CF 
+9:00 - 17:30 
+Soybean oil futures 
+BO 
+8:30 - 13:20 
+IBEX 35 Index futures 
+IB 
+9:00 - 17:30 
+Corn futures 
+CN 
+8:30 - 13:20 
+FTSE MIB Index futures 
+II 
+9:00 - 17:30 
+Soybean meal futures 
+SM 
+8:30 - 13:20 
+FTSE 100 Index futures 
+FT 
+8:00 - 16:30 
+Soybean futures 
+SY 
+8:30 - 13:20 
+Nikkei 225 futures SGX 
+EN 
+8:00 - 14:00 
+Wheat futures CBOT 
+WC 
+8:30 - 13:20 
+TOPIX futures JPX 
+TP 
+9:00 - 15:00 
+Cocoa futures 
+CC 
+9:45 - 18:30 
+ASX SPI 200 Index futures 
+XP 
+10:00 - 16:00 
+Cotton #2 futures 
+CT 
+2:00 - 19:20 
+S&P Canada 60 futures 
+PT 
+9:30 - 16:00 
+Coffee C futures 
+KC 
+9:15 - 18:30 
+Sugar #11 futures 
+SB 
+8:30 - 18:00 
+Government bond futures 
+Feeder cattle futures 
+FC 
+8:30 - 13:05 
+US 2-year T-note futures 
+TU 
+8:20 - 15:00 
+Live cattle futures 
+LC 
+8:30 - 13:05 
+US 5-year T-note futures 
+FV 
+8:20 - 15:00 
+Lean hogs futures 
+LH 
+8:30 - 13:05 
+US 10-year T-note futures 
+TY 
+8:20 - 15:00 
+US 30-Year T-bond futures 
+US 
+8:20 - 15:00 
+Currency futures 
+Ultra T-bond futures 
+UB 
+8:20 - 15:00 
+Australian dollar futures 
+AD 
+7:20 - 14:00 
+Euro-Schatz 2-year futures 
+BZ 
+8:00 - 17:15 
+British pound futures 
+BP 
+7:20 - 14:00 
+Euro-Bobl 5-year futures 
+BL 
+8:00 - 17:15 
+Canadian dollar futures 
+CD 
+7:20 - 14:00 
+Euro-Bund 10-year futures 
+BN 
+8:00 - 17:15 
+Euro FX futures 
+EC 
+7:20 - 14:00 
+Euro-Buxl 30-year futures 
+BX 
+8:00 - 17:15 
+Japanese yen futures 
+JY 
+7:20 - 14:00 
+Short-term Euro-BTP futures 
+BS 
+8:00 - 17:15 
+Mexican peso futures 
+ME 
+7:20 - 14:00 
+Long-term Euro-BTP futures 
+BT 
+8:00 - 17:15 
+New Zealand dollar futures 
+NZ 
+7:20 - 14:00 
+Long gilt futures 
+GL 
+8:00 - 16:15 
+Swiss franc futures 
+SF 
+7:20 - 14:00 
+Australian 3-year bond futures 
+AY 
+8:30 - 16:30 
+Australian 10-year bond futures 
+AX 
+8:32 - 16:30 
+Japanese 10-year bond futures JPX 
+JB 
+8:45 - 15:00 
+Canadian 10-year futures 
+CB 
+8:20 - 15:00 
+Table 2 
+Market intraday momentum regressions. This table shows the pooled regression results of regressing the last half-hour return ( r LH ) on a constant and the 
+ﬁrst half hour return ( r ONFH ), the return from ﬁrst half hour until last hour ( r M ) and second-to-last half hour ( r SLH ), and the return until the last half hour 
+( r ROD ), for equity index futures (Panel A), government bond futures (Panel B), commodity futures (Panel C), and currency futures (Panel D). Trading hours 
+of equity futures are based on the trading hours of their underlying markets, for other futures trading hours are matched to their volume patterns. The 
+intercept is not reported. T -statistics in parentheses are computed using standard errors that account for clustering on time and market (in case number 
+of clusters exceeds ten), see Cameron et al. (2011) . Samples range from December 1974 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted 
+by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and slope coeﬃcients are multiplied by 100. 
+Panel A Equity futures 
+Panel B Bond futures 
+βONFH 
+4 . 86 
+(6 . 52) 
+∗∗∗
+4 . 72 
+(6 . 46) 
+∗∗∗
+1 . 59 
+(4 . 65) 
+∗∗∗
+1 . 66 
+(4 . 99) 
+∗∗∗
+βM 
+2 . 92 
+(4 . 43) 
+∗∗∗
+1 . 97 
+(5 . 93) 
+∗∗∗
+βSLH 
+9 . 08 
+(4 . 82) 
+∗∗∗
+3 . 11 
+(1 . 68) 
+∗
+βROD 
+4 . 18 
+(7 . 29) 
+∗∗∗
+1 . 90 
+(5 . 97) 
+∗∗∗
+R 2 (%) 
+1.49 
+2.74 
+2.45 
+0.2 
+0.66 
+0.64 
+R 2 
+OOS (%) 
+−1.71 
+2.22 
+2.88 
+−0.05 
+0.56 
+0.60 
+Panel C Commodity futures 
+Panel D Currency futures 
+βONFH 
+1 . 33 
+(3 . 04) 
+∗∗∗
+1 . 29 
+(3 . 02) 
+∗∗∗
+0 . 91 
+(4 . 58) 
+∗∗∗
+0 . 91 
+(4 . 61) 
+∗∗∗
+βM 
+0 . 85 
+(2 . 73) 
+∗∗∗
+0 . 37 
+(1 . 60) 
+βSLH 
+2 . 24 
+(1 . 16) 
+0 . 62 
+(0 . 33) 
+βROD 
+1 . 21 
+(3 . 63) 
+∗∗∗
+0 . 72 
+(4 . 57) 
+∗∗∗
+R 2 (%) 
+0.09 
+0.15 
+0.15 
+0.19 
+0.21 
+0.19 
+R 2 
+OOS (%) 
+−0.01 
+−0.14 
+0.07 
+0.28 
+0.03 
+0.26 
+383 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table 3 
+Market intraday momentum: horse race results. This table reports the pooled regressions results for Eq. (5) (ﬁrst two colmuns), Eq. (7) (middle comuns), or 
+Eq. (11) (last three colmuns), conditioned on whether the ﬁrst half-hour return ( r ONFH ) and the return until the last half hour ( r ROD ) (i) have the same sign 
+(row “Equal sign”), (ii) have a different sign (row “Different sign”), and (iii) without conditioning (row “Full sample”). Results are shown for equity index 
+futures (Panel A), government bond futures (Panel B), commodity futures (Panel C), and currency futures (Panel D). T -statistics in parentheses are computed 
+using standard errors that account for clustering on time and market (in case number of clusters exceeds ten), see Cameron et al. (2011) . Samples range 
+from December 1974 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and slope coeﬃcients are 
+multiplied by 100. 
+βONFH 
+R 2 (%) 
+βROD 
+R 2 (%) 
+βONFH 
+βROD 
+R 2 (%) 
+Panel A: Equity index futures 
+Equal sign 
+5 . 75 
+(6 . 78) 
+∗∗∗
+2.67 
+4 . 26 
+(7 . 19) 
+∗∗∗
+3.13 
+1 . 80 
+(1 . 44) 
+3 . 23 
+(3 . 39) 
+∗∗∗
+3.21 
+Different sign 
+−3 . 71 
+(−2 . 76) 
+∗∗∗
+0.28 
+3 . 59 
+(3 . 54) 
+∗∗∗
+0.80 
+−0 . 46 
+(−0 . 33) 
+3 . 44 
+(3 . 09) 
+∗∗∗
+0.79 
+Full sample 
+4 . 86 
+(6 . 52) 
+∗∗∗
+1.49 
+4 . 18 
+(7 . 29) 
+∗∗∗
+2.45 
+1 . 14 
+(1 . 39) 
+3 . 65 
+(5 . 28) 
+∗∗∗
+2.49 
+Panel B: Government bond futures 
+Equal sign 
+1 . 94 
+(5 . 04) 
+∗∗∗
+0.41 
+2 . 00 
+(6 . 43) 
+∗∗∗
+0.91 
+−1 . 29 
+(−2 . 77) 
+∗∗∗
+2 . 73 
+(5 . 91) 
+∗∗∗
+0.97 
+Different sign 
+−1 . 35 
+(−1 . 39) 
+0.04 
+1 . 32 
+(1 . 84) 
+∗
+0.14 
+−0 . 23 
+(−0 . 19) 
+1 . 25 
+(1 . 48) 
+0.14 
+Full sample 
+1 . 59 
+(4 . 65) 
+∗∗∗
+0.20 
+1 . 90 
+(5 . 97) 
+∗∗∗
+0.64 
+−0 . 41 
+(−1 . 04) 
+2 . 07 
+(5 . 17) 
+∗∗∗
+0.65 
+Panel C: Commodity futures 
+Equal sign 
+1 . 47 
+(3 . 23) 
+∗∗∗
+0.14 
+1 . 19 
+(3 . 50) 
+∗∗∗
+0.18 
+0 . 23 
+(0 . 36) 
+1 . 06 
+(2 . 09) 
+∗∗
+0.18 
+Different sign 
+−0 . 47 
+(−0 . 56) 
+0.00 
+1 . 32 
+(3 . 12) 
+∗∗∗
+0.09 
+0 . 94 
+(0 . 96) 
+1 . 52 
+(3 . 07) 
+∗∗∗
+0.09 
+Full sample 
+1 . 33 
+(3 . 04) 
+∗∗∗
+0.09 
+1 . 21 
+(3 . 63) 
+∗∗∗
+0.15 
+0 . 17 
+(0 . 39) 
+1 . 13 
+(3 . 02) 
+∗∗∗
+0.15 
+Panel D: Currency futures 
+Equal sign 
+0 . 90 
+(4 . 41) 
+∗∗∗
+0.24 
+0 . 74 
+(4 . 73) 
+∗∗∗
+0.25 
+0 . 42 
+(1 . 03) 
+0 . 45 
+(1 . 46) 
+0.26 
+Different sign 
+1 . 05 
+(1 . 33) 
+0.05 
+0 . 46 
+(0 . 69) 
+0.02 
+1 . 86 
+(2 . 18) 
+∗∗
+1 . 09 
+(1 . 46) 
+0.14 
+Full sample 
+0 . 91 
+(4 . 58) 
+∗∗∗
+0.19 
+0 . 72 
+(4 . 57) 
+∗∗∗
+0.19 
+0 . 52 
+(1 . 51) 
+0 . 39 
+(1 . 45) 
+0.21 
+in this extended equity futures index sample, r ONF H has a 
+negative R 2 
+OOS , −1.71%. Interestingly, the R 2 
+OOS of r ROD is also 
+higher than that of the case where r ONF H , r M , and r SLH are 
+used separately. 
+Panels B to D show similar patterns in bond, com- 
+modity, and currency futures markets. While r ONF H al- 
+ways positively and signiﬁcantly predicts r LH , r ROD has gen- 
+erally stronger predictive performance. In almost all as- 
+set classes, r ROD has the highest t-value and the highest 
+R 2 
+OOS . The only exception is in the currency futures mar- 
+ket (Panel D), in which r ONF H has a slightly higher t-value 
+and R 2 
+OOS than r ROD . This is probably due to the fact that 
+the U-shaped intraday volume pattern is the least pro- 
+nounced in the currency futures market. Fig. 1 (d) shows 
+that the ﬁrst half an hour dominates and the volume drops 
+afterwards. 
+The four tables in Appendix B report the predictive re- 
+gression results for each individual futures contract in eq- 
+uities ( Table B1 ), bonds ( Table B2 ), commodities ( Table B3 ), 
+and currencies ( Table B4 ). In each of the four tables, Panel 
+A ﬁrst reports the pooled results by regions (USA, Europe, 
+Australasia). Panel B then reports the results contract by 
+contract. 
+The four tables present overwhelming evidence that 
+r ROD positively and signiﬁcantly predicts r LH . Focusing on 
+the R 2 
+OOS of r ROD in the equity futures market ( Table B1 ), 
+out of a total of 17, the R 2 
+OOS is positive and signiﬁcant for 
+14 contracts. In addition, r ROD has a higher R 2 
+OOS than r ONF H 
+for 10 contracts. In Appendix C, we show that these re- 
+sults are very similar for stock market indices included in 
+our sample instead of index futures. This is not surprising 
+given the no-arbitrage relation between the index futures 
+and the underlying index. 
+In the bond futures market ( Table B2 ), out of a total 
+of 16, the R 2 
+OOS is positive and signiﬁcant for 11 contracts; 
+r ROD has a higher R 2 
+OOS than r ONF H for 13 contracts. The re- 
+sults are slightly weaker for commodity futures ( Table B3 ) 
+and currency futures ( Table B4 ). Still, for about 40% to 50% 
+of the contracts, r ROD has a positive and signiﬁcant R 2 
+OOS . Its 
+performance, however, is more comparable to that of r ONF H 
+in these two asset classes. 
+Based on the evidence across multiple asset classes and 
+markets in an extended sample period, we conclude that 
+the rest-of-day return ( r ROD ) positively and signiﬁcantly 
+predicts the last half-an-hour return ( r LH ) and this robust 
+pattern better describes market intraday momentum ev- 
+erywhere. 
+3.2. Horse race between r ONF H and r ROD 
+The fact that returns during all intervals of the day mat- 
+ter for predicting r LH suggests a new driver of market in- 
+traday momentum: market makers’ hedging demand. To 
+the extent that market makers want to hedge their expo- 
+sure right before the market close (i.e., during the LH pe- 
+riod) and their exposure tends to be the reverse of the sign 
+of the return during the rest of the day (or they are short 
+gamma), their hedging activity will push r LH in the same 
+direction as r ROD , resulting in the market intraday momen- 
+tum we have shown so far. 
+384 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Under this hedging-based explanation, r LH should 
+be best predicted by r ROD , not just r ONF H . To test this 
+conjecture directly, we estimate: 
+r LH,t = α + βONF H · r ONF H,t + βROD · r ROD,t + ε t . 
+(11) 
+We also estimate Eq. (11) separately for the cases in 
+which r ROD and r ONF H have the same or different signs. The 
+results are presented in Table 3 for the four asset classes 
+separately in Panels A through D. 
+The evidence in Table 3 is clear. When r ROD and r ONF H 
+are of the same sign, r ROD tends to be the better predictor 
+of r LH , in terms of both t-value and R -squared. When r ROD 
+and r ONF H have opposite signs, r ROD is also clearly better, 
+apart from the result for currencies. The only reason r ROD 
+and r ONF H can have opposite signs is that | (r M + r SLH ) | > 
+| (r ONF H ) | . In equity, bond, and commodity futures markets, 
+the coeﬃcient on r ONF H has the wrong sign but the coef- 
+ﬁcient on r ROD is still positive and highly signiﬁcant. The 
+currency futures market is again the exception with the co- 
+eﬃcients for both r ROD and r ONF H positive but insigniﬁcant. 
+In general, the result supports the negative gamma 
+hedging hypothesis in which r ROD should be more relevant 
+than r ONF H in determining the hedging demand towards 
+the end of the trading hours. Also for the full sample, 
+i.e., without conditioning, we see clearly that r ROD is the 
+strongest predictor for r LH for equities, bonds, and com- 
+modities, leaving r ONF H insigniﬁcant. 
+3.3. Intraday seasonality 
+Heston et al. (2010) ﬁnd a striking intraday seasonality 
+in the cross-section of individual stock returns. The return 
+of a stock over a half-hour trading interval today positively 
+and signiﬁcantly predicts its return during the same inter- 
+val tomorrow and on subsequent days, potentially up to 
+40 days. They attribute this seasonality to systematic trad- 
+ing and institutional fund ﬂows. How does market intra- 
+day momentum compare to such an intraday seasonality? 
+We examine this question in Table 4 , where we repeat the 
+regressions in Table 2 after including yesterday’s last half- 
+hour return ( r LH t−1 ) as an additional predictor. 
+We do not ﬁnd positive and signiﬁcant coeﬃcients on 
+r LH t−1 except in the case of currency futures. In fact, the co- 
+eﬃcients are negative and signiﬁcant among equity index 
+futures, suggesting that intraday seasonality in the cross- 
+section of individual stocks does not aggregate up to time- 
+series intraday seasonality at the market level. One possi- 
+ble explanation is that the former effect is cross-sectional, 
+hence largely ignoring general market movements, while 
+the latter is a time-series effect that especially captures 
+general market movements. More importantly, including 
+r LH t−1 hardly changes the conclusions regarding market in- 
+traday momentum we reached in Table 2 . Coeﬃcients on 
+r ROD in Table 4 are almost identical to those in Table 2 . We 
+have conﬁrmed (unreported for the sake of brevity) that 
+these results remain similar even when 5 up to 40 lags of 
+r LH are included. In other words, market intraday momen- 
+tum seems distinct from intraday seasonality in the cross- 
+section. The results further support the negative gamma 
+hedging channel in which only intraday returns during 
+day- t should matter. 
+3.4. Intraday momentum over time 
+In this section, we show the pooled regression results 
+for the subsamples: 1974–1999 and 20 0 0–2020. Table 5 
+shows the results for equity index (Panel A), government 
+bond (Panel B), commodity (Panel C), and currency futures 
+(Panel D). The results are similar in the ﬁrst and second 
+half of our sample. In addition to r ONF H , r M and r SLH also 
+predict returns in the last half hour. As a result, r ROD gen- 
+erally has a higher adjusted R 2 than r ONF H in both subsam- 
+ples. Results also conﬁrm that r ROD wins the direct horse 
+race against r ONF H in both subsamples, especially when 
+their signs differ, as shown in Appendix D. 
+Overall, intraday momentum as predicted by r ROD is 
+present in both subsamples, indicating that there always 
+have been hedgers who have to trade in the same direction 
+as the market has moved. For example, portfolio insurance 
+was very popular during the ﬁrst period ( Tosini, 1988 ), op- 
+tion activity increased a lot since the end of the ﬁrst pe- 
+riod, and leveraged ETF activity strongly gained traction as 
+of 2006 ( Cheng and Madhavan, 2010 ). 
+3.5. Economic signiﬁcance market intraday momentum 
+Next, we investigate the economic signiﬁcance of mar- 
+ket intraday momentum in futures markets. To this end, 
+we examine a market-timing strategy that uses the predic- 
+tor variables as timing signals and evaluate their trading 
+proﬁts. We look at both r = r ONF H and r = r ROD as predic- 
+tors. If the predictor return is positive, we will earn the last 
+half-hour return, r LH , otherwise we will earn −r LH . Hence, 
+the timing returns are: 
+η(r) = 
+
+r LH , 
+if r > 0 . 
+−r LH , otherwise . 
+(12) 
+We use two different benchmark strategies to compare 
+the timing strategies. The ﬁrst benchmark, Always Long, has 
+a long position during the last half hour irrespective of 
+the sign of the signal. The other benchmark buys at the 
+start of the sample and sells at the end of the sample, May 
+2020. 
+The trading strategy results are presented in Table 6 , 
+showing annualized returns, volatilities, and Sharpe ratios, 
+as well as daily success rates. We ﬁnd overall positive re- 
+turns, very high Sharpe ratios, and success rates well above 
+0.50 on the timing strategies. Further, r ROD produces higher 
+average returns and Sharpe ratios than r ONF H in all asset 
+classes but currencies. Moreover, the market-timing strate- 
+gies based on r ROD outperform passive benchmark strate- 
+gies in terms of Sharpe ratios. 
+Fig. 2 provides a visual illustration of the strategy re- 
+turns and their consistency over time. We plot the cumu- 
+lative (log) performance of the market intraday momen- 
+tum strategy based on r ROD (solid line) and the bench- 
+mark Always Long strategy (dashed line). Clearly, condition- 
+ing positions in LH to equal r ROD outperforms a passive 
+Always Long strategy. This outperformance is generally con- 
+sistent over time, as is evident from the upward-sloping 
+solid lines. Focusing on the equity asset class, the market 
+intraday momentum strategy also performs strongly dur- 
+385 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table 4 
+Market intraday momentum: seasonality robustness. This table shows the pooled regression results of regressing the last half-hour return ( r LH ) on a 
+constant and the ﬁrst half-hour return ( r ONFH ), return from the ﬁrst half hour until the last hour ( r M ) and second-to-last half hour ( r SLH ), the return until 
+the last half hour ( r ROD ), and the last half-hour return of the previous day ( r LH 
+t−1 ) for equity index futures (Panel A), government bond futures (Panel B), 
+commodity futures (Panel C), and currency futures (Panel D). Trading hours of equity futures are based on the trading hours of their underlying markets; 
+for other futures trading hours are matched to their volume patterns. The intercept is not reported. T -statistics in parentheses are computed using standard 
+errors that account for clustering on time and market (in case number of clusters exceeds ten), see Cameron et al. (2011) . Samples range from December 
+1974 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and slope coeﬃcients are multiplied by 
+100. 
+Panel A Equity futures 
+Panel B Bond futures 
+βONFH 
+4 . 76 
+(6 . 66) 
+∗∗∗
+4 . 63 
+(6 . 55) 
+∗∗∗
+1 . 59 
+(4 . 68) 
+∗∗∗
+1 . 66 
+(5 . 02) 
+∗∗∗
+βM 
+2 . 97 
+(4 . 54) 
+∗∗∗
+1 . 98 
+(6 . 00) 
+∗∗∗
+βSLH 
+8 . 83 
+(4 . 95) 
+∗∗∗
+3 . 13 
+(1 . 69) 
+∗
+βROD 
+4 . 14 
+(7 . 50) 
+∗∗∗
+1 . 90 
+(6 . 01) 
+∗∗∗
+βLH 
+t−1 
+−6 . 68 
+(−2 . 66) 
+∗∗∗
+−6 . 56 
+(−2 . 71) 
+∗∗∗
+−6 . 81 
+(−2 . 75) 
+∗∗∗
+2 . 22 
+(1 . 36) 
+2 . 24 
+(1 . 36) 
+2 . 24 
+(1 . 35) 
+R 2 (%) 
+1.94 
+3.17 
+2.91 
+0.25 
+0.71 
+0.69 
+R 2 
+OOS (%) 
+−1.40 
+2.51 
+2.77 
+0.00 
+0.61 
+0.66 
+Panel C Commodity futures 
+Panel D Currency futures 
+βONFH 
+1 . 33 
+(3 . 03) 
+∗∗∗
+1 . 29 
+(3 . 01) 
+∗∗∗
+0 . 93 
+(4 . 66) 
+∗∗∗
+0 . 94 
+(4 . 70) 
+∗∗∗
+βM 
+0 . 85 
+(2 . 74) 
+∗∗∗
+0 . 37 
+(1 . 57) 
+βSLH 
+2 . 27 
+(1 . 18) 
+0 . 57 
+(0 . 30) 
+βROD 
+1 . 21 
+(3 . 63) 
+∗∗∗
+0 . 73 
+(4 . 62) 
+∗∗∗
+βLH 
+t−1 
+−1 . 04 
+(−0 . 99) 
+−1 . 09 
+(−1 . 03) 
+−1 . 07 
+(−1 . 02) 
+3 . 05 
+(3 . 43) 
+∗∗∗
+3 . 03 
+(3 . 42) 
+∗∗∗
+2 . 98 
+(3 . 37) 
+∗∗∗
+R 2 (%) 
+0.10 
+0.16 
+0.16 
+0.28 
+0.30 
+0.28 
+R 2 
+OOS (%) 
+0.17 
+0.03 
+0.24 
+0.25 
+0.00 
+0.22 
+Table 5 
+Market intraday momentum: subsample results. This table shows the pooled regression results of regressing the last half-hour return ( r LH ) on a constant 
+and the ﬁrst half-hour return ( r ONFH ), return from the ﬁrst half hour until the last hour ( r M ) and second-to-last half hour ( r SLH ), and the return until the last 
+half hour ( r ROD ), for equity index futures, government bond futures, commodity futures, and currency futures for the 1974–1999 (Panel A) and 20 0 0–2020 
+(Panel B) subsamples. Trading hours of equity futures are based on the trading hours of their underlying markets; for other futures, trading hours are 
+matched to their volume patterns. The intercept is not reported. T -statistics in parentheses are computed using standard errors that account for clustering 
+on time and market (in case number of clusters exceeds ten); see Cameron et al. (2011) . Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or 
+∗, respectively. Adjusted R 2 and slope coeﬃcients are multiplied by 100. 
+βONFH 
+R 2 (%) 
+βONFH 
+βM 
+βSLH 
+R 2 (%) 
+βROD 
+R 2 (%) 
+Panel A: 1974–1999 
+Equity 
+3 . 73 
+(2 . 74) 
+∗∗∗
+0.53 
+3 . 81 
+(2 . 70) 
+∗∗∗
+6 . 94 
+(4 . 25) 
+∗∗∗
+9 . 46 
+(4 . 35) 
+∗∗∗
+3.74 
+5 . 96 
+(4 . 80) 
+∗∗∗
+3.41 
+Bonds 
+1 . 65 
+(3 . 49) 
+∗∗∗
+0.17 
+1 . 89 
+(4 . 14) 
+∗∗∗
+3 . 71 
+(7 . 46) 
+∗∗∗
+9 . 40 
+(4 . 75) 
+∗∗∗
+1.68 
+3 . 19 
+(8 . 38) 
+∗∗∗
+1.28 
+Commodity 
+0 . 83 
+(1 . 45) 
+0.03 
+0 . 72 
+(1 . 29) 
+2 . 08 
+(4 . 06) 
+∗∗∗
+4 . 13 
+(3 . 14) 
+∗∗∗
+0.31 
+1 . 59 
+(3 . 92) 
+∗∗∗
+0.23 
+Currency 
+1 . 79 
+(7 . 54) 
+∗∗∗
+0.68 
+1 . 84 
+(7 . 66) 
+∗∗∗
+0 . 97 
+(2 . 99) 
+∗∗∗
+−4 . 05 
+(−1 . 55) 
+0.95 
+1 . 31 
+(6 . 48) 
+∗∗∗
+0.61 
+Panel B: 2000–2020 
+Equity 
+4 . 97 
+(6 . 06) 
+∗∗∗
+1.67 
+4 . 83 
+(6 . 02) 
+∗∗∗
+2 . 42 
+(3 . 82) 
+∗∗∗
+8 . 89 
+(4 . 11) 
+∗∗∗
+2.73 
+3 . 98 
+(6 . 65) 
+∗∗∗
+2.34 
+Bonds 
+1 . 56 
+(3 . 63) 
+∗∗∗
+0.21 
+1 . 60 
+(3 . 79) 
+∗∗∗
+1 . 52 
+(4 . 16) 
+∗∗∗
+1 . 00 
+(0 . 35) 
+0.47 
+1 . 53 
+(3 . 61) 
+∗∗∗
+0.47 
+Commodity 
+1 . 58 
+(3 . 22) 
+∗∗∗
+0.13 
+1 . 57 
+(3 . 25) 
+∗∗∗
+0 . 34 
+(1 . 08) 
+0 . 86 
+(0 . 28) 
+0.14 
+1 . 04 
+(2 . 86) 
+∗∗∗
+0.12 
+Currency 
+0 . 38 
+(1 . 29) 
+0.03 
+0 . 37 
+(1 . 27) 
+−0 . 04 
+(−0 . 12) 
+3 . 44 
+(1 . 41) 
+0.17 
+0 . 33 
+(1 . 45) 
+0.04 
+ing the last four months of our sample (February to May, 
+2020), consistent with the anecdotal evidence cited in the 
+beginning of the paper. 
+Note that we do not consider transaction costs. Given 
+that trading on market intraday momentum requires fre- 
+quent rebalancing, the strategy as presented might not be 
+exploitable to many investors after accounting for transac- 
+tion costs. That said, this is deﬁnitely not to say that mar- 
+ket intraday momentum is not exploitable for investors. In 
+fact, several investors in especially the most liquid mar- 
+kets are known to trade at very limited cost, and exploit- 
+ing the effect in the S&P 500 futures yields a positive net 
+Sharpe ratio when we assume transaction cost equal to a 
+tick (a cost level faced commonly by advanced investors 
+in the S&P 500 futures market). Further, market intraday 
+momentum could be exploited in other manners that limit 
+turnover or additional trading cost, for example, via the 
+timing of already planned trades. We leave a detailed study 
+of the best way to exploit market intraday momentum for 
+future research. 
+386 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table 6 
+Market intraday momentum: trading strategy results. This table shows annualized average returns, standard deviations, and Sharpe Ratios (SR) together 
+with the success rates of our three timing strategies, η(r ONFH ) , η(r ONFH , r ROD ) , η(r ROD ) , and two benchmark strategies, Always Long and Buy & Hold. Timing 
+strategies η(r ONFH ) ( η(r ROD ) ) take a long position when the ﬁrst half hour return r ONFH (return until 30 minutes before close r ROD ) is positive, and a short 
+position otherwise. Timing strategy η(r ONFH , r ROD ) takes a long (short) position when both the ﬁrst half-hour return and the return until 30 minutes before 
+close are positive (negative) and does not trade when signs differ. The benchmark strategy Always Long is always long during the last half hour, and Buy & 
+Hold opens a position at the start of each futures sample and closes this at the end of the sample (May 2020). For each asset class, a 1/ N portfolio is used 
+to combine the various futures belonging to the same asset class into one portfolio. Shown are the results for equity index futures (Panel A), government 
+bond futures (Panel B), commodity futures (Panel C), and currency futures (Panel D). Samples range from December 1974 to May 2020. 
+Avg ret(%) 
+Std dev(%) 
+SR 
+Success 
+Avg ret(%) 
+Std dev(%) 
+SR 
+Success 
+Panel A: Equity index futures 
+Panel B: Government bond futures 
+η(r ONFH ) 
+4.21 
+3.95 
+1.07 
+0.55 
+1.08 
+1.33 
+0.81 
+0.53 
+η(r ONFH , r ROD ) 
+5.47 
+3.42 
+1.60 
+0.61 
+1.57 
+1.10 
+1.42 
+0.58 
+η(r ROD ) 
+6.86 
+3.96 
+1.73 
+0.55 
+2.16 
+1.33 
+1.62 
+0.55 
+Always Long
+0.44 
+4.20 
+0.11 
+0.53 
+0.48 
+1.42 
+0.34 
+0.53 
+Buy & Hold
+8.76 
+17.29 
+0.51 
+0.54 
+4.07 
+5.96 
+0.68 
+0.53 
+Panel C: Commodity futures 
+Panel D: Currency futures 
+η(r ONFH ) 
+2.48 
+3.03 
+0.82 
+0.54 
+0.93 
+0.97 
+0.96 
+0.54 
+η(r ONFH , r ROD ) 
+3.29 
+2.56 
+1.29 
+0.56 
+0.89 
+0.86 
+1.03 
+0.54 
+η(r ROD ) 
+4.34 
+3.05 
+1.42 
+0.56 
+0.85 
+0.98 
+0.87 
+0.53 
+Always Long
+−0.68 
+3.50 
+−0.19 
+0.51 
+0.49 
+1.13 
+0.43 
+0.52 
+Buy & Hold
+1.92 
+13.34 
+0.14 
+0.51 
+0.53 
+7.27 
+0.07 
+0.50 
+Fig. 2. Strategy performance of market intraday momentum. This ﬁgure shows the cumulative performance (on a log-scale) of the η(r ROD ) timing strategy 
+and the Always Long benchmark strategy per asset class. Timing strategy η(r ROD ) takes a long position when the return until 30 minutes before close r ROD is 
+positive, and a short position otherwise. The benchmark strategy Always Long is always long during the last half hour. Shown are the results for equity index 
+futures (Panel (a)), government bond futures (Panel (b)), commodity futures (Panel (c)), and currency futures (Panel (d)). Samples range from December 
+1974 to May 2020. For each asset class, a 1/ N portfolio is used to combine the various futures belonging to the same asset class into one portfolio. 
+387 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+4. New evidence on hedging demand 
+In this section, we provide more evidence support- 
+ing market makers’ hedging demand as a novel driver of 
+the market intraday momentum phenomenon. The ﬁrst 
+two tests provide direct evidence for the hedging channel, 
+while the last two tests allow us to differentiate hedging 
+activities from late informed trading. 
+4.1. Hedging demand of option market makers 
+Hedging demand of option market makers hinges on 
+their net gamma positions. So far, we assumed that op- 
+tion market makers are on average net short gamma, 
+and, as a result, they need to trade in the direction 
+of the market to rebalance their delta hedges. It is 
+well known that institutional investors buy index puts 
+as portfolio insurance ( Bollen and Whaley, 2004 ). Simi- 
+larly, Garleanu et al. (2008) ﬁnd that end users have a 
+net long position in S&P 500 index options with large 
+net positions in out-of-the-money puts. Since there are 
+no natural counter-parties to these trades, market makers 
+must step in to absorb the imbalance. By contrast, index 
+call options are typically shorted by market participants, 
+for example, via call overwriting strategies. Goyenko and 
+Zhang (2019) provide evidence supporting positive net de- 
+mand pressures by end users for S&P 500 index puts, and 
+negative net demand pressures for S&P 500 index calls. 
+Cici and Palacios (2015) study mutual fund holdings in op- 
+tions, ﬁnding that, for mutual funds using options, writ- 
+ten calls and long (mostly index) put options represent 
+the majority of option positions. As a result, option market 
+makers are typically net short (index) put options, and net 
+long call options, and, as a result, often net short gamma 
+on average. 
+By contrast, if option market makers are net long 
+gamma (which happens, for example, with net short put 
+and long call positions and markets drifting up), they will 
+have to trade against the market. As such, they could off- 
+set the effects of information and rebalancing trades, po- 
+tentially resulting in no market intraday momentum or 
+even intraday reversals. Hence, if hedging demand is a key 
+driver of market intraday momentum, the market intraday 
+momentum could be virtually absent in periods that op- 
+tion market makers are not net short gamma, but stronger 
+the more gamma they short. 
+For the S&P 500 index, we proxy the net gamma ex- 
+posure of option market makers based on all the open in- 
+terest in S&P 500 index options using OptionMetrics data. 
+Speciﬁcally, we assume that (i) all traded options are fa- 
+cilitated by delta-hedgers, (ii) call options are sold by in- 
+vestors, and bought by option market makers, (iii) put op- 
+tions are bought by investors and sold by option market 
+makers, and (iv) option market makers hedge precisely 
+their option deltas. 
+For a call (C) option on day t with strike price s ∈ S C 
+t 
+and maturity m ∈ M C 
+t , the NGE is computed as: 
+NGE C 
+s,m,t = C 
+s,m,t · OI C 
+s,m,t · 100 · P t , 
+(13) 
+where C 
+s,m is the option’s gamma, OI C 
+s,m is the option’s 
+open interest, and 100 is the adjustment from option con- 
+tracts to shares of the underlying. P t is equal to the level 
+of the S&P 500 index on day t. 
+For a put (P) option on day t with strike price s ∈ S P 
+t 
+and maturity m ∈ M P 
+t , the NGE is computed as: 
+NGE P 
+s,m,t = P 
+s,m,t · OI P 
+s,m,t · (−100) · P t , 
+(14) 
+where we use the adjustment of −100 as this represents 
+short gamma for option market makers and P t the level of 
+the S&P 500 index on day t. 
+The NGE of the S&P 500 index is then computed by 
+summing all NGEs at every strike price in every available 
+contract and dividing by the market value of the S&P 500 
+index ( MV t ): 
+N GE t = 
+ 
+s ∈ S 
+C 
+ 
+m ∈ M 
+C N GE C 
+s,m +  
+s ∈ S P 
+ 
+m ∈ M P N GE P 
+s,m 
+MV t 
+. (15) 
+Using data from OptionMetrics, we compute the NGE 
+measure from 1996 until the end of 2017. We use data 
+from SqueezeMetrics to extend the sample until May 
+2020. 7 Fig. 3 shows the NGE for the S&P 500 over time. 
+In the period from 1996 until May 2020 there have been 
+2930 days with a negative NGE and 3158 with a positive 
+one. 8 
+A negative NGE t implies that option market makers 
+will delta hedge in the same direction as the market has 
+moved, in line with market intraday momentum. There- 
+fore, we regress the r LH on r ROD conditional on the sign 
+of the NGE. Table 7 shows that indeed intraday momen- 
+tum is much more pronounced on negative NGE days. On 
+days with positive NGE, however, there is no signiﬁcant 
+intraday momentum. This provides strong support for our 
+hedging demand hypothesis, i.e., that intraday momentum 
+is partially driven by option hedging demand. As discussed 
+in the introduction, rebalancing and information traders 
+could also show up to trigger the market intraday mo- 
+mentum. However, we show that market intraday momen- 
+tum is only present when, according to our proxy, op- 
+tion market makers are net short gamma. But, when they 
+are net long gamma, market intraday momentum is no 
+7 We have veriﬁed the computations of SqueezeMetrics using Option- 
+Metrics data over the 2002 to 2017 period, yielding virtually identical re- 
+sults. 
+8 Note that NGE is on average positive for most days. One possible ex- 
+planation is that market makers are net short put and long call positions, 
+but markets on average drift up over time in such a manner that the net 
+gamma of the puts drops and the net gamma of calls rises. Another ex- 
+planation for more positive NGE days could also be the choice of data. We 
+like to stress that the data used in this section is limited to listed cash op- 
+tions available from OptionMetrics, and we assume option market makers 
+are short all puts and long all calls. We do not have data on, for example, 
+OTC option positions and precise end-user option positions. This means 
+that our sample misses many long puts and short calls typically done 
+OTC by institutional investors (for example, many institutional investors 
+buy index puts as portfolio insurance and insurers buy puts to hedge 
+insurance books) and proxies end-user demand. Portfolio insurance and 
+insurer hedging practices create structural option demand, in line with 
+studies showing net long end-user demand to index put options ( Bollen 
+and Whaley, 2004; Garleanu et al., 2008 ). Further, the net short option 
+position of option market makers is believed to cause them to demand 
+a volatility risk premium as compensation for exposure to volatility risk 
+( Bollen and Whaley, 2004 ), a ﬁnding consistently observed across most of 
+the markets we study. Industry estimates from, for example, JP Morgan 
+Chase suggest that short puts are by far the most dominant positions of 
+option market makers. 
+388 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Fig. 3. Net gamma positioning for the S&P 500. This ﬁgure shows the net gamma exposure (NGE) from S&P 500 index options between January 1996 and 
+May 2020. 
+Table 7 
+Market intraday momentum and net gamma exposure: conditional anal- 
+ysis. This table reports the results of regressing r LH,t on r ROD,t , condi- 
+tioned on the sign of the net gamma exposure (NGE) for the S&P 500 
+futures. Newey and West (1986) robust t-statistics are shown in paren- 
+theses. Samples range from January 1996 to May 2020. Signiﬁcance at the 
+1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 
+and regression coeﬃcients are multiplied by 100. 
+Intercept 
+βROD,t 
+R 2 (%) 
+NGE t−1 ≥0 
+0 . 00 
+(0 . 17) 
+0 . 82 
+(1 . 03) 
+0.05 
+NGE t−1 < 0 
+−0 . 01 
+(−0 . 63) 
+6 . 63 
+(4 . 78) 
+∗∗∗
+3.58 
+longer present. This suggests that hedging demand then 
+seems to offset the intraday momentum effects triggered 
+by rebalancing and information traders. Unreported anal- 
+yses show that the results in Table 7 also hold when us- 
+ing the overnight return plus ﬁrst half hour ( r ONF H ) used 
+in Gao et al. (2018) or the return between the ﬁrst half 
+hour and last half hour ( r M ). 
+Furthermore, we include the S&P 500 NGE in Eq. (7) . 
+We include NGE t and NGE t multiplied by r ROD,t−1 into 
+Eq. (7) . Table 8 contains the results. Conﬁrming the ear- 
+lier results, intraday momentum is especially pronounced 
+when NGE is negative (i.e., option market makers are net 
+short gamma) or when their net short gamma position is 
+stronger. The last two columns conﬁrm that these results 
+are not driven by a time trend shared by intraday momen- 
+tum and NGE by running a difference-in-difference regres- 
+sion. Further, unreported robustness checks conﬁrm that 
+these results also hold when only considering puts (and no 
+calls). 
+4.2. Hedging demand from leveraged ETFs 
+Next, we present direct evidence for the hedging-based 
+explanation in the market for leveraged ETFs (LETF). Note 
+that direct data on dynamic hedging demand is gener- 
+ally not available or very noisy. Option data across asset 
+classes is also limited. On the other hand, data on lever- 
+Table 8 
+Market intraday momentum and net gamma exposure: regression anal- 
+ysis. This table reports the results of regressing the last half-hour return 
+( r LH ) on a constant, the return until the last half hour ( r ROD ), I NGE< 0 ∗r ROD,t , 
+NGE t and NGE t multiplied by r ROD for the S&P500 futures. X t is computed 
+as net gamma exposure (NGE) divided by the market value of the S&P 500 
+index. Newey and West (1986) robust t-statistics are shown in parenthe- 
+ses. Samples range from January 1996 to May 2020. Signiﬁcance at the 
+1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 
+and regression coeﬃcients are multiplied by 100. 
+Variable 
+r LH 
+r LH 
+(1) 
+(2) 
+(3) 
+(4) 
+(5) 
+Intercept 
+−0 . 00 
+(−0 . 38) 
+0 . 00 
+(0 . 82) 
+−0 . 00 
+(−0 . 47) 
+−0 . 01 
+(−0 . 80) 
+−0 . 01 
+(−0 . 85) 
+r ROD,t 
+5 . 08 
+(4 . 72) 
+∗∗∗
+1 . 41 
+(1 . 72) 
+∗
+2 . 58 
+(3 . 86) 
+∗∗∗
+I NGE≤0 ∗r ROD,t 
+5 . 05 
+(3 . 04) 
+∗∗∗
+NGE ∗r ROD,t 
+−123 . 04 
+(−3 . 42) 
+∗∗∗
+NGE t 
+0 . 21 
+(1 . 34) 
+r ROD,t 
+5 . 77 
+(6 . 49) 
+∗∗∗
+3 . 33 
+(4 . 86) 
+∗∗∗
+NGE ∗r ROD,t 
+−119 . 79 
+(−4 . 06) 
+∗∗∗
+NGE t 
+0 . 43 
+(2 . 51) 
+∗∗
+R 2 (%) 
+2.32 
+2.75 
+3.78 
+3.04 
+4.63 
+aged ETFs is readily available and generally accurate. Lever- 
+aged ETFs seek to deliver a multiple of their underlying 
+market’s daily returns. There are two types of leveraged 
+ETFs: bull/ultra ETFs that promise a positive multiple (usu- 
+ally two or three times) of the underlying index’s daily re- 
+turn, and inverse/bear ETFs that promise an (leveraged) in- 
+verse of their underlying market’s return. Both ETF types 
+need to rebalance daily in the same direction as the under- 
+lying index’s daily performance. This is caused by the fact 
+that on an up (down) day, bull ETFs need to increase (de- 
+crease) their exposure to the underlying, while bear ETFs 
+have to close (open) some shorts. 
+Consequently, market makers of the ETF providers need 
+to rebalance exposure to the market near or at the market 
+close (which these investors typically do using total return 
+swaps and futures contracts), as these indexing products 
+389 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+essentially offer a multiple of the daily close-to-close re- 
+turn of the underlying index [see also Bogousslavsky and 
+Muravyev (2019) for the use of close prices]. This hedging 
+behavior causes price pressures near the end of the trading 
+day. Cheng and Madhavan (2010) derive that the rebalanc- 
+ing demand on day t is equal to: 
+NAV t−1 (x 2 −x ) r c,t 
+c,t−1 , 
+(16) 
+where NAV t are the net asset values on day t for a lever- 
+aged ETF and x is the leverage factor (e.g., −2, −1,2,3). 
+As of the end of February 2009, Cheng and Madha- 
+van (2010) estimated that leveraged ETF rebalancing made 
+up 16.8% (50.2%) of the market-on-close (MOC) volume on 
+a day the market moved 1% (5%). 9 Shum et al. (2015) argue 
+that MOC orders have ﬁll risk, such that the hedging could 
+start as early as 30 minutes before close. This ﬁts nicely 
+into our reasoning that r ROD predicts r LH . 
+We obtain historical daily NAV data for leveraged ETFs 
+on markets underlying the futures contracts used from 
+Bloomberg. Not all markets used in this research have 
+leveraged ETF data available. For markets with LETF data 
+available, we sum the NAVs multiplied by x 2 −x (where x 
+is the leverage factor) and express the total as a percent- 
+age of the underlying index’s market capitalization (akin 
+to Baltussen et al., 2019 ). We denote this market share of 
+leveraged ETFs by Indexing LET F . Market sizes for govern- 
+ment bonds are per maturity bucket. Due to duration re- 
+quirements, they show seasonality that we solve by using 
+a three-month rolling average. For commodities, we cannot 
+compute market shares, as we do not have data on the size 
+of the market. 
+If hedging activity on these products drives market in- 
+traday momentum, we would expect more pronounced 
+market intraday momentum in markets with more lever- 
+aged ETF activity. To examine this relation, we ﬁrst exam- 
+ine such a relation in the cross-section. To this end, we 
+plot the average leveraged ETF share per market against 
+the t-statistics of βROD . As leveraged ETFs are introduced 
+in 2006, we make scatterplots over the 2006–2020 sub- 
+sample. As we do not have market sizes for commodities, 
+we rank the LETF market sizes and plot these ranks against 
+the t-statistics. Fig. 4 shows a signiﬁcant upward sloping 
+line for all three asset classes, indicating a positive relation 
+between LETF market shares and intraday momentum. 
+Next, we examine the relation in a time series. To 
+this end, we expand the regression of r LH on r ROD with 
+Indexing LET F and this measure multiplied by r ROD (the 
+hedging demand): 
+r LH,t = α + β1 · r ROD,t + β2 · Indexing LET F,t · r ROD,t 
++ β3 · Indexing LET F,t + ε t . 
+(17) 
+We run this regression for equity index and govern- 
+ment bond futures, as we lack dynamic LETF data for the 
+other asset classes. The ﬁrst columns of Table 9 show that 
+the hedging demand has additional predictive power for 
+the last half-hour return in both equity index and govern- 
+ment bond futures. Further, to remove any index-speciﬁc 
+9 In a related study, Todorov (2019) shows that leveraged ETFs rebal- 
+ancing demand substantially inﬂuences price changes in VIX futures and 
+the natural gas, silver, gold, and oil commodity futures markets. 
+Table 9 
+Market intraday momentum and Leveraged ETF market share: regression 
+analysis. This table reports the pooled regression results of regressing the 
+last half-hour return ( r LH ) on a constant, the return until the last half hour 
+( r ROD ), Indexing LETF and Indexing LETF multiplied by r ROD , for equity index 
+futures (Panel A) and government bond futures (Panel B). Indexing LETF 
+is computed as the total market value of all leveraged ETFs on the eq- 
+uity indices or government bond indices multiplied by x 2 −x , where x is 
+their leverage factor, divided by their market size. Due to seasonality in 
+government bond market sizes, we use three-month rolling averages for 
+this asset class. T -statistics that account for clustering on time and mar- 
+ket (in case the number of clusters exceeds ten) are in parentheses; see 
+Cameron et al. (2011) . Samples range from June 2006 to May 2020. Signif- 
+icance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. 
+Adjusted R 2 and slope coeﬃcients for r ROD are multiplied by 100. 
+Panel A: Equity futures r LH 
+r LH 
+(1) 
+(2) 
+(3) 
+(4) 
+Intercept 
+0 . 00 
+(0 . 83) 
+0 . 00 
+(0 . 51) 
+0 . 00 
+(0 . 01) 
+0 . 00 
+(0 . 01) 
+r ROD 
+2 . 90 
+(4 . 51) 
+∗∗∗
+2 . 91 
+(4 . 51) 
+∗∗∗
+Indexing LETF · r ROD 
+1 . 79 
+(2 . 20) 
+∗∗
+1 . 79 
+(2 . 20) 
+∗∗
+Indexing LETF 
+0 . 25 
+(0 . 75) 
+0 . 71 
+(1 . 26) 
+r ROD 
+2 . 42 
+(3 . 49) 
+∗∗∗
+2 . 42 
+(3 . 49) 
+∗∗∗
+Indexing LETF · r ROD 
+2 . 94 
+(3 . 10) 
+∗∗∗
+2 . 94 
+(3 . 10) 
+∗∗∗
+Indexing LETF 
+−10 . 09 
+(−3 . 36) 
+∗∗∗
+−10 . 19 
+(−3 . 38) 
+∗∗∗
+R 2 (%) 
+1.75 
+1.76 
+1.67 
+1.67 
+Fixed effects 
+No 
+Yes 
+No 
+Yes 
+Panel B: Bond futures 
+r LH 
+r LH 
+(1) 
+(2) 
+(3) 
+(4) 
+Intercept 
+−0 . 00 
+(−1 . 88) 
+∗
+−0 . 00 
+(−2 . 83) 
+∗∗∗
+−0 . 00 
+(−1 . 52) 
+−0 . 00 
+(−1 . 75) 
+∗
+r ROD 
+1 . 07 
+(2 . 85) 
+∗∗∗
+1 . 08 
+(2 . 91) 
+∗∗∗
+Indexing LETF · r ROD 
+0 . 67 
+(1 . 96) 
+∗
+0 . 67 
+(1 . 96) 
+∗∗
+Indexing LETF 
+0 . 03 
+(0 . 40) 
+0 . 20 
+(1 . 64) 
+r ROD 
+1 . 18 
+(2 . 54) 
+∗∗
+1 . 18 
+(2 . 54) 
+∗∗
+Indexing LETF · r ROD 
+0 . 45 
+(1 . 31) 
+0 . 45 
+(1 . 31) 
+Indexing LETF 
+0 . 20 
+(0 . 48) 
+0 . 13 
+(0 . 30) 
+R 2 (%) 
+1.01 
+1.06 
+0.75 
+0.75 
+Fixed effects 
+No 
+Yes 
+No 
+Yes 
+time trend (indexing of LETFs has increased over time, 
+and proﬁts on intraday momentum might share a simi- 
+lar time component), we also run difference-in-difference 
+regressions. The results conﬁrm the earlier ﬁndings in eq- 
+uity markets, while the bond market results remain posi- 
+tive but insigniﬁcantly so. Overall, we conclude that LETF’s 
+hedging demand drives the magnitude of market intraday 
+momentum patterns, providing unique evidence support- 
+ing the hedging channel. 
+4.3. Intraday vs. end-of-day hedging 
+In a frictionless Black-Scholes world, hedging is done 
+continuously to ensure delta-neutrality all the time. With 
+transaction costs, it is optimal to hedge only discretely dur- 
+ing the day. Yet, if hedging is complete, so the delta goes 
+back to zero at the end of each discrete interval, then the 
+return prior to the hedge should not predict the return af- 
+ter the hedge, as demonstrated by Leland (1985) . 
+390 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Fig. 4. Leveraged ETF market share versus market intraday momentum. This ﬁgure plots the average leveraged ETF (LETF) market share against the 
+Newey and West (1986) robust t-statistic of regressing its futures’ last half-hour return ( r LH ) on the return until 30 minutes before close ( r ROD ) for eq- 
+uity index futures (Panel (a)), government bond futures (Panel (b)), and commodity futures (Panel (c)). The market share measure is computed as the total 
+market value of all LETFs on the market multiplied by x 2 −x , where x is the leverage factor, divided by the index market value. For government bond 
+futures, we use three-month rolling average market sizes. Currencies are missing as we do not have LETF data on those markets. Commodity futures have 
+no market size data available, therefore, we rank the LETF market sizes. Samples range from June 2006 to May 2020. 
+In Table 10 , we examine such intraday hedging activi- 
+ties. We conjecture that, while small price movements dur- 
+ing the day may not trigger hedging due to transaction 
+cost, large price jumps probably will. If the gamma is neg- 
+ative, then hedging will further push the price in the di- 
+rection of the jump. Hence, cumulative return up to and 
+including the jump should positively predict the return af- 
+ter the jump when hedging takes place. In addition, if the 
+jump occurs early during the day and the hedge is timely 
+and complete, then the cumulative jump return should not 
+predict the return in the last half an hour ( r LH ). 
+The results in Table 10 conﬁrm that cumulative jump 
+returns positively predict subsequent returns during the 
+day ( r Post jump ). A jump is deﬁned as each daily half hour 
+in which the return from close to that half-hour interval is 
+below (above) the 10% (90%) percentile of the full-sample 
+daily returns distribution of that asset (we have veriﬁed 
+that results are comparable when using 5% (95%) or 2.5% 
+(97.5%) percentiles). We run a pooled regression of r Post jump 
+on a constant and the return from the previous day’s close 
+until jump. Next, we decompose r Post jump into two parts: 
+the return from post-jump to the end of SLH ( r Post jumptoSLH ) 
+and the return in the last half hour ( r LH ). We ﬁnd that the 
+cumulative jump returns to positively predict r Post jumptoSLH 
+for all four asset classes and signiﬁcantly for commodities 
+and currencies. We interpret the pattern as evidence for in- 
+traday hedging after large jumps. Nevertheless, for all four 
+asset classes, the cumulative jump returns still positively 
+and signiﬁcantly predict r LH , suggesting that intraday hedg- 
+ing is incomplete and a signiﬁcant portion of the hedge is 
+still carried out towards the end of the day. 
+We conjecture that there are at least ﬁve reasons 
+why hedging activity is more intensive towards the end 
+of the day. First, from a theoretical point of view, 
+391 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table 10 
+Market intraday momentum and intraday jumps. This table shows the 
+pooled regression results of regressing the post-jump return on a con- 
+stant and the return from the previous day’s close until jump. A jump is 
+deﬁned as each daily half hour in which the return from close to that 
+half-hour interval is below (above) the 10% (90%) percentile of daily re- 
+turns for that asset. The dependent variables are the return in the period 
+after the jump to close ( r Post jump ), the return after the half-hour post-jump 
+to the second-to-last half hour ( r Post jumptoSLH ), and the last half-hour re- 
+turn ( r LH ). The sample includes equity index futures, government bond 
+futures, commodity futures, and currency futures, and ranges from De- 
+cember 1974 to May 2020. Trading hours of equity futures are based on 
+the trading hours of their underlying markets; for other futures, trading 
+hours are matched to their volume patterns. The intercept is not reported. 
+T -statistics in parentheses are computed using standard errors that ac- 
+count for clustering on time and market (in case number of clusters ex- 
+ceeds ten); see Cameron et al. (2011) . Signiﬁcance at the 1%, 5%, and 10% 
+level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and regression 
+coeﬃcients are multiplied by 100. 
+r Post jump R 2 (%) r Post jumptoSLH R 2 (%) r LH 
+R 2 (%) 
+Equity 
+6 . 74 
+(5 . 03) 
+∗∗∗
+1.83 1 . 50 
+(1 . 40) 
+0.14 5 . 16 
+(7 . 51) 
+∗∗∗
+4.96 
+Bonds 
+1 . 63 
+(1 . 42) 
+0.14 0 . 34 
+(0 . 36) 
+0.01 1 . 58 
+(4 . 64) 
+∗∗∗
+0.89 
+Commodity 3 . 28 
+(3 . 55) 
+∗∗∗
+0.70 2 . 16 
+(3 . 60) 
+∗∗∗
+0.49 1 . 00 
+(2 . 54) 
+∗∗
+0.24 
+Currency 
+1 . 64 
+(2 . 45) 
+∗∗
+0.27 0 . 97 
+(1 . 72) 
+∗
+0.13 0 . 80 
+(3 . 89) 
+∗∗∗
+0.53 
+Clewlow and Hodges (1997) show that, in the presence 
+of partially ﬁxed transaction costs, the optimal trade-off
+between delta risk and costs results in two bandwidths 
+around a delta-neutral hedge. If the outer bandwidth is 
+breached, it is optimal to trade towards the inner band- 
+width, not back to delta-neutral. Simply put, it is optimal 
+to hedge only partially after a large price movement, im- 
+plying that additional hedging is required afterwards (see 
+also Sepp, 2013 ). 
+Second, the additional hedging could be deferred to the 
+end of the trading day for liquidity reasons. The U-shaped 
+intraday volume pattern across the equity, bond, commod- 
+ity, and currency markets in Fig. 1 conﬁrms that liquidity 
+tends to be high right after open and before close. Fur- 
+ther, spreads are generally lower and market depth higher 
+when trading towards the close. Improved liquidity is an- 
+other reason why investors could leave the bulk of hedg- 
+ing to the last half hour, especially when they have larger 
+quantities to trade. 
+Third, while hedging is partial during the day, it tends 
+to be complete at the end of the day to protect against 
+overnight risk. Brock and Kleidon (1992) and Hong and 
+Wang (20 0 0) show that lower liquidity and higher price 
+risk overnight makes it optimal for market makers to close 
+delta positions before overnight. 
+Fourth, holding positions overnight typically incurs 
+higher capital needs and investment frictions. For ex- 
+ample, BIS capital requirements are driven by deltas at 
+close. Further, margin requirements generally increase for 
+overnight positions, while lending fees and margin inter- 
+est are typically charged only on positions held overnight 
+( Bogousslavsky, 2020 ). As a consequence, holding risky po- 
+sitions overnight comes not only with higher price risks, 
+but also with higher capital requirements. Market partic- 
+ipants therefore have an incentive to reduce delta at the 
+end of the day to free up capital and save cost. Sev- 
+eral studies empirically show that dealers in stocks, bonds, 
+commodities, or currencies are indeed reluctant to hold 
+delta positions overnight and tend to close them before the 
+end of the day ( Lyons, 1995; Manaster and Mann, 1996; 
+Ferguson and Mann, 2001; Bjønnes and Rime, 2005 ). A re- 
+lated study, Gerety and Mulherin (1992) , provides evidence 
+consistent with dealers unloading their delta positions be- 
+fore the close and reopening them on the following day. 
+Finally, as we have demonstrated, index products such 
+as LETFs seek to deliver a multiple of their underlying mar- 
+ket’s daily returns benchmarked at closing prices. Market 
+makers in these index products have little choice but to 
+rebalance daily and around the close in the same direc- 
+tion as the underlying index’s daily performance. A similar 
+mechanism holds for market makers of variance swaps, as 
+the payoff of a variance swap is calculated based on the 
+closing levels of the underlying index. 
+4.4. Price pressure vs. informed trading 
+Gao et al. (2018) presents late informed trading as an- 
+other potential driver of market intraday momentum. Un- 
+der this explanation, traders who are informed late trade 
+in the last 30 minutes. Hence, the same information is in- 
+corporated into prices during both the ﬁrst and the last 
+30 minutes, resulting in momentum. A major difference 
+between hedging and informed trading lies in their price 
+impact. Generally speaking, hedging activities should only 
+result in transitory price pressure (as there is no news), 
+while fundamental information is expected to cause a per- 
+manent price impact (as news is incorporated into prices). 
+In case the market intraday momentum is caused by price 
+pressure from hedging demands, the price should revert 
+back after the hedging activity has ceased. In case market 
+intraday momentum is caused by informed traders delay- 
+ing their trades to beneﬁt from liquidity, the last half-hour 
+return should reﬂect delayed incorporation of new infor- 
+mation and should not revert back the next days. In other 
+words, under the hedging explanation, we expect mean- 
+reversion in the near future, while we do not expect mean- 
+reversion under the informed trading explanation. 
+Fig. 5 examines whether market intraday momentum 
+persists beyond the current trading day. Throughout this 
+paper, we use the intervals overnight, ﬁrst half an hour, 
+middle of day, second-to-last half an hour, and last half an 
+hour. To ﬁnd out when momentum disappears, in Fig. 5 , 
+we extend the last half hour with the previously men- 
+tioned intervals. Starting at our standard setting of regress- 
+ing the last half hour return ( r LH ) on the return until the 
+last half hour ( r ROD ), we progressively add those intervals 
+until we regress the return from 30 minutes before today’s 
+close until 30 minutes before close three days later ( r c,t+3 
+c−30 ,t ) 
+on the return until 30 minutes before today’s close ( r ROD,t ). 
+Fig. 5 clearly shows that the market intraday momen- 
+tum does not persist for long. The predictive power of r ROD 
+reverts to zero in the next day in the currency futures mar- 
+ket ( Fig. 4 D), in two days in the equity and commodity fu- 
+tures markets ( Figs. 4 A and C), and in three days in the 
+government bond futures markets ( Fig. 4 B). 
+In Fig. 5 , we focus on the relation between the predic- 
+tor of the last half hour, r ROD , and the cumulative return 
+from the last half hour on the same day. Table 11 shows 
+392 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Fig. 5. Market intraday momentum and reversals. This ﬁgure shows the regression coeﬃcients and corresponding conﬁdence bounds of using the return 
+until last half-hour today, r ROD , to predict today’s last half-hour return, r LH , and progressively adding intervals: overnight, ﬁrst half an hour, middle of 
+the day, second-to-last half an hour and last half an hour, until close three days later, r c,t+3 
+c−30 ,t . Shown are the results for equity index futures (Panel (a)), 
+government bond futures (Panel (b)), commodity futures (Panel (c)), and currency futures (Panel (d)). Samples range from December 1974 to May 2020. 
+Table 11 
+Market intraday momentum and mean-reversion: regression analysis. This table reports the pooled regression results of regressing the next day return 
+( r c,t+1 
+c,t ), the next two days return ( r c,t+2 
+c,t ), and the next three days return ( r c,t+3 
+c,t ) on a constant and today’s last half-hour return ( r LH,t ) for equity index 
+futures (Panel A), government bond futures (Panel B), commodity futures (Panel C), and currency futures (Panel D). Trading hours of equity futures are 
+based on the trading hours of their underlying markets; for other futures, trading hours are matched to their volume patterns. T -statistics in parentheses 
+are computed using standard errors that account for clustering on time and market (in case number of clusters exceeds ten); see Cameron et al. (2011) . 
+Samples range from December 1974 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and 
+regression coeﬃcients are multiplied by 100. 
+Dep. Variable: 
+r c,t+1 
+c,t 
+r c,t+2 
+c,t 
+r c,t+3 
+c,t 
+r c,t+1 
+c,t 
+r c,t+2 
+c,t 
+r c,t+3 
+c,t 
+Panel A: Equity futures 
+Panel B: Bond futures 
+Intercept 
+0 . 02 
+(1 . 95) 
+∗
+0 . 05 
+(2 . 55) 
+∗∗
+0 . 07 
+(2 . 98) 
+∗∗∗
+0 . 01 
+(4 . 53) 
+∗∗∗
+0 . 03 
+(5 . 30) 
+∗∗∗
+0 . 04 
+(5 . 79) 
+∗∗∗
+r LH,t 
+−14 . 51 
+(−1 . 70) 
+∗
+−29 . 05 
+(−3 . 16) 
+∗∗∗
+−27 . 98 
+(−2 . 61) 
+∗∗∗
+1 . 77 
+(0 . 41) 
+−10 . 68 
+(−1 . 60) 
+−19 . 64 
+(−2 . 21) 
+∗∗
+R 2 (%) 
+0.13 
+0.27 
+0.17 
+0.00 
+0.03 
+0.06 
+Panel C: Commodity futures 
+Panel D: Currency futures 
+Intercept 
+0 . 01 
+(0 . 76) 
+0 . 01 
+(0 . 94) 
+0 . 02 
+(1 . 01) 
+0 . 00 
+(0 . 54) 
+0 . 00 
+(0 . 74) 
+0 . 01 
+(0 . 89) 
+r LH,t 
+−0 . 82 
+(−0 . 25) 
+−8 . 56 
+(−1 . 61) 
+−12 . 22 
+(−2 . 17) 
+∗∗
+−8 . 06 
+(−1 . 32) 
+−8 . 64 
+(−1 . 14) 
+−6 . 98 
+(−0 . 84) 
+R 2 (%) 
+−0.00 
+0.03 
+0.04 
+0.02 
+0.01 
+0.00 
+393 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Fig. 6. Average intraday trading volume S&P 500 E-Mini futures. This ﬁgure shows the average trading volume per 15-minute time interval of the S&P 500 
+E-Mini futures. The sample period is July 2003 to May 2020. 
+Table 12 
+Market intraday momentum: 16:00 stock market close versus the 16:15 futures market close. This table reports the results of regressing the last half-hour 
+return ( r LH ), last 15-minute return ( r c,t 
+c−15 ,t ), or last 5-minute return ( r c,t 
+c−5 ,t ) on a constant and the ﬁrst half-hour return ( r ONFH ), return from the ﬁrst half 
+hour until last hour ( r M ), second-to-last half-hour return ( r SLH ) and the return until the last half hour ( r ROD ) for the S&P 500 index in Panel A (close 16:00 
+EST) and for the S&P 500 index futures in Panel B (close 16:15 EST). The intercept is not reported. Newey and West (1986) robust t-statistics are shown in 
+parentheses. The sample ranges from April 1982 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 
+and regression coeﬃcients are multiplied by 100. 
+βONFH 
+R 2 (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+βROD 
+R 2 (%) 
+Panel A: 16:00 close 
+r LH 
+5 . 14 
+(3 . 36) 
+∗∗∗
+0.96 
+4 . 78 
+(3 . 22) 
+∗∗∗
+5 . 58 
+(2 . 25) 
+∗∗
+18 . 47 
+(3 . 90) 
+∗∗∗
+3.69 
+5 . 98 
+(4 . 78) 
+∗∗∗
+3.28 
+r c,t 
+c−15 ,t 
+2 . 97 
+(3 . 21) 
+∗∗∗
+0.80 
+2 . 84 
+(3 . 11) 
+∗∗∗
+2 . 53 
+(2 . 00) 
+∗∗
+6 . 90 
+(2 . 57) 
+∗∗
+1.88 
+2 . 83 
+(3 . 99) 
+∗∗∗
+1.81 
+r c,t 
+c−15 ,t 
+2 . 15 
+(2 . 60) 
+∗∗∗
+1.29 
+2 . 07 
+(2 . 56) 
+∗∗
+1 . 73 
+(4 . 77) 
+∗∗∗
+4 . 01 
+(3 . 18) 
+∗∗∗
+2.63 
+1 . 94 
+(5 . 03) 
+∗∗∗
+2.65 
+Panel B: 16:15 close 
+r LH 
+3 . 98 
+(3 . 07) 
+∗∗∗
+0.77 
+3 . 68 
+(2 . 79) 
+∗∗∗
+1 . 69 
+(1 . 58) 
+10 . 10 
+(4 . 45) 
+∗∗∗
+1.87 
+3 . 28 
+(5 . 09) 
+∗∗∗
+1.48 
+r c,t 
+c−15 ,t 
+0 . 01 
+(0 . 01) 
+-0.01 
+0 . 00 
+(0 . 01) 
+−1 . 04 
+(−1 . 89) 
+∗
+−0 . 03 
+(−0 . 02) 
+0.22 
+−0 . 37 
+(−0 . 97) 
+0.05 
+r c,t 
+c−15 ,t 
+0 . 40 
+(0 . 87) 
+0.06 
+0 . 43 
+(0 . 95) 
+−0 . 92 
+(−1 . 88) 
+∗
+−1 . 02 
+(−0 . 94) 
+0.52 
+−0 . 28 
+(−1 . 06) 
+0.09 
+the results of regressing the next day return ( r c,t+1 
+c,t ), the 
+next two days’ return ( r c,t+2 
+c,t ), and the next three days’ re- 
+turn ( r c,t+3 
+c,t ) on a constant and today’s last half-hour return 
+( r LH,t ). In all four markets, we observe reversals, although 
+this effect is not signiﬁcant in currency futures. Such a re- 
+turn reversal is consistent with the price pressure caused 
+by market makers’ hedging activities. 
+For another piece of evidence for the hedging demand, 
+we turn to the S&P 500 underlying market. The market 
+closes at 4:00pm ET, the time at which most options and 
+levered ETFs on the index are settled. Market makers for 
+these index-related instruments have strong incentives to 
+hedge their positions before 4:00pm in the underlying 
+market. 
+On the other hand, the futures trade well until at least 
+4:15pm ET, when the futures market has its settlement. 
+This is evident in Fig. 6 , which plots the average 15-minute 
+trading volume of the S&P 500 E-Mini futures. We ob- 
+serve very active trading during the 15-minute interval 
+from 4:00pm ET to 4:15pm ET, suggesting that informed 
+traders can trade on their information at suﬃcient liquid- 
+ity even after 4:00pm ET in the futures market. 
+Table 12 examines the return predictability during the 
+last half an hour before close in both the S&P 500 cash 
+index market (Panel A) and the futures market (Panel B). 
+394 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Empirically, Panel A shows that r ROD strongly predicts r LH 
+in the cash index market (we have veriﬁed similar re- 
+sults in the futures market over the same time interval). 
+In contrast, in Panel B, we ﬁnd that the predictability of 
+r ROD does not extend to the futures return beyond 4:00pm 
+ET. The evidence is again consistent with the hedging de- 
+mand channel, and seems hard to reconcile with the late 
+informed trading channel. 
+5. Conclusion 
+Using intraday price data on more than 60 futures con- 
+tracts on equity indices, bonds, commodities, and curren- 
+cies over the past 45 years, we ﬁnd a strong market in- 
+traday momentum across the main markets in the major 
+asset classes. The futures return during the last 30 min- 
+utes before market close is positively predicted by the fu- 
+tures return during the rest of the day (from previous mar- 
+ket close to just before the last 30 minutes). The predictive 
+power is both statistically and economically highly signif- 
+icant, yielding Sharpe ratios between 0.87 and 1.73. Mar- 
+ket intraday momentum is robustly present across markets 
+and over time, reverts over the next days, and is distinct 
+from intraday seasonality effects. 
+More importantly, we identify a novel economic force 
+that drives market intraday momentum: market partici- 
+pants’ hedging demand coming from short gamma expo- 
+sure. Our tests link both cross-sectional and time-series 
+variation in market intraday momentum to such hedging 
+demand. Our evidence suggests that concentrated trades 
+of groups of investors, like portfolio insurers, option mar- 
+ket makers, and leveraged ETFs, can have substantial, non- 
+fundamental price impact, amplifying price changes and 
+impacting market dynamics around the times they trade. 
+Paradoxically, these dynamics could even lead leveraged 
+(including short) ETFs to underperform their underlying 
+index, as the hedging impact of their trades tend to re- 
+vert. At the same time, market dynamics are strongly pre- 
+dictable intraday, and as such, proactive investors can ben- 
+eﬁt, for example, by providing liquidity opportunistically in 
+anticipation of hedging ﬂows or a smart timing of planned 
+trades. 
+Appendix 
+This Appendix is divided into four sections. The 
+ﬁrst section ( Section Appendix A ) elaborates on the fu- 
+tures contracts used in this research. The second section 
+( Section Appendix B ) shows results for the individual mar- 
+kets. The third section ( Section Appendix C ) shows the re- 
+sults for equity cash indices as opposed to futures con- 
+tracts. Finally, Section Appendix D shows the horse race 
+results for the different subperiods. 
+Appendix A. Details on futures contracts 
+Tables A1–A4 
+Table A1 
+Overview of equity index futures sample. This table includes symbols as listed on www.tickdata.com , start of the sample period, end of the sample period, 
+the trading hours we consider to be a trading day, the number of observations after ﬁltering, and the geographical group to which a future belongs. An 
+asterisk indicates futures for which the sample period is extended by considering the regular future before the mini contract was introduced. The symbol 
+given is the ticker used by Tickdata.com, which is not necessarily the exchange ticker. Trading hours provided are the current trading hours, however, some 
+indices have changed over time, for which the data has been adjusted. Trading hours are expressed in the local exchange time zone, with U.S.-listed futures 
+denoted in Eastern Standard Time (EST). 
+Future 
+Symbol 
+Start 
+End 
+Obs 
+Times 
+Group 
+Dow Jones futures ∗
+YM 
+1997-10-08 
+2020-05-01 
+5639 
+09:30–16:00 
+USA 
+S&P 500 futures ∗
+ES 
+1982-04-23 
+2020-05-01 
+9535 
+09:30–16:00 
+USA 
+NASDAQ 100 futures ∗
+NQ 
+1996-04-12 
+2020-05-01 
+6017 
+09:30–16:00 
+USA 
+Russell 2000 ICE/CME ∗
+ER 
+1993-02-08 
+2020-05-01 
+6746 
+09:30–16:00 
+USA 
+S&P 400 MidCap futures ∗
+MI 
+1993-01-06 
+2020-05-01 
+6594 
+09:30–16:00 
+USA 
+Amsterdam AEX Index futures 
+EO 
+2008-01-04 
+2020-05-01 
+3136 
+09:00–17:30 
+EU 
+DAX Index futures 
+DA 
+1997-01-06 
+2020-05-01 
+5911 
+09:00–17:30 
+EU 
+Swiss Market Index futures 
+SW 
+2005-11-21 
+2020-05-01 
+3624 
+09:00–17:30 
+EU 
+EURO STOXX 50 Index futures 
+XX 
+1998-07-03 
+2020-05-01 
+5550 
+09:00–17:30 
+EU 
+CAC 40 Index futures 
+CF 
+2000-05-04 
+2020-05-01 
+5093 
+09:00–17:30 
+EU 
+IBEX 35 Index futures 
+IB 
+2003-07-03 
+2020-05-01 
+4275 
+09:00–17:30 
+EU 
+FTSE MIB Index futures 
+II 
+2004-10-05 
+2020-05-01 
+3951 
+09:00–17:30 
+EU 
+FTSE 100 Index futures 
+FT 
+1998-07-03 
+2020-05-01 
+5484 
+08:00–16:30 
+EU 
+Nikkei 225 futures SGX 
+EN 
+1997-04-03 
+2020-04-02 
+5560 
+08:00–14:00 
+Australasia 
+TOPIX futures JPX 
+TP 
+2003-07-03 
+2020-05-01 
+4118 
+09:00–15:00 
+Australasia 
+ASX SPI 200 Index futures 
+XP 
+2001-07-04 
+2020-03-19 
+4538 
+10:00–16:00 
+Australasia 
+S&P Canada 60 futures 
+PT 
+1999-10-05 
+2020-05-01 
+5142 
+09:30–16:00 
+- 
+395 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table A2 
+Overview of government bond futures sample. This table includes symbols as listed on www.tickdata.com , the start of the sample period, the end of sample 
+period, the trading hours we consider to be a trading day, the number of observations after ﬁltering, and the geographical group to which a future belongs. 
+The symbol given is the ticker used by Tickdata.com, which is not necessarily the exchange ticker. Trading hours provided are the current trading hours, 
+however, some indices have changed over time, for which the data has been adjusted. Trading hours are expressed in the local exchange time zone, with 
+U.S.-listed futures denoted in Eastern Standard Time (EST). 
+Future 
+Symbol 
+Start 
+End 
+Obs 
+Times 
+Group 
+US 2-year T-note futures 
+TU 
+1991-01-04 
+2020-05-01 
+7153 
+08:20–15:00 
+USA 
+US 5-year T-note futures 
+FV 
+1988-07-06 
+2020-05-01 
+7907 
+08:20–15:00 
+USA 
+US 10-year T-note futures 
+TY 
+1983-01-05 
+2020-05-01 
+9296 
+08:20–15:00 
+USA 
+US 30-year T-bond futures 
+US 
+1982-10-05 
+2020-05-01 
+9366 
+08:20–15:00 
+USA 
+Ultra T-bond futures 
+UB 
+2010-02-03 
+2020-05-01 
+2564 
+08:20–15:00 
+USA 
+Euro-Schatz 2-year futures 
+BZ 
+1997-03-11 
+2020-05-01 
+5874 
+08:00–17:15 
+EU 
+Euro-Bobl 5-year futures 
+BL 
+1997-01-06 
+2020-05-01 
+5921 
+08:00–17:15 
+EU 
+Euro-Bund 10-year futures 
+BN 
+1997-01-06 
+2020-05-01 
+5921 
+08:00–17:15 
+EU 
+Euro-Buxl 30-year futures 
+BX 
+2005-09-13 
+2020-05-01 
+3720 
+08:00–17:15 
+EU 
+Short-term euro-BTP futures 
+BS 
+2010-10-21 
+2020-05-01 
+2421 
+08:00–17:15 
+EU 
+Long-term euro-BTP futures 
+BT 
+2010-02-24 
+2020-05-01 
+2591 
+08:00–17:15 
+EU 
+Long gilt futures 
+GL 
+1998-07-03 
+2020-05-01 
+5485 
+08:00–16:15 
+EU 
+Australian 3-year bond futures 
+AY 
+2001-07-04 
+2020-05-01 
+4738 
+08:30–16:30 
+Australasia 
+Australian 10-year bond futures 
+AX 
+2001-07-04 
+2020-05-01 
+4737 
+08:32–16:30 
+Australasia 
+Japanese 10-year bond futures JPX 
+JB 
+2003-07-03 
+2020-05-01 
+4117 
+08:45–15:00 
+Australasia 
+Canadian 10-year futures 
+CB 
+1990-04-04 
+2020-05-01 
+7368 
+08:20–15:00 
+- 
+Table A3 
+Overview of commodity futures sample. The table includes symbols as listed on www.tickdata.com , the start of the sample period, the end of sample 
+period, the trading hours we consider to be a trading day, the number of observations after ﬁltering, and the categorical group to which a future belongs. 
+The symbol given is the ticker used by Tickdata.com, which is not necessarily the exchange ticker. Trading hours provided are the current trading hours, 
+however, some indices have changed over time, for which the data has been adjusted. Trading hours are expressed in the local exchange time zone, except 
+for CC, CT, KC, SB, which are expressed in London time. 
+Future 
+Symbol 
+Start 
+End 
+Obs 
+Times 
+Group 
+Gold futures COMEX 
+GC 
+1984-01-05 
+2020-05-01 
+9044 
+08:20–13:30 
+Metals 
+Copper high grade futures COMEX 
+HG 
+1989-12-05 
+2020-05-01 
+7608 
+08:10–13:00 
+Metals 
+Silver futures COMEX 
+SV 
+1983-12-05 
+2020-05-01 
+9064 
+08:25–13:25 
+Metals 
+Palladium futures NYMEX 
+PA 
+1994-01-05 
+2020-05-01 
+5495 
+08:30–13:00 
+Metals 
+Platinum futures NYMEX 
+PL 
+2007-10-03 
+2020-03-30 
+2978 
+08:20–13:05 
+Metals 
+Light crude oil futures NYMEX 
+CL 
+1987-01-06 
+2020-05-01 
+8336 
+09:00–14:30 
+Energies 
+Heating oil #2 futures NYMEX 
+HO 
+1984-01-05 
+2020-05-01 
+9060 
+09:00–14:30 
+Energies 
+Natural gas futures NYMEX 
+NG 
+1993-01-06 
+2020-05-01 
+6824 
+09:00–14:30 
+Energies 
+RBOB gasoline futures NYMEX 
+XB 
+2006-10-04 
+2020-05-01 
+3417 
+09:00–14:30 
+Energies 
+Soybean oil futures 
+BO 
+1982-07-06 
+2020-05-01 
+9458 
+08:30–13:20 
+Softs 
+Corn futures 
+CN 
+1982-07-06 
+2020-05-01 
+9462 
+08:30–13:20 
+Softs 
+Soybean meal futures 
+SM 
+1982-07-06 
+2020-05-01 
+9458 
+08:30–13:20 
+Softs 
+Soybean futures 
+SY 
+1982-07-06 
+2020-05-01 
+9462 
+08:30–13:20 
+Softs 
+Wheat futures CBOT 
+WC 
+1982-07-06 
+2020-05-01 
+9462 
+08:30–13:20 
+Softs 
+Cocoa futures 
+CC 
+1986-07-07 
+2020-05-01 
+8389 
+09:45–18:30 
+Softs 
+Cotton #2 futures 
+CT 
+1987-01-07 
+2020-05-01 
+8168 
+02:00–19:20 
+Softs 
+Coffee C futures 
+KC 
+1987-01-07 
+2020-05-01 
+8201 
+09:15–18:30 
+Softs 
+Sugar #11 futures 
+SB 
+1986-07-07 
+2020-05-01 
+8345 
+08:30–18:00 
+Softs 
+Feeder cattle futures 
+FC 
+1984-08-15 
+2020-05-01 
+8164 
+08:30–13:05 
+Softs 
+Live cattle futures 
+LC 
+1984-08-14 
+2020-05-01 
+8797 
+08:30–13:05 
+Softs 
+Lean hogs futures 
+LH 
+1981-04-03 
+2020-05-01 
+9499 
+08:30–13:05 
+Softs 
+Table A4 
+Overview of currency futures sample. This table includes symbols as listed on www.tickdata.com , the start of the sample period, the end of sample period, 
+the trading hours we consider to be a trading day, and the number of observations after ﬁltering. Trading hours are expressed in the local exchange time 
+zone. 
+Future 
+Symbol 
+Start 
+End 
+Obs 
+Times 
+Australian dollar futures 
+AD 
+1987-01-15 
+2020-04-13 
+8139 
+07:20–14:00 
+British pound futures 
+BP 
+1977-09-06 
+2020-05-01 
+10,570 
+07:20–14:00 
+Canadian dollar futures 
+CD 
+1977-01-05 
+2020-03-16 
+10,658 
+07:20–14:00 
+Euro FX futures 
+EC 
+1999-01-06 
+2020-05-01 
+5284 
+07:20–14:00 
+Japanese yen futures 
+JY 
+1977-03-14 
+2020-04-23 
+10,553 
+07:20–14:00 
+Mexican peso futures 
+ME 
+2002-07-12 
+2020-04-09 
+4255 
+07:20–14:00 
+New Zealand dollar futures 
+NZ 
+2010-01-06 
+2020-05-01 
+2584 
+07:20–14:00 
+Swiss franc futures 
+SF 
+1974-12-04 
+2020-05-01 
+11,233 
+07:20–14:00 
+396 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Appendix B. Individual market results 
+Tables B1–B4 
+Table B1 
+Market intraday momentum: individual equity index futures results. This table shows the pooled (Panel A) and individual (Panel B) results of regressing 
+the last half-hour return ( r LH ) on a constant and the ﬁrst half-hour return ( r ONFH ), return from the ﬁrst half hour until the last hour ( r M ) and second-to-last 
+half hour ( r SLH ), and the return until the last half hour ( r ROD ), for equity index futures. Trading hours are based on the trading hours of their underlying 
+markets. Intercepts are not reported. Panel A: T -statistics that account for clustering on time and market (in case number of clusters exceeds ten) are in 
+parentheses; see Cameron et al. (2011) . Panel B: Newey and West (1986) robust t-statistics are in parentheses. Samples range from April 1982 to May 2020. 
+Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 , R 2 
+OOS , and slope coeﬃcients are multiplied by 100. 
+Panel A: Pooled regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+Total 
+4 . 86 
+(6 . 52) 
+∗∗∗
+1.49 
+−1.71 
+4 . 72 
+(6 . 46) 
+∗∗∗
+2 . 92 
+(4 . 43) 
+∗∗∗
+9 . 08 
+(4 . 82) 
+∗∗∗
+2.74 
+2.22 
+4 . 18 
+(7 . 29) 
+∗∗∗
+2.45 
+2.88 
+USA 
+6 . 92 
+(4 . 67) 
+∗∗∗
+1.80 
+−0.87 
+6 . 50 
+(4 . 49) 
+∗∗∗
+4 . 47 
+(4 . 22) 
+∗∗∗
+12 . 58 
+(3 . 66) 
+∗∗∗
+3.84 
+2.60 
+5 . 99 
+(6 . 66) 
+∗∗∗
+3.46 
+3.09 
+EU 
+4 . 62 
+(5 . 62) 
+∗∗∗
+1.76 
+1.60 
+4 . 59 
+(5 . 57) 
+∗∗∗
+2 . 33 
+(3 . 99) 
+∗∗∗
+5 . 05 
+(2 . 83) 
+∗∗∗
+2.60 
+2.22 
+3 . 48 
+(7 . 41) 
+∗∗∗
+2.36 
+2.50 
+Australasia 
+2 . 97 
+(4 . 30) 
+∗∗∗
+1.17 
+1.03 
+2 . 90 
+(4 . 29) 
+∗∗∗
+0 . 39 
+(0 . 42) 
+8 . 66 
+(3 . 37) 
+∗∗∗
+1.73 
+1.03 
+2 . 40 
+(5 . 33) 
+∗∗∗
+1.17 
+0.85 
+Panel B: Individual regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+YM 
+6 . 07 
+(3 . 28) 
+∗∗∗
+1.34 
+1.31 ∗∗∗
+5 . 71 
+(3 . 19) 
+∗∗∗
+2 . 77 
+(1 . 91) 
+∗
+13 . 09 
+(2 . 46) 
+∗∗
+2.75 
+2.34 ∗∗∗
+5 . 02 
+(4 . 12) 
+∗∗∗
+2.20 
+2.18 ∗∗∗
+ES 
+5 . 24 
+(3 . 38) 
+∗∗∗
+0.98 
+−1.68 
+4 . 81 
+(3 . 25) 
+∗∗∗
+6 . 06 
+(2 . 48) 
+∗∗
+12 . 39 
+(3 . 49) 
+∗∗∗
+3.74 
+1.21 ∗∗∗
+6 . 18 
+(4 . 97) 
+∗∗∗
+3.41 
+2.29 ∗∗∗
+NQ 
+7 . 45 
+(5 . 33) 
+∗∗∗
+2.01 
+1.83 ∗∗∗
+6 . 95 
+(5 . 03) 
+∗∗∗
+5 . 14 
+(4 . 74) 
+∗∗∗
+11 . 54 
+(3 . 26) 
+∗∗∗
+4.31 
+3.58 ∗∗∗
+6 . 36 
+(7 . 97) 
+∗∗∗
+4.10 
+3.76 ∗∗∗
+ER 
+8 . 17 
+(4 . 62) 
+∗∗∗
+2.38 
+2.21 ∗∗∗
+7 . 79 
+(4 . 54) 
+∗∗∗
+3 . 61 
+(3 . 15) 
+∗∗∗
+12 . 27 
+(2 . 17) 
+∗∗
+3.91 
+3.33 ∗∗∗
+6 . 00 
+(5 . 86) 
+∗∗∗
+3.35 
+3.15 ∗∗∗
+MI 
+7 . 34 
+(4 . 06) 
+∗∗∗
+2.41 
+2.23 ∗∗∗
+6 . 99 
+(4 . 09) 
+∗∗∗
+3 . 59 
+(3 . 26) 
+∗∗∗
+14 . 67 
+(3 . 23) 
+∗∗∗
+4.46 
+3.87 ∗∗∗
+5 . 85 
+(5 . 53) 
+∗∗∗
+3.69 
+3.46 ∗∗∗
+EO 
+3 . 82 
+(2 . 62) 
+∗∗∗
+1.68 
+−1.91 
+3 . 78 
+(2 . 71) 
+∗∗∗
+0 . 62 
+(0 . 75) 
+2 . 69 
+(0 . 69) 
+1.75 
+−3.05 
+2 . 23 
+(2 . 33) 
+∗∗
+1.24 
+−1.91 
+DA 
+4 . 57 
+(5 . 45) 
+∗∗∗
+1.67 
+1.19 ∗∗∗
+4 . 69 
+(5 . 58) 
+∗∗∗
+2 . 14 
+(2 . 99) 
+∗∗∗
+4 . 97 
+(2 . 72) 
+∗∗∗
+2.39 
+0.42 ∗∗∗
+3 . 42 
+(6 . 28) 
+∗∗∗
+2.13 
+0.42 ∗∗∗
+SW 
+3 . 52 
+(3 . 02) 
+∗∗∗
+1.11 
+0.71 ∗∗∗
+3 . 41 
+(3 . 01) 
+∗∗∗
+0 . 43 
+(0 . 42) 
+3 . 80 
+(1 . 17) 
+1.21 
+0.17 ∗∗∗
+1 . 98 
+(2 . 26) 
+∗∗
+0.80 
+0.37 
+XX 
+5 . 66 
+(6 . 02) 
+∗∗∗
+2.30 
+2.44 ∗∗∗
+5 . 73 
+(6 . 13) 
+∗∗∗
+4 . 17 
+(5 . 01) 
+∗∗∗
+5 . 91 
+(2 . 42) 
+∗∗
+4.10 
+3.26 ∗∗∗
+4 . 98 
+(7 . 61) 
+∗∗∗
+4.06 
+3.67 ∗∗∗
+CF 
+4 . 82 
+(5 . 55) 
+∗∗∗
+1.89 
+1.72 ∗∗∗
+4 . 81 
+(5 . 63) 
+∗∗∗
+3 . 07 
+(3 . 79) 
+∗∗∗
+6 . 64 
+(2 . 82) 
+∗∗∗
+3.30 
+0.42 ∗∗∗
+4 . 07 
+(6 . 37) 
+∗∗∗
+3.14 
+0.85 ∗∗∗
+IB 
+2 . 35 
+(2 . 25) 
+∗∗
+0.50 
+0.10 ∗
+2 . 27 
+(2 . 21) 
+∗∗
+−0 . 38 
+(−0 . 60) 
+2 . 83 
+(1 . 05) 
+0.56 
+−0.28 ∗
+0 . 93 
+(1 . 45) 
+0.18 
+−0.21 
+II 
+5 . 39 
+(5 . 42) 
+∗∗∗
+2.26 
+1.94 ∗∗∗
+5 . 13 
+(5 . 32) 
+∗∗∗
+3 . 49 
+(5 . 83) 
+∗∗∗
+6 . 53 
+(2 . 24) 
+∗∗
+4.29 
+3.31 ∗∗∗
+4 . 29 
+(7 . 58) 
+∗∗∗
+4.15 
+3.68 ∗∗∗
+FT 
+5 . 76 
+(6 . 91) 
+∗∗∗
+2.48 
+1.70 ∗∗∗
+5 . 78 
+(7 . 00) 
+∗∗∗
+2 . 92 
+(3 . 48) 
+∗∗∗
+4 . 41 
+(1 . 79) 
+∗
+3.37 
+1.96 ∗∗∗
+4 . 28 
+(7 . 35) 
+∗∗∗
+3.09 
+2.03 ∗∗∗
+EN 
+3 . 31 
+(3 . 13) 
+∗∗∗
+1.20 
+1.26 ∗∗∗
+3 . 16 
+(3 . 06) 
+∗∗∗
+0 . 67 
+(0 . 74) 
+9 . 50 
+(2 . 86) 
+∗∗∗
+1.84 
+1.36 ∗∗∗
+2 . 70 
+(3 . 74) 
+∗∗∗
+1.30 
+1.20 ∗∗∗
+TP 
+3 . 92 
+(3 . 59) 
+∗∗∗
+2.04 
+1.76 ∗∗∗
+3 . 80 
+(3 . 58) 
+∗∗∗
+−0 . 75 
+(−0 . 70) 
+9 . 40 
+(2 . 17) 
+∗∗
+2.66 
+1.78 ∗∗∗
+2 . 77 
+(3 . 22) 
+∗∗∗
+1.47 
+1.24 ∗∗∗
+XP 
+0 . 72 
+(0 . 94) 
+0.10 
+−0.25 
+0 . 76 
+(0 . 99) 
+1 . 59 
+(1 . 58) 
+2 . 80 
+(0 . 83) 
+0.39 
+−0.78 
+1 . 05 
+(1 . 73) 
+∗
+0.36 
+−0.13 ∗
+PT 
+2 . 08 
+(1 . 50) 
+0.28 
+0.09 
+1 . 80 
+(1 . 34) 
+1 . 11 
+(0 . 86) 
+12 . 18 
+(2 . 16) 
+∗∗
+1.26 
+0.56 ∗
+2 . 12 
+(2 . 36) 
+∗∗
+0.61 
+0.48 ∗∗
+Table B2 
+Market intraday momentum: individual bond futures results. This table shows the pooled (Panel A) and individual (Panel B) results of regressing the last 
+half-hour return ( r LH ) on a constant and the ﬁrst half-hour return ( r ONFH ), return from ﬁrst half-hour until last hour ( r M ) and second-to-last half hour ( r SLH ), 
+and the return until the last half-hour ( r ROD ) for government bond futures. Trading hours are based on volume plots. Intercepts are not reported. Panel 
+A: T -statistics that account for clustering on time and market (in case the number of clusters exceeds ten) are in parentheses; see Cameron et al. (2011) . 
+Panel B: Newey and West (1986) robust t-statistics are in parentheses. Samples range from October 1982 to May 2020. Signiﬁcance at the 1%, 5%, and 10% 
+level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 , R 2 
+OOS , and slope coeﬃcients are multiplied by 100. 
+Panel A: Pooled regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+Total 
+1 . 59 
+(4 . 65) 
+∗∗∗
+0.20 
+−0.05 
+1 . 66 
+(4 . 99) 
+∗∗∗
+1 . 97 
+(5 . 93) 
+∗∗∗
+3 . 11 
+(1 . 68) 
+∗
+0.66 
+0.56 
+1 . 90 
+(5 . 97) 
+∗∗∗
+0.64 
+0.60 
+USA 
+1 . 91 
+(3 . 57) 
+∗∗∗
+0.30 
+−0.11 
+1 . 96 
+(3 . 71) 
+∗∗∗
+2 . 77 
+(5 . 23) 
+∗∗∗
+5 . 25 
+(1 . 42) 
+1.13 
+0.16 
+2 . 51 
+(6 . 00) 
+∗∗∗
+1.03 
+0.29 
+EU 
+1 . 85 
+(2 . 95) 
+∗∗∗
+0.22 
+0.04 
+1 . 99 
+(3 . 20) 
+∗∗∗
+1 . 47 
+(3 . 44) 
+∗∗∗
+2 . 58 
+(1 . 57) 
+0.57 
+−0.08 
+1 . 69 
+(4 . 78) 
+∗∗∗
+0.56 
+0.29 
+Australasia 
+0 . 00 
+(0 . 01) 
+−0.01 
+−0.92 
+0 . 01 
+(0 . 03) 
+−0 . 22 
+(−0 . 38) 
+−14 . 07 
+(−6 . 51) 
+∗∗∗
+1.33 
+0.52 
+−0 . 45 
+(−1 . 16) 
+0.04 
+-0.63 
+397 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table B2 
+( continued ) 
+Panel B: Individual regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+TU 
+1 . 37 
+(2 . 11) 
+∗∗
+0.17 
+0.09 ∗
+1 . 56 
+(2 . 44) 
+∗∗
+2 . 34 
+(3 . 41) 
+∗∗∗
+4 . 83 
+(1 . 52) 
+0.80 
+0.26 ∗∗
+2 . 07 
+(4 . 45) 
+∗∗∗
+0.71 
+0.70 ∗∗∗
+FV 
+1 . 67 
+(3 . 35) 
+∗∗∗
+0.27 
+0.19 ∗∗∗
+1 . 82 
+(3 . 72) 
+∗∗∗
+2 . 01 
+(3 . 89) 
+∗∗∗
+8 . 77 
+(2 . 93) 
+∗∗∗
+1.56 
+1.12 ∗∗∗
+2 . 33 
+(6 . 25) 
+∗∗∗
+1.05 
+0.93 ∗∗∗
+TY 
+1 . 68 
+(3 . 41) 
+∗∗∗
+0.24 
+0.16 ∗∗∗
+1 . 81 
+(3 . 68) 
+∗∗∗
+2 . 60 
+(5 . 21) 
+∗∗∗
+7 . 51 
+(4 . 07) 
+∗∗∗
+1.33 
+0.91 ∗∗∗
+2 . 53 
+(6 . 96) 
+∗∗∗
+1.06 
+0.86 ∗∗∗
+US 
+1 . 77 
+(3 . 62) 
+∗∗∗
+0.21 
+0.09 ∗∗∗
+1 . 81 
+(3 . 71) 
+∗∗∗
+2 . 59 
+(5 . 03) 
+∗∗∗
+0 . 88 
+(0 . 15) 
+0.65 
+−0.43 ∗∗∗
+2 . 11 
+(3 . 85) 
+∗∗∗
+0.64 
+0.22 ∗∗∗
+UB 
+2 . 46 
+(2 . 79) 
+∗∗∗
+0.61 
+−2.24 
+2 . 44 
+(2 . 77) 
+∗∗∗
+3 . 73 
+(3 . 30) 
+∗∗∗
+15 . 06 
+(2 . 52) 
+∗∗
+3.49 
+−1.92 ∗∗
+3 . 39 
+(4 . 36) 
+∗∗∗
+2.35 
+−3.40 ∗
+BZ 
+0 . 55 
+(0 . 61) 
+0.00 
+−0.12 
+0 . 77 
+(0 . 84) 
+1 . 56 
+(2 . 59) 
+∗∗∗
+0 . 93 
+(0 . 38) 
+0.24 
+−0.19 ∗∗
+1 . 28 
+(2 . 26) 
+∗∗
+0.25 
+0.14 ∗∗
+BL 
+0 . 90 
+(1 . 23) 
+0.02 
+−0.05 
+1 . 00 
+(1 . 36) 
+0 . 91 
+(1 . 74) 
+∗
+4 . 72 
+(1 . 44) 
+0.28 
+−0.15 ∗∗
+1 . 19 
+(2 . 70) 
+∗∗∗
+0.19 
+0.11 ∗∗
+BN 
+1 . 79 
+(2 . 54) 
+∗∗
+0.16 
+0.11 ∗∗
+1 . 97 
+(2 . 78) 
+∗∗∗
+1 . 80 
+(3 . 65) 
+∗∗∗
+3 . 67 
+(2 . 18) 
+∗∗
+0.67 
+0.36 ∗∗∗
+1 . 97 
+(5 . 12) 
+∗∗∗
+0.67 
+0.54 ∗∗∗
+BX 
+2 . 08 
+(2 . 37) 
+∗∗
+0.23 
+0.02 ∗∗
+2 . 28 
+(2 . 64) 
+∗∗∗
+1 . 63 
+(2 . 37) 
+∗∗
+−0 . 16 
+(−0 . 06) 
+0.51 
+0.01 ∗∗
+1 . 71 
+(3 . 19) 
+∗∗∗
+0.52 
+0.33 ∗∗∗
+BS 
+1 . 51 
+(0 . 73) 
+0.15 
+0.12 
+1 . 03 
+(0 . 51) 
+1 . 74 
+(1 . 22) 
+12 . 47 
+(1 . 99) 
+∗∗
+2.23 
+0.96 
+2 . 02 
+(2 . 01) 
+∗∗
+1.20 
+1.02 
+BT 
+1 . 56 
+(1 . 47) 
+0.18 
+−0.11 
+1 . 52 
+(1 . 41) 
+1 . 64 
+(2 . 51) 
+∗∗
+11 . 13 
+(2 . 95) 
+∗∗∗
+1.82 
+−0.98 ∗∗
+2 . 04 
+(3 . 17) 
+∗∗∗
+1.07 
+0.81 ∗∗∗
+GL 
+2 . 02 
+(3 . 28) 
+∗∗∗
+0.26 
+0.26 ∗∗∗
+2 . 05 
+(3 . 34) 
+∗∗∗
+0 . 74 
+(1 . 43) 
+0 . 02 
+(0 . 01) 
+0.28 
+−0.11 ∗∗
+1 . 16 
+(2 . 92) 
+∗∗∗
+0.23 
+0.02 ∗∗
+AY 
+−0 . 41 
+(−0 . 60) 
+0.01 
+−1.05 
+−0 . 38 
+(−0 . 54) 
+−0 . 38 
+(−0 . 58) 
+−17 . 25 
+(−7 . 20) 
+∗∗∗
+2.01 
+0.70 ∗∗∗
+−0 . 82 
+(−1 . 55) 
+0.15 
+−0.87 
+AX 
+1 . 03 
+(0 . 89) 
+0.15 
+−0.56 
+0 . 90 
+(0 . 91) 
+2 . 07 
+(1 . 74) 
+∗
+−14 . 41 
+(−2 . 86) 
+∗∗∗
+1.98 
+0.35 ∗
+1 . 06 
+(1 . 08) 
+0.26 
+−0.58 
+JB 
+1 . 73 
+(1 . 54) 
+0.17 
+−0.95 
+1 . 68 
+(1 . 50) 
+−1 . 67 
+(−1 . 16) 
+−3 . 59 
+(−0 . 85) 
+0.36 
+−1.15 
+−0 . 05 
+(−0 . 06) 
+−0.02 
+−0.56 
+CB 
+0 . 87 
+(1 . 78) 
+∗
+0.05 
+−0.10 
+0 . 93 
+(1 . 93) 
+∗
+1 . 52 
+(3 . 02) 
+∗∗∗
+0 . 77 
+(0 . 36) 
+0.25 
+−0.07 ∗∗
+1 . 20 
+(3 . 67) 
+∗∗∗
+0.25 
+0.19 ∗∗∗
+Table B3 
+Market intraday momentum: individual commodity futures results. This table shows the pooled (Panel A) and individual (Panel B) results of regressing the 
+last half-hour return ( r LH ) on a constant and the ﬁrst half-hour return ( r ONFH ), return from ﬁrst half hour until the last hour ( r M ) and second-to-last half 
+hour ( r SLH ), and the return until the last half hour ( r ROD ) for commodity futures. Trading hours are based on volume plots. Intercepts are not reported. Panel 
+A: T -statistics that account for clustering on time and market (in case the number of clusters exceeds ten) are in parentheses; see Cameron et al. (2011) . 
+Panel B: Newey and West (1986) robust t-statistics in parentheses. Samples range from April 1981 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level 
+is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 , R 2 
+OOS , and slope coeﬃcients are multiplied by 100. 
+Panel A: Pooled regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+Total 
+1 . 33 
+(3 . 04) 
+∗∗∗
+0.09 
+−0.01 
+1 . 29 
+(3 . 02) 
+∗∗∗
+0 . 85 
+(2 . 73) 
+∗∗∗
+2 . 24 
+(1 . 16) 
+0.15 
+−0.14 
+1 . 21 
+(3 . 63) 
+∗∗∗
+0.15 
+0.07 
+Metals 
+1 . 60 
+(4 . 76) 
+∗∗∗
+0.28 
+0.21 
+1 . 61 
+(4 . 80) 
+∗∗∗
+0 . 69 
+(1 . 77) 
+∗
+0 . 06 
+(0 . 05) 
+0.31 
+0.10 
+1 . 19 
+(4 . 50) 
+∗∗∗
+0.26 
+0.31 
+Energies 
+2 . 80 
+(2 . 43) 
+∗∗
+0.35 
+0.03 
+2 . 75 
+(2 . 49) 
+∗∗
+1 . 25 
+(1 . 52) 
+0 . 73 
+(0 . 13) 
+0.42 
+−0.07 
+2 . 10 
+(2 . 34) 
+∗∗
+0.45 
+0.20 
+Softs 
+0 . 25 
+(0 . 70) 
+0.00 
+−0.06 
+0 . 19 
+(0 . 57) 
+0 . 61 
+(1 . 70) 
+∗
+3 . 50 
+(2 . 62) 
+∗∗∗
+0.09 
+−0.14 
+0 . 65 
+(2 . 16) 
+∗∗
+0.04 
+−0.01 
+398 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Table B3 
+( continued ) 
+Panel B: Individual regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+GC 
+1 . 43 
+(2 . 98) 
+∗∗∗
+0.23 
+0.18 ∗∗∗
+1 . 43 
+(2 . 97) 
+∗∗∗
+0 . 68 
+(1 . 20) 
+0 . 84 
+(0 . 44) 
+0.26 
+−0.19 
+1 . 09 
+(2 . 95) 
+∗∗∗
+0.25 
+0.08 ∗∗
+HG 
+0 . 87 
+(1 . 86) 
+∗
+0.08 
+−0.02 
+0 . 92 
+(1 . 97) 
+∗∗
+0 . 38 
+(0 . 60) 
+−3 . 56 
+(−1 . 70) 
+∗
+0.15 
+−0.31 
+0 . 52 
+(1 . 34) 
+0.04 
+−0.25 
+SV 
+3 . 17 
+(4 . 14) 
+∗∗∗
+0.84 
+0.73 ∗∗∗
+3 . 14 
+(4 . 13) 
+∗∗∗
+2 . 33 
+(3 . 58) 
+∗∗∗
+5 . 59 
+(2 . 48) 
+∗∗
+1.51 
+0.76 ∗∗∗
+2 . 93 
+(5 . 44) 
+∗∗∗
+1.42 
+1.01 ∗∗∗
+PA 
+0 . 74 
+(1 . 32) 
+0.05 
+−0.15 
+0 . 64 
+(1 . 13) 
+−1 . 49 
+(−1 . 60) 
+−7 . 72 
+(−3 . 08) 
+∗∗∗
+0.53 
+−0.01 ∗∗∗
+−0 . 32 
+(−0 . 63) 
+0.00 
+−0.16 
+PL 
+2 . 34 
+(3 . 35) 
+∗∗∗
+0.95 
+1.02 ∗∗∗
+2 . 33 
+(3 . 37) 
+∗∗∗
+0 . 42 
+(0 . 43) 
+0 . 89 
+(0 . 25) 
+0.90 
+0.68 ∗∗∗
+1 . 79 
+(3 . 27) 
+∗∗∗
+0.79 
+0.96 ∗∗∗
+CL 
+2 . 00 
+(0 . 72) 
+0.17 
+−0.48 
+2 . 40 
+(1 . 12) 
+−0 . 06 
+(−0 . 03) 
+−13 . 95 
+(−0 . 99) 
+1.25 
+−1.77 
+0 . 67 
+(0 . 25) 
+0.03 
+−1.04 
+HO 
+2 . 25 
+(2 . 76) 
+∗∗∗
+0.22 
+0.04 
+2 . 22 
+(2 . 74) 
+∗∗∗
+2 . 24 
+(3 . 15) 
+∗∗∗
+5 . 39 
+(2 . 40) 
+∗∗
+0.59 
+0.16 ∗∗∗
+2 . 40 
+(4 . 95) 
+∗∗∗
+0.55 
+0.44 ∗∗∗
+NG 
+3 . 89 
+(5 . 49) 
+∗∗∗
+0.68 
+0.61 ∗∗∗
+3 . 74 
+(5 . 21) 
+∗∗∗
+1 . 80 
+(2 . 58) 
+∗∗∗
+9 . 20 
+(3 . 44) 
+∗∗∗
+1.34 
+0.94 ∗∗∗
+3 . 02 
+(6 . 15) 
+∗∗∗
+1.04 
+0.92 ∗∗∗
+XB 
+2 . 90 
+(1 . 62) 
+0.38 
+−0.14 
+2 . 87 
+(1 . 60) 
+0 . 80 
+(0 . 47) 
+3 . 40 
+(0 . 47) 
+0.40 
+−0.83 
+1 . 92 
+(2 . 04) 
+∗∗
+0.32 
+−0.00 
+BO 
+−0 . 80 
+(−1 . 40) 
+0.02 
+−0.06 
+−0 . 86 
+(−1 . 48) 
+1 . 02 
+(1 . 20) 
+2 . 80 
+(1 . 22) 
+0.06 
+−0.36 
+0 . 03 
+(0 . 08) 
+−0.01 
+−0.06 
+CN 
+−0 . 13 
+(−0 . 26) 
+−0.01 
+−0.05 
+−0 . 21 
+(−0 . 41) 
+2 . 89 
+(3 . 54) 
+∗∗∗
+0 . 79 
+(0 . 42) 
+0.21 
+0.03 ∗∗∗
+0 . 82 
+(2 . 09) 
+∗∗
+0.05 
+−0.01 
+SM 
+−0 . 95 
+(−1 . 58) 
+0.03 
+−0.04 ∗
+−1 . 02 
+(−1 . 68) 
+∗
+2 . 49 
+(3 . 22) 
+∗∗∗
+−1 . 35 
+(−0 . 54) 
+0.18 
+−0.27 ∗∗∗
+0 . 18 
+(0 . 42) 
+−0.01 
+−0.07 
+SY 
+−1 . 17 
+(−2 . 17) 
+∗∗
+0.06 
+−0.04 ∗∗
+−1 . 23 
+(−2 . 26) 
+∗∗
+1 . 68 
+(2 . 01) 
+∗∗
+3 . 11 
+(1 . 19) 
+0.15 
+−0.45 
+−0 . 05 
+(−0 . 13) 
+−0.01 
+−0.07 
+WC 
+0 . 48 
+(0 . 73) 
+−0.00 
+−0.06 
+0 . 48 
+(0 . 73) 
+0 . 49 
+(0 . 57) 
+−1 . 74 
+(−0 . 85) 
+−0.00 
+−0.21 
+0 . 32 
+(0 . 67) 
+−0.00 
+−0.07 
+CC 
+1 . 50 
+(2 . 59) 
+∗∗∗
+0.11 
+0.03 ∗∗∗
+1 . 44 
+(2 . 48) 
+∗∗
+0 . 20 
+(0 . 59) 
+2 . 00 
+(1 . 09) 
+0.12 
+−0.14 ∗∗
+0 . 70 
+(2 . 27) 
+∗∗
+0.07 
+0.02 ∗∗∗
+CT 
+−0 . 20 
+(−0 . 26) 
+−0.01 
+−0.05 
+−0 . 21 
+(−0 . 27) 
+−1 . 47 
+(−2 . 94) 
+∗∗∗
+0 . 90 
+(0 . 45) 
+0.11 
+−0.08 ∗∗
+−0 . 90 
+(−2 . 16) 
+∗∗
+0.07 
+−0.02 ∗∗
+KC 
+1 . 46 
+(1 . 55) 
+0.07 
+0.00 
+1 . 24 
+(1 . 31) 
+1 . 39 
+(2 . 50) 
+∗∗
+5 . 65 
+(3 . 07) 
+∗∗∗
+0.45 
+0.23 ∗∗∗
+1 . 72 
+(3 . 30) 
+∗∗∗
+0.34 
+0.26 ∗∗∗
+SB 
+2 . 19 
+(2 . 26) 
+∗∗
+0.09 
+−0.09 ∗
+1 . 89 
+(1 . 93) 
+∗
+0 . 71 
+(1 . 11) 
+9 . 41 
+(4 . 07) 
+∗∗∗
+0.66 
+0.29 ∗∗∗
+2 . 07 
+(4 . 24) 
+∗∗∗
+0.29 
+0.08 ∗∗∗
+FC 
+0 . 06 
+(0 . 08) 
+−0.01 
+−0.06 
+0 . 01 
+(0 . 02) 
+−1 . 04 
+(−1 . 22) 
+1 . 99 
+(0 . 83) 
+0.03 
+−0.19 
+−0 . 34 
+(−0 . 72) 
+−0.00 
+−0.04 
+LC 
+−0 . 01 
+(−0 . 01) 
+−0.01 
+−0.05 
+−0 . 03 
+(−0 . 04) 
+0 . 01 
+(0 . 01) 
+6 . 14 
+(2 . 77) 
+∗∗∗
+0.19 
+0.01 ∗∗
+0 . 42 
+(1 . 03) 
+0.00 
+−0.05 
+LH 
+0 . 56 
+(0 . 87) 
+0.00 
+−0.04 
+0 . 58 
+(0 . 89) 
+−0 . 98 
+(−1 . 18) 
+3 . 30 
+(1 . 76) 
+∗
+0.08 
+−0.06 
+0 . 03 
+(0 . 06) 
+−0.01 
+−0.06 
+Table B4 
+Market intraday momentum: individual currency futures results. This table shows the pooled (Panel A) and individual (Panel B) results of regressing the 
+last half-hour return ( r LH ) on a constant and the ﬁrst half-hour return ( r ONFH ), return from the ﬁrst half hour until the last hour ( r M ) and second-to-last half 
+hour ( r SLH ), and the return until the last half hour ( r ROD ), for currency futures. Trading hours are based on volume plots. Intercepts are not reported. Panel 
+A: T -statistics that account for clustering on time and market (in case the number of clusters exceeds ten) are in parentheses; see Cameron et al. (2011) . 
+Panel B: Newey and West (1986) robust t-statistics are in parentheses. Samples range from December 1974 to May 2020. Signiﬁcance at the 1%, 5%, and 
+10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 , R 2 
+OOS , and slope coeﬃcients are multiplied by 100. 
+Panel A: Pooled regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+Total 
+0 . 91 
+(4 . 58) 
+∗∗∗
+0.19 
+0.28 
+0 . 91 
+(4 . 61) 
+∗∗∗
+0 . 37 
+(1 . 60) 
+0 . 62 
+(0 . 33) 
+0.21 
+0.03 
+0 . 72 
+(4 . 57) 
+∗∗∗
+0.19 
+0.26 
+Panel B: Individual regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+AD 
+0 . 72 
+(2 . 27) 
+∗∗
+0.10 
+0.03 ∗
+0 . 71 
+(2 . 25) 
+∗∗
+1 . 23 
+(2 . 19) 
+∗∗
+1 . 36 
+(0 . 45) 
+0.22 
+−0.17 ∗∗
+0 . 89 
+(3 . 25) 
+∗∗∗
+0.23 
+0.17 ∗∗∗
+BP 
+1 . 40 
+(4 . 92) 
+∗∗∗
+0.49 
+0.46 ∗∗∗
+1 . 41 
+(4 . 92) 
+∗∗∗
+−0 . 04 
+(−0 . 11) 
+−3 . 30 
+(−0 . 74) 
+0.59 
+−0.14 ∗∗∗
+0 . 76 
+(2 . 95) 
+∗∗∗
+0.23 
+0.16 ∗∗∗
+CD 
+0 . 36 
+(0 . 97) 
+0.01 
+−0.05 ∗
+0 . 39 
+(1 . 06) 
+0 . 90 
+(2 . 23) 
+∗∗
+1 . 33 
+(0 . 52) 
+0.14 
+−0.16 ∗∗∗
+0 . 65 
+(1 . 94) 
+∗
+0.13 
+0.02 ∗∗∗
+EC 
+0 . 04 
+(0 . 12) 
+−0.02 
+−0.08 
+0 . 01 
+(0 . 04) 
+−0 . 47 
+(−1 . 25) 
+4 . 07 
+(1 . 44) 
+0.22 
+−0.30 
+−0 . 04 
+(−0 . 17) 
+−0.02 
+−0.07 
+JY 
+0 . 45 
+(1 . 72) 
+∗
+0.05 
+−0.01 ∗∗∗
+0 . 44 
+(1 . 68) 
+∗
+0 . 19 
+(0 . 40) 
+1 . 07 
+(0 . 41) 
+0.05 
+−0.23 ∗∗∗
+0 . 39 
+(1 . 54) 
+0.06 
+−0.01 ∗∗∗
+ME 
+1 . 13 
+(1 . 46) 
+0.18 
+−0.27 
+1 . 17 
+(1 . 51) 
+0 . 23 
+(0 . 31) 
+−0 . 08 
+(−0 . 03) 
+0.14 
+−1.23 
+0 . 70 
+(1 . 21) 
+0.10 
+−0.14 
+NZ 
+0 . 47 
+(0 . 94) 
+0.03 
+−0.23 
+0 . 54 
+(1 . 07) 
+0 . 84 
+(0 . 98) 
+8 . 21 
+(2 . 11) 
+∗∗
+0.97 
+0.07 ∗
+0 . 84 
+(2 . 07) 
+∗∗
+0.25 
+−0.25 
+SF 
+1 . 66 
+(3 . 93) 
+∗∗∗
+0.62 
+0.55 ∗∗∗
+1 . 68 
+(3 . 96) 
+∗∗∗
+0 . 37 
+(1 . 14) 
+−0 . 50 
+(−0 . 30) 
+0.63 
+0.38 ∗∗∗
+1 . 10 
+(3 . 53) 
+∗∗∗
+0.46 
+0.40 ∗∗∗
+399 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Appendix C. Cash index results 
+Tables C1 and C2 
+Table C1 
+Overview of equity indices sample. This table includes symbols as listed on www.tickdata.com , start of the sample period, end of the sample period, trading 
+hours we consider to be a trading day, number of observations after ﬁltering, and the geographical group to which a future belongs. Trading hours are 
+expressed in the local exchange time zone, with U.S.-listed futures denoted in Eastern Standard Time (EST). 
+Index 
+Symbol 
+Start 
+End 
+#Obs 
+Trading hours 
+Group 
+Dow Jones Industrial Average Index 
+DJ 
+1993-04-05 
+2020-05-01 
+6757 
+09:30–16:00 
+USA 
+S&P 500 Index 
+SP 
+1983-02-03 
+2020-05-01 
+9312 
+09:30–16:00 
+USA 
+NASDAQ 100 Index 
+ND 
+1997-01-06 
+2020-05-01 
+5807 
+09:30–16:00 
+USA 
+S&P 400 MidCap Index 
+MD 
+1998-01-06 
+2020-05-01 
+5554 
+09:30–16:00 
+USA 
+Amsterdam AEX Index 
+AE 
+2008-01-04 
+2020-05-01 
+3116 
+09:00–17:30 
+EU 
+DAX Index 
+DA 
+2003-07-03 
+2020-05-01 
+4241 
+09:00–17:30 
+EU 
+Swiss Market Index 
+SW 
+2011-07-01 
+2020-05-01 
+2187 
+09:00–17:30 
+EU 
+EURO STOXX 50 Index 
+XX 
+2003-07-03 
+2020-05-01 
+4263 
+09:00–17:30 
+EU 
+CAC 40 Index 
+CF 
+2003-07-03 
+2020-05-01 
+4267 
+09:00–17:30 
+EU 
+IBEX 35 Index 
+IB 
+2003-07-03 
+2020-05-01 
+4248 
+09:00–17:30 
+EU 
+Nikkei 225 Index 
+NE 
+2003-07-03 
+2020-05-01 
+4090 
+09:00–15:00 
+Australasia 
+TOPIX Index 
+TP 
+2003-07-03 
+2020-05-01 
+4093 
+09:00–15:00 
+Australasia 
+S&P Canada 60 Index 
+SC 
+2003-07-04 
+2020-05-01 
+4188 
+09:30–16:00 
+- 
+Table C2 
+Market intraday momentum: individual equity indices results. This table shows the pooled (Panel A) and individual (Panel B) results of regressing the last 
+half-hour return ( r LH ) on a constant and the ﬁrst half-hour return ( r ONFH ), the return from the ﬁrst half hour until the last hour ( r M ) and second-to-last half 
+hour ( r SLH ), and the return until the last half hour ( r ROD ) for equity indices. Intercepts are not reported. Panel A: T -statistics that account for clustering on 
+time and market (in case the number of clusters exceeds ten) in parentheses; see Cameron et al. (2011) . Panel B: Newey and West (1986) robust t-statistics 
+are in parentheses. Samples range from February 1983 to May 2020. Signiﬁcance at the 1%, 5%, and 10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. 
+Adjusted R 2 , R 2 
+OOS , and slope coeﬃcients are multiplied by 100. 
+Panel A: Pooled regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+Total 
+4 . 38 
+(5 . 31) 
+∗∗∗
+1.29 
+0.98 
+4 . 18 
+(5 . 25) 
+∗∗∗
+2 . 35 
+(2 . 63) 
+∗∗∗
+9 . 70 
+(3 . 69) 
+∗∗∗
+2.46 
+3.3 
+3 . 70 
+(4 . 73) 
+∗∗∗
+2.05 
+3.06 
+USA 
+6 . 71 
+(5 . 30) 
+∗∗∗
+1.79 
+1.35 
+6 . 24 
+(5 . 03) 
+∗∗∗
+4 . 50 
+(4 . 35) 
+∗∗∗
+14 . 42 
+(3 . 98) 
+∗∗∗
+4.32 
+3.76 
+6 . 03 
+(7 . 27) 
+∗∗∗
+3.75 
+3.45 
+EU 
+2 . 82 
+(2 . 83) 
+∗∗∗
+0.83 
+0.32 
+2 . 78 
+(2 . 78) 
+∗∗∗
+0 . 67 
+(1 . 00) 
+2 . 16 
+(0 . 93) 
+0.93 
+−0.11 
+1 . 71 
+(3 . 07) 
+∗∗∗
+0.70 
+0.23 
+Australasia 
+3 . 38 
+(4 . 02) 
+∗∗∗
+1.62 
+1.39 
+3 . 31 
+(3 . 88) 
+∗∗∗
+0 . 07 
+(0 . 05) 
+7 . 02 
+(1 . 74) 
+∗
+2.00 
+1.15 
+2 . 50 
+(4 . 52) 
+∗∗∗
+1.37 
+1.19 
+Panel B: Individual regressions 
+βONFH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βr 
+ONFH 
+βM 
+βSLH 
+R 2 (%) 
+R 2 
+OOS (%) 
+βROD 
+R 2 (%) 
+R 2 
+OOS (%) 
+DJ 
+5 . 68 
+(3 . 19) 
+∗∗∗
+1.15 
+0.97 ∗∗∗
+5 . 38 
+(3 . 14) 
+∗∗∗
+2 . 48 
+(1 . 85) 
+∗
+12 . 49 
+(2 . 57) 
+∗∗
+2.41 
+1.83 ∗∗∗
+4 . 63 
+(4 . 16) 
+∗∗∗
+1.88 
+1.69 ∗∗∗
+SP 
+6 . 26 
+(3 . 99) 
+∗∗∗
+1.39 
+1.15 ∗∗∗
+5 . 68 
+(3 . 86) 
+∗∗∗
+4 . 20 
+(3 . 05) 
+∗∗∗
+15 . 36 
+(4 . 04) 
+∗∗∗
+3.95 
+3.10 ∗∗∗
+5 . 84 
+(5 . 58) 
+∗∗∗
+3.23 
+2.70 ∗∗∗
+ND 
+7 . 34 
+(5 . 38) 
+∗∗∗
+2.09 
+2.09 ∗∗∗
+6 . 88 
+(5 . 09) 
+∗∗∗
+5 . 63 
+(5 . 47) 
+∗∗∗
+12 . 68 
+(3 . 61) 
+∗∗∗
+4.99 
+4.07 ∗∗∗
+6 . 69 
+(8 . 96) 
+∗∗∗
+4.74 
+4.39 ∗∗∗
+MD 
+7 . 04 
+(5 . 52) 
+∗∗∗
+2.57 
+2.53 ∗∗∗
+6 . 53 
+(5 . 47) 
+∗∗∗
+4 . 28 
+(3 . 68) 
+∗∗∗
+18 . 86 
+(3 . 87) 
+∗∗∗
+6.19 
+5.58 ∗∗∗
+6 . 21 
+(6 . 65) 
+∗∗∗
+4.91 
+4.87 ∗∗∗
+AE 
+3 . 00 
+(2 . 31) 
+∗∗
+1.04 
+−1.46 
+2 . 97 
+(2 . 36) 
+∗∗
+1 . 04 
+(1 . 23) 
+2 . 53 
+(0 . 71) 
+1.19 
+−2.60 
+2 . 04 
+(2 . 31) 
+∗∗
+1.04 
+−1.70 
+DA 
+3 . 83 
+(3 . 31) 
+∗∗∗
+1.37 
+1.00 ∗∗∗
+3 . 81 
+(3 . 35) 
+∗∗∗
+0 . 51 
+(0 . 65) 
+1 . 60 
+(0 . 63) 
+1.38 
+0.46 ∗∗
+2 . 05 
+(3 . 01) 
+∗∗∗
+0.89 
+0.66 ∗∗
+SW 
+2 . 27 
+(2 . 60) 
+∗∗∗
+0.98 
+0.93 ∗∗
+2 . 36 
+(2 . 59) 
+∗∗∗
+1 . 47 
+(2 . 33) 
+∗∗
+−1 . 82 
+(−0 . 63) 
+1.41 
+1.16 ∗∗
+1 . 76 
+(2 . 94) 
+∗∗∗
+1.24 
+1.28 ∗∗
+XX 
+3 . 29 
+(3 . 08) 
+∗∗∗
+1.03 
+0.65 ∗∗
+3 . 24 
+(3 . 11) 
+∗∗∗
+1 . 24 
+(1 . 61) 
+2 . 99 
+(1 . 16) 
+1.27 
+0.43 ∗∗
+2 . 24 
+(3 . 19) 
+∗∗∗
+1.12 
+0.87 ∗∗
+CF 
+2 . 44 
+(2 . 49) 
+∗∗
+0.58 
+0.27 ∗
+2 . 40 
+(2 . 53) 
+∗∗
+0 . 82 
+(1 . 06) 
+1 . 89 
+(0 . 62) 
+0.66 
+−0.13 ∗
+1 . 63 
+(2 . 38) 
+∗∗
+0.59 
+0.37 ∗
+IB 
+1 . 80 
+(1 . 77) 
+∗
+0.30 
+−0.14 
+1 . 72 
+(1 . 72) 
+∗
+−0 . 21 
+(−0 . 35) 
+2 . 96 
+(1 . 10) 
+0.35 
+−0.51 
+0 . 78 
+(1 . 23) 
+0.13 
+−0.28 
+NE 
+3 . 64 
+(3 . 61) 
+∗∗∗
+1.84 
+1.60 ∗∗∗
+3 . 55 
+(3 . 52) 
+∗∗∗
+0 . 35 
+(0 . 31) 
+6 . 72 
+(1 . 62) 
+2.18 
+1.39 ∗∗∗
+2 . 73 
+(3 . 48) 
+∗∗∗
+1.62 
+1.44 ∗∗∗
+TP 
+3 . 09 
+(3 . 49) 
+∗∗∗
+1.37 
+1.14 ∗∗∗
+3 . 03 
+(3 . 39) 
+∗∗∗
+−0 . 26 
+(−0 . 24) 
+7 . 34 
+(1 . 64) 
+1.75 
+0.87 ∗∗∗
+2 . 24 
+(3 . 31) 
+∗∗∗
+1.08 
+0.91 ∗∗∗
+SC 
+3 . 37 
+(1 . 98) 
+∗∗
+0.80 
+0.29 
+3 . 05 
+(1 . 87) 
+∗
+0 . 51 
+(0 . 30) 
+17 . 68 
+(2 . 30) 
+∗∗
+2.59 
+0.81 ∗∗
+2 . 74 
+(2 . 42) 
+∗∗
+1.04 
+0.41 ∗
+400 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Appendix D. Horse race subsamples 
+D.1. 1974–1999 
+Table D1 
+Market intraday momentum: horse race results 1974–1999. This table reports the pooled regressions results for Eq. (11) , conditioned on whether the ﬁrst 
+half-hour return ( r ONFH ) and the return until the last half hour ( r ROD ) (i) have the same sign (row “Equal sign”), (ii) have different signs (row “Different 
+sign”), and (iii) without conditioning (row “Full sample”). T -statistics in parentheses are computed using standard errors that account for clustering on 
+time and market (in case the number of clusters exceeds ten); see Cameron et al. (2011) . Samples range from 1974–1999. Signiﬁcance at the 1%, 5%, and 
+10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and slope coeﬃcients are multiplied by 100. 
+βONFH 
+R 2 (%) 
+βROD 
+R 2 (%) 
+βONFH 
+βROD 
+R 2 (%) 
+Panel A: Equity index futures 
+Equal sign 
+4 . 72 
+(2 . 79) 
+∗∗∗
+1.08 
+6 . 13 
+(4 . 68) 
+∗∗∗
+4.42 
+−7 . 66 
+(−2 . 12) 
+∗∗
+10 . 06 
+(3 . 87) 
+∗∗∗
+5.47 
+Different sign 
+−3 . 90 
+(−1 . 97) 
+∗∗
+0.20 
+4 . 92 
+(2 . 63) 
+∗∗∗
+1.07 
+0 . 99 
+(0 . 61) 
+5 . 22 
+(2 . 66) 
+∗∗∗
+1.06 
+Full sample 
+3 . 73 
+(2 . 74) 
+∗∗∗
+0.53 
+5 . 96 
+(4 . 80) 
+∗∗∗
+3.41 
+−3 . 45 
+(−1 . 98) 
+∗∗
+7 . 32 
+(4 . 74) 
+∗∗∗
+3.68 
+Panel B: Government bond futures 
+Equal sign 
+2 . 57 
+(5 . 26) 
+∗∗∗
+0.58 
+2 . 96 
+(8 . 08) 
+∗∗∗
+1.44 
+−2 . 77 
+(−3 . 16) 
+∗∗∗
+4 . 67 
+(6 . 71) 
+∗∗∗
+1.64 
+Different sign 
+−5 . 66 
+(−4 . 47) 
+∗∗∗
+0.66 
+4 . 58 
+(4 . 75) 
+∗∗∗
+1.08 
+−2 . 81 
+(−1 . 95) 
+∗
+3 . 70 
+(3 . 38) 
+∗∗∗
+1.19 
+Full sample 
+1 . 65 
+(3 . 49) 
+∗∗∗
+0.17 
+3 . 19 
+(8 . 38) 
+∗∗∗
+1.28 
+−2 . 41 
+(−3 . 67) 
+∗∗∗
+4 . 35 
+(7 . 94) 
+∗∗∗
+1.48 
+Panel C: Commodity futures 
+Equal sign 
+1 . 15 
+(1 . 95) 
+∗
+0.08 
+1 . 44 
+(3 . 51) 
+∗∗∗
+0.24 
+−2 . 14 
+(−2 . 84) 
+∗∗∗
+2 . 73 
+(5 . 33) 
+∗∗∗
+0.31 
+Different sign 
+−2 . 74 
+(−2 . 03) 
+∗∗
+0.08 
+2 . 57 
+(3 . 37) 
+∗∗∗
+0.25 
+−0 . 58 
+(−0 . 44) 
+2 . 42 
+(3 . 29) 
+∗∗∗
+0.24 
+Full sample 
+0 . 83 
+(1 . 45) 
+0.03 
+1 . 59 
+(3 . 92) 
+∗∗∗
+0.23 
+−1 . 64 
+(−2 . 30) 
+∗∗
+2 . 40 
+(4 . 88) 
+∗∗∗
+0.28 
+Panel D: Currency futures 
+Equal sign 
+1 . 83 
+(7 . 66) 
+∗∗∗
+0.92 
+1 . 46 
+(7 . 47) 
+∗∗∗
+0.95 
+0 . 84 
+(1 . 73) 
+∗
+0 . 89 
+(2 . 23) 
+∗∗
+0.99 
+Different sign 
+1 . 14 
+(0 . 96) 
+0.04 
+−0 . 42 
+(−0 . 39) 
+0.00 
+1 . 09 
+(1 . 04) 
+−0 . 07 
+(−0 . 06) 
+0.02 
+Full sample 
+1 . 79 
+(7 . 54) 
+∗∗∗
+0.68 
+1 . 31 
+(6 . 48) 
+∗∗∗
+0.61 
+1 . 19 
+(2 . 47) 
+∗∗
+0 . 59 
+(1 . 49) 
+0.72 
+401 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+D.2. 20 0 0–2020 
+Table D2 
+Market intraday momentum: horse race results 20 0 0–2020. This table reports the pooled regressions results for Eq. (11) , conditioned on whether the ﬁrst 
+half-hour return ( r ONFH ) and the return until the last half hour ( r ROD ) (i) have the same sign (row “Equal Sign”), (ii) have different signs (row “Different 
+Sign”), and (iii) without conditioning (row “Full Sample”). T -statistics in parentheses are computed using standard errors that account for clustering on 
+time and market (in case the number of clusters exceeds ten); see Cameron et al. (2011) . Samples range from 20 0 0–2020. Signiﬁcance at the 1%, 5%, and 
+10% level is denoted by ∗∗∗, ∗∗, or ∗, respectively. Adjusted R 2 and slope coeﬃcients are multiplied by 100. 
+βONFH 
+R 2 (%) 
+βROD 
+R 2 (%) 
+βONFH 
+βROD 
+R 2 (%) 
+Panel A: Equity index futures 
+Equal sign 
+5 . 84 
+(6 . 28) 
+∗∗∗
+2.94 
+4 . 05 
+(6 . 55) 
+∗∗∗
+2.98 
+3 . 07 
+(2 . 83) 
+∗∗∗
+2 . 27 
+(2 . 95) 
+∗∗∗
+3.21 
+Different sign 
+−3 . 69 
+(−2 . 39) 
+∗∗
+0.29 
+3 . 42 
+(3 . 12) 
+∗∗∗
+0.76 
+−0 . 67 
+(−0 . 43) 
+3 . 21 
+(2 . 75) 
+∗∗∗
+0.76 
+Full sample 
+4 . 97 
+(6 . 07) 
+∗∗∗
+1.67 
+3 . 97 
+(6 . 66) 
+∗∗∗
+2.34 
+1 . 74 
+(2 . 07) 
+∗∗
+3 . 16 
+(4 . 70) 
+∗∗∗
+2.44 
+Panel B: Government bond futures 
+Equal sign 
+1 . 71 
+(3 . 63) 
+∗∗∗
+0.34 
+1 . 72 
+(4 . 43) 
+∗∗∗
+0.75 
+−0 . 99 
+(−1 . 80) 
+∗
+2 . 27 
+(4 . 08) 
+∗∗∗
+0.79 
+Different sign 
+0 . 19 
+(0 . 21) 
+-0.00 
+0 . 47 
+(0 . 47) 
+0.02 
+0 . 85 
+(0 . 68) 
+0 . 70 
+(0 . 58) 
+0.03 
+Full sample 
+1 . 56 
+(3 . 63) 
+∗∗∗
+0.21 
+1 . 53 
+(3 . 61) 
+∗∗∗
+0.47 
+0 . 12 
+(0 . 26) 
+1 . 48 
+(2 . 84) 
+∗∗∗
+0.47 
+Panel C: Commodity futures 
+Equal sign 
+1 . 15 
+(1 . 95) 
+∗
+0.08 
+1 . 44 
+(3 . 51) 
+∗∗∗
+0.24 
+−2 . 14 
+(−2 . 84) 
+∗∗∗
+2 . 73 
+(5 . 33) 
+∗∗∗
+0.31 
+Different sign 
+−2 . 74 
+(−2 . 03) 
+∗∗
+0.08 
+2 . 57 
+(3 . 37) 
+∗∗∗
+0.25 
+−0 . 58 
+(−0 . 44) 
+2 . 42 
+(3 . 29) 
+∗∗∗
+0.24 
+Full sample 
+0 . 83 
+(1 . 45) 
+0.03 
+1 . 59 
+(3 . 92) 
+∗∗∗
+0.23 
+−1 . 64 
+(−2 . 30) 
+∗∗
+2 . 40 
+(4 . 88) 
+∗∗∗
+0.28 
+Panel D: Currency futures 
+Equal sign 
+0 . 34 
+(1 . 13) 
+0.03 
+0 . 27 
+(1 . 19) 
+0.03 
+0 . 23 
+(0 . 40) 
+0 . 11 
+(0 . 25) 
+0.03 
+Different sign 
+0 . 99 
+(0 . 96) 
+0.04 
+1 . 11 
+(1 . 32) 
+0.13 
+2 . 39 
+(1 . 96) 
+∗∗
+1 . 94 
+(1 . 99) 
+∗∗
+0.37 
+Full sample 
+0 . 38 
+(1 . 29) 
+0.03 
+0 . 33 
+(1 . 45) 
+0.04 
+0 . 15 
+(0 . 32) 
+0 . 23 
+(0 . 64) 
+0.04 
+References 
+Admati, A.R. , Pﬂeiderer, P. , 1988. A theory of intraday patterns: volume 
+and price variability. Rev. Financ. Stud. 1 (1), 3–40 . 
+Baltussen, G. , van Bekkum, S. , Da, Z. , 2019. Indexing and stock market se- 
+rial dependence around the world. J. Financ. Econ. 132 (1), 26–48 . 
+Barberis, N. , Shleifer, A. , Wurgler, J. , 2005. Comovement. J. Financ. Econ. 
+75 (2), 283–317 . 
+Barbon, A. , Buraschi, A. , 2020. Gamma Fragility. Unpublished working pa- 
+per. University of St.Gallen . 
+Barndorff-Nielsen, O.E. , Hansen, P.R. , Lunde, A. , Shephard, N. , 2008. De- 
+signing realized kernels to measure the ex post variation of equity 
+prices in the presence of noise. Econometrica 76 (6), 1481–1536 . 
+Ben-David, I. , Franzoni, F. , Moussawi, R. , 2018. Do ETFs increase volatility? 
+J. Finance 73 (6), 2471–2535 . 
+Bjønnes, G.H. , Rime, D. , 2005. Dealer behavior and trading systems in for- 
+eign exchange markets. J. Financ. Econ. 75 (3), 571–605 . 
+Bogousslavsky, V. , 2016. Infrequent rebalancing, return autocorrelation, 
+and seasonality. J. Finance 71 (6), 2967–3006 . 
+Bogousslavsky, V. , 2020. The cross-section of intraday and overnight re- 
+turns. Unpublished working paper. Boston College . 
+Bogousslavsky, V. , Muravyev, D. , 2019. Should We Use Closing Prices? In- 
+stitutional Price Pressure at the Close. Unpublished working paper. 
+Boston College . 
+Bollen, N.P. , Whaley, R.E. , 2004. Does net buying pressure affect the shape 
+of implied volatility functions? J. Finance 59 (2), 711–753 . 
+Bollerslev, T. , Cai, J. , Song, F.M. , 20 0 0. Intraday periodicity, long memory 
+volatility, and macroeconomic announcement effects in the U.S. Trea- 
+sury bond market. J. Empir. Finance 7 (1), 37–55 . 
+Bollerslev, T. , Hood, B. , Huss, J. , Pedersen, L.H. , 2018. Risk every- 
+where: modeling and managing volatility. Rev. Financ. Stud. 31 (7), 
+2729–2773 . 
+Brock, W.A . , Kleidon, A .W. , 1992. Periodic market closure and trading vol- 
+ume: a model of intraday bids and asks. J. Econ. Dyn. Control 16 (3), 
+451–489 . 
+Cameron, A.C. , Gelbach, J.B. , Miller, D.L. , 2011. Robust inference with mul- 
+tiway clustering. J. Bus. Econ. Stat. 29 (2), 238–249 . 
+Chang, E.C. , Jain, P.C. , Locke, P.R. , 1995. Standard & Poor’s 500 index fu- 
+tures volatility and price changes around the New York stock ex- 
+change close. J. Bus. 61–84 . 
+Cheng, M. , Madhavan, A. , 2010. The dynamics of leveraged and inverse 
+exchange-traded funds. J. Invest. Manage. 7 (4), 43–62 . 
+Cici, G. , Palacios, L.-F. , 2015. On the use of options by mutual funds: do 
+they know what they are doing? J. Bank. Finance 50, 157–168 . 
+Clark, T.E. , West, K.D. , 2007. Approximately normal tests for equal predic- 
+tive accuracy in nested models. J. Econom. 138 (1), 291–311 . 
+Clewlow, L. , Hodges, S. , 1997. Optimal delta-hedging under transactions 
+costs. J. Econ. Dyn. Control 21 (8), 1353–1376 . 
+Da, Z. , Shive, S. , 2018. Exchange traded funds and asset return correlations. 
+Eur. Financ. Manage. 24 (1), 136–168 . 
+Elaut, G. , Frömmel, M. , Lampaert, K. , 2018. Intraday momentum in fx mar- 
+kets: disentangling informed trading from liquidity provision. J. Fi- 
+nanc. Mark. 37, 35–51 . 
+Ferguson, M.F. , Mann, S.C. , 2001. Execution costs and their intraday varia- 
+tion in futures markets. J. Bus. 74 (1), 125–160 . 
+Gao, L. , Han, Y. , Li, S.Z. , Zhou, G. , 2018. Market intraday momentum. J. 
+Financ. Econ . 
+Garleanu, N. , Pedersen, L.H. , Poteshman, A.M. , 2008. Demand-based op- 
+tion pricing. Rev. Financ. Stud. 22 (10), 4259–4299 . 
+Gerety, M.S. , Mulherin, J.H. , 1992. Trading halts and market activity: an 
+analysis of volume at the open and the close. J. Finance 47 (5), 
+1765–1784 . 
+Goyenko, R. , Zhang, C. , 2019. Option Returns: Closing Prices are not What 
+You Pay. Unpublished working paper. McGill University . 
+402 
+G. Baltussen, Z. Da, S. Lammers et al. 
+Journal of Financial Economics 142 (2021) 377–403 
+Greenwood, R. , 2005. Short-and long-term demand curves for stocks: the- 
+ory and evidence on the dynamics of arbitrage. J. Financ. Econ. 75 (3), 
+607–649 . 
+Greenwood, R. , 2008. Excess comovement of stock returns: evidence from 
+cross-sectional variation in Nikkei 225 weights. Rev. Financ. Stud. 21 
+(3), 1153–1186 . 
+Hendershott, T. , Livdan, D. , Rösch, D. , 2020. Asset pricing: a tale of night 
+and day. J. Financ. Econ. 138 (3), 635–662 . 
+Heston, S.L. , Korajczyk, R.A. , Sadka, R. , 2010. Intraday patterns in the 
+cross-section of stock returns. J. Finance 65 (4), 1369–1407 . 
+Hong, H. , Kubik, J.D. , Fishman, T. , 2012. Do arbitrageurs amplify economic 
+shocks? J. Financ. Econ. 103 (3), 454–470 . 
+Hong, H. , Wang, J. , 20 0 0. Trading and returns under periodic market clo- 
+sures. J. Finance 55 (1), 297–354 . 
+Israeli, D. , Lee, C.M. , Sridharan, S.A. , 2017. Is there a dark side to exchange 
+traded funds? An information perspective. Rev. Account. Stud. 22 (3), 
+1048–1083 . 
+Jegadeesh, N. , Titman, S. , 1993. Returns to buying winners and selling 
+losers: implications for stock market eﬃciency. J. Finance 48 (1), 
+65–91 . 
+Leland, H. , Rubinstein, M. , 1976. The evolution of portfolio insurance. In: 
+Luskin, D.L. (Ed.), Portfolio Insurance: A Guide to Dynamic Hedging. 
+Wiley . 
+Leland, H.E. , 1985. Option pricing and replication with transactions costs. 
+J. Finance 40 (5), 1283–1301 . 
+Lou, D. , Polk, C. , Skouras, S. , 2019. A tug of war: overnight versus intraday 
+expected returns. J. Financ. Econ. 34 (1), 192–213 . 
+Lyons, R.K. , 1995. Tests of microstructural hypotheses in the foreign ex- 
+change market. J. Financ. Econ. 39 (2), 321–351 . 
+Manaster, S. , Mann, S. , 1996. Life in the pits: competitive market making 
+and inventory control. Rev. Financ. Stud. 9 (3), 953–975 . 
+Martens, M. , Van Dijk, D. , 2007. Measuring volatility with the realized 
+range. J. Econom. 138 (1), 181–207 . 
+Moskowitz, T.J. , Ooi, Y.H. , Pedersen, L.H. , 2012. Time series momentum. J. 
+Financ. Econ. 104 (2), 228–250 . 
+Muravyev, D. , Ni, X.C. , 2019. Why do option returns change sign from day 
+to night? J. Financ. Econ. . forthcoming 
+Newey, W. K., West, K. D., 1986. A simple, positive semi-deﬁnite, het- 
+eroskedasticity and autocorrelation consistent covariance matrix. 
+Sepp, A. , 2013. When you hedge discretely: optimization of Sharpe ra- 
+tio for delta-hedging strategy under discrete hedging and transaction 
+costs. J. Invest. Strategies 3 (1), 19–59 . 
+Shum, P. , Hejazi, W. , Haryanto, E. , Rodier, A. , 2015. Intraday share 
+price volatility and leveraged ETF rebalancing. Rev. Financ 20 (6), 
+2379–2409 . 
+Todorov, K. , 2019. Passive Funds Actively Affect Prices: Evidence from the 
+Largest ETF Markets. Unpublished working paper. London School of 
+Economics . 
+Tosini, P.A. , 1988. Stock index futures and stock market activity in October 
+1987. Financ. Anal. J. 44 (1), 28–37 . 
+Wurgler, J. , 2011. On the economic consequences of index-linked invest- 
+ing. In: Allen, W.T., Khurana, R., Rosenfeld, G. (Eds.), Challenges to 
+Business in the Twenty-First Century: The Way Forward. American 
+Academy of Arts and Sciences, Cambridge, MA, pp. 20–34 . 
+403 

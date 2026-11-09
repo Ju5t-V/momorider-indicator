@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.log
+*.ex5
+data/
+output/
+build_exe/output/
